@@ -6,9 +6,16 @@ import (
 	"strconv"
 )
 
+type Config struct {
+	Enable bool
+}
 
+func Init(c Config){
 
-func init(){
+	if c.Enable == false{
+		return
+	}
+
 	wantQuiet := []string{"想静静","要静静","自闭了","想自闭","要自闭"};
 
 	for _, v := range wantQuiet {

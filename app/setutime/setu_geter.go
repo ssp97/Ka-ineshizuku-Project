@@ -15,6 +15,10 @@ import (
 	"github.com/FloatTech/AnimeAPI/pixiv"
 )
 
+type Config struct {
+	Enable bool
+}
+
 // Pools 图片缓冲池
 type Pool struct {
 	Lock  sync.Mutex
@@ -56,7 +60,11 @@ var (
 	limit = rate.NewManager(time.Minute*1, 5)
 )
 
-func init() { // 插件主体
+func Init(c Config) { // 插件主体
+
+	if c.Enable == false{
+		return
+	}
 
 	for i := range POOL.List {
 		// 下载全部图

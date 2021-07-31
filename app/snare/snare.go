@@ -14,10 +14,22 @@ import (
 
 const PATH = "data/snare"
 
-func init() {
-	zero.OnRegex("随机[陷祸迫]害").SetBlock(true).SetPriority(20).
+type Config struct{
+	Enable 		bool
+	RegexAdd 	string
+	RegexExec	string
+	RegexDel	string
+	Priority	int
+}
+
+func Init(c Config) {
+
+	if c.Enable == false{
+		return
+	}
+
+	zero.OnRegex(c.RegexExec).SetBlock(true).SetPriority(c.Priority).
 		Handle(func(ctx *zero.Ctx) {
-			fmt.Println("sao")
 			groupId := ctx.Event.GroupID
 			dir := fmt.Sprintf("%s/%v", PATH,groupId)
 			rootDir, _ := os.Getwd()
@@ -39,7 +51,7 @@ func init() {
 			ctx.SendChain(message.Image(url))
 	})
 	
-	zero.OnRegex("[陷祸迫]害加图", zero.OnlyGroup).SetBlock(true).SetPriority(20).
+	zero.OnRegex(c.RegexAdd, zero.OnlyGroup).SetBlock(true).SetPriority(c.Priority).
 		Handle(func(ctx *zero.Ctx) {
 			groupId := ctx.Event.GroupID
 			for _, elem := range ctx.Event.Message {
@@ -64,11 +76,12 @@ func init() {
 					if err!=nil{
 						fmt.Println(err)
 					}
+					ctx.SendChain(message.Text("安排上了"))
 				}
 			}
 	})
 	
-	zero.OnRegex("[陷祸迫]害删图", zero.OnlyGroup).SetBlock(true).SetPriority(20).
+	zero.OnRegex(c.RegexDel, zero.OnlyGroup).SetBlock(true).SetPriority(c.Priority).
 		Handle(func(ctx *zero.Ctx) {
 		groupId := ctx.Event.GroupID
 		for _, elem := range ctx.Event.Message {

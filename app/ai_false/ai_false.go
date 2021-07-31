@@ -30,6 +30,10 @@ func init() { // 插件主体
 			),
 			)
 		})
+	zero.OnFullMatch("!获取群信息", zero.OnlyGroup).Handle(func(ctx *zero.Ctx) {
+		ctx.SendChain(message.Text(fmt.Sprintf("%v", ctx.GetGroupInfo(ctx.Event.GroupID, false))))
+
+	})
 }
 
 func cpuPercent() float64 {

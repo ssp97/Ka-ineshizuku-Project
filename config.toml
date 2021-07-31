@@ -1,0 +1,32 @@
+[db]
+    dbType = "sqlite"
+    [db.sqlite]
+        path = "data/main.db"
+    [db.postgresql]
+        dsn = "host=localhost user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Shanghai"
+
+[zerobot]
+    nickName = [ "二小姐" ]
+    url = "ws://192.168.123.98:6700"
+    token = ""
+    superUser = [ "38263547" ]
+    prefix = "!"
+
+[app]
+    [app.snare]      #黑历史功能
+        enable = true
+        priority = 20
+        regexAdd = "[陷祸迫]害加图"
+        regexExec = "随机[陷祸迫]害"
+        regexDel = "[陷祸迫]害删图"
+    [app.gag]
+        enable = true
+    [app.setutime]
+        enable = true
+    [app.thunder]
+        enable = true
+
+
+
+
+
