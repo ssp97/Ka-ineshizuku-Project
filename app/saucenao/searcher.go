@@ -95,7 +95,8 @@ func init() { // 插件主体
 			for _, pic := range ctx.State["image_url"].([]string) {
 				fmt.Println(pic)
 				if result, err := saucenao.SauceNAO(pic); err != nil {
-					ctx.SendChain(message.Text("ERROR: ", err))
+					ctx.SendChain(message.Text("你这阴间图哪来的啊。我问了好多人他们都说不知道"))
+					continue
 				} else {
 					// 返回SauceNAO的结果
 					ctx.SendChain(

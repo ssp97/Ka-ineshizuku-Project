@@ -41,7 +41,7 @@ func init() { // 插件主体
 				ctx.SendChain(randRecord("RocketPunch.amr"))
 			}
 		})
-	zero.OnKeywordGroup([]string{"喜欢", "爱你", "爱", "suki", "daisuki", "すき", "好き", "贴贴", "老婆", "亲一个", "mua"}, AtriSwitch(), AtriSleep(), zero.OnlyToMe).SetBlock(true).SetPriority(PRIO).
+	zero.OnKeywordGroup([]string{"喜欢", "爱你", "suki", "daisuki", "すき", "好き", "贴贴", "老婆", "亲一个", "mua"}, AtriSwitch(), AtriSleep(), zero.OnlyToMe).SetBlock(true).SetPriority(PRIO).
 		Handle(func(ctx *zero.Ctx) {
 			if rand.Intn(10) == 0 {
 				ctx.SendChain(randImage("SUKI.jpg", "SUKI1.jpg", "SUKI2.png"))
@@ -51,7 +51,7 @@ func init() { // 插件主体
 		Handle(func(ctx *zero.Ctx) {
 			ctx.SendChain(randImage("FN.jpg", "WQ.jpg", "WQ1.jpg"))
 		})
-	zero.OnFullMatchGroup([]string{"早安", "早哇", "早上好", "ohayo", "哦哈哟", "お早う"}, AtriSwitch()).SetBlock(true).SetPriority(PRIO).
+	zero.OnFullMatchGroup([]string{"早安", "早哇", "早上好", "ohayo", "哦哈哟", "お早う", "早"}, AtriSwitch()).SetBlock(true).SetPriority(PRIO).
 		Handle(func(ctx *zero.Ctx) {
 			now := time.Now().Hour()
 			switch {

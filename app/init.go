@@ -1,41 +1,35 @@
 package app
 
 import (
+	"github.com/FloatTech/ZeroBot-Plugin/app/EEAsst"
 	"github.com/FloatTech/ZeroBot-Plugin/app/gag"
+	"github.com/FloatTech/ZeroBot-Plugin/app/manager"
 	"github.com/FloatTech/ZeroBot-Plugin/app/setutime"
 	"github.com/FloatTech/ZeroBot-Plugin/app/snare"
+	"github.com/FloatTech/ZeroBot-Plugin/app/study"
 	"github.com/FloatTech/ZeroBot-Plugin/app/thunder"
 	"github.com/FloatTech/ZeroBot-Plugin/conf"
-	"github.com/FloatTech/ZeroBot-Plugin/pkg/db"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/driver"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	"os"
 )
 
-type App struct {
-	c     	*conf.Config
-	db   	*db.ORM
-	//App  *AppConfig
-	//minio *minio.Client
-	//mqtt  *MQTTOrder
-}
 
-func New(c *conf.Config) (app *App) {
-	app = &App{
-		c:     c,
-		db:   db.New(&c.DB),
-	}
-	return app
-}
+func Init(c *conf.Config){
 
-func (p *App)Init(){
-	snare.Init(p.c.App.Snare)
-	gag.Init(p.c.App.Gag)
-	setutime.Init(p.c.App.Setutime)
-	thunder.Init(p.c.App.Thunder)
+	manager.Init(c.App.Manager)
 
-	zerobotConfig := &p.c.Zerobot
+	snare.Init(c.App.Snare)
+	gag.Init(c.App.Gag)
+	setutime.Init(c.App.Setutime)
+	thunder.Init(c.App.Thunder)
+
+	study.Init(c.App.Study)
+
+	EEAsst.Init(c.App.EEAsst)
+
+	zerobotConfig := &c.Zerobot
 	zero.Run(zero.Config{
 		NickName:      zerobotConfig.NickName,
 		CommandPrefix: zerobotConfig.Prefix,

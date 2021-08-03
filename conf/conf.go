@@ -4,14 +4,15 @@ import (
 	"flag"
 	"fmt"
 	"github.com/BurntSushi/toml"
-	"github.com/FloatTech/ZeroBot-Plugin/pkg/db"
+	"github.com/FloatTech/ZeroBot-Plugin/pkg/dbManager"
 )
 
 
 type Config struct {
-	DB  db.OrmConfig
+	DB      dbManager.OrmConfig
 	Zerobot ZerobotConfig
-	App AppConfig
+	App     AppConfig
+
 }
 
 var (

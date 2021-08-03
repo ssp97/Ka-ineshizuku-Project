@@ -1,6 +1,8 @@
-package db
+package dbManager
 
 import "gorm.io/gorm"
+
+var DEFAULT_DB_NAME = "main"
 
 type ORM struct {
 	DB *gorm.DB
@@ -13,6 +15,25 @@ type OrmConfig struct {
 	Sqlite  	ConfigSqlite
 	Postgresql ConfigPostgresql
 }
+
+var DbMap = map[string]*ORM{}
+
+func SetDb(name string, orm *ORM) {
+	DbMap[name] = orm
+}
+
+func GetDb(name string)(orm *ORM) {
+	orm, ok := DbMap[name]
+	if !ok{
+		return nil
+	}
+	return
+}
+
+//func GetTableName(db *ORM, m interface{})(){
+//	db.DB.
+//	db.DB.NewScope(model).GetModelStruct().TableName(db)
+//}
 
 func New(c *OrmConfig) *ORM{
 

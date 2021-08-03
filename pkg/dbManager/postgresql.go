@@ -1,4 +1,4 @@
-package db
+package dbManager
 
 import (
 	"gorm.io/driver/postgres"
@@ -16,7 +16,9 @@ type ConfigPostgresql struct {
 
 
 func connectPostgresql(cSqlite  *ConfigPostgresql)  (*gorm.DB, error){
-	db, err := gorm.Open(postgres.Open(cSqlite.DSN), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(cSqlite.DSN), &gorm.Config{
+		PrepareStmt: true,
+	})
 	if err != nil {
 		//panic("failed to connect database")
 		return nil,err

@@ -1,4 +1,4 @@
-package db
+package dbManager
 
 import (
 	"gorm.io/driver/sqlite"
@@ -6,12 +6,7 @@ import (
 )
 
 type ConfigSqlite struct {
-	//DSN         string         // orm DSN
-	//Debug       bool           // orm is debug
-	//Active      int            // pool
-	//Idle        int            // pool
 	Path string
-	//IdleTimeout xtime.Duration // connect max life time.
 }
 
 

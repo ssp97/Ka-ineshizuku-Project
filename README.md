@@ -1,5 +1,4 @@
 <div align="center">
-  <img src=".github/yaya.jpg" width = "150" height = "150" alt="OneBot-YaYa"><br>
   <h2>ZeroBot-App</h2>
   ZeroBot-App 是 ZeroBot 的 实用插件合集<br><br>
 
@@ -18,17 +17,17 @@
 
 
 ### 功能
-- 聊天 `import _ "github.com/FloatTech/ZeroBot-App/plugin_chat"`
+- 聊天 `app/chat 来自ZeroBot-Plugin`
     - [x] [BOT名字]
     - [x] [戳一戳BOT]
     - [x] 空调开
     - [x] 空调关
     - [x] 群温度
     - [x] 设置温度[正整数]
-- ATRI `import _ "github.com/FloatTech/ZeroBot-App/plugin_atri"`
+- ATRI `app/atri 来自ZeroBot-Plugin`
     - [x] 具体指令看代码
     - 注：本插件基于 [ATRI](https://github.com/Kyomotoi/ATRI) ，为 Golang 移植版
-- 群管 `import _ "github.com/FloatTech/ZeroBot-App/plugin_manager"`
+- 群管 `app/manager 来自ZeroBot-Plugin`
     - [x] 禁言[@xxx][分钟]
     - [x] 解除禁言[@xxx]
     - [x] 我要自闭 [分钟]
@@ -53,79 +52,50 @@
     - [ ] 撤回[@xxx] [xxx]
     - [ ] 警告[@xxx]
     - [x] run[xxx]
-- GitHub仓库搜索 `import _ "github.com/FloatTech/ZeroBot-App/plugin_github"`
-    - [x] >github [xxx] 
-    - [x] >github -p [xxx] 
-- 在线代码运行 `import _ "github.com/FloatTech/ZeroBot-App/plugin_runcode"`
+- 在线代码运行 `app/runcode 来自ZeroBot-Plugin`
     - [x] >runcode help
     - [x] >runcode [on/off]
-    - [x] >runcode [language] [code block] 
-- 点歌 `import _ "github.com/FloatTech/ZeroBot-App/plugin_music"`
-    - [x] 点歌[xxx]
-    - [x] 网易点歌[xxx]
-    - [x] 酷我点歌[xxx]
-    - [x] 酷狗点歌[xxx]
-- shindan `import _ "github.com/FloatTech/ZeroBot-App/plugin_shindan"`
-    - [x] 今天是什么少女[@xxx] 
-    - [x] 异世界转生[@xxx] 
-    - [x] 卖萌[@xxx] 
-- 涩图 `import _ "github.com/FloatTech/ZeroBot-App/plugin_setutime"`
+    - [x] >runcode [language] [code block]
+- 涩图 `app/setutime 来自ZeroBot-Plugin，增加启动缓存功能`
     - [x] 来份[涩图/二次元/风景/车万]
     - [x] 添加[涩图/二次元/风景/车万][P站图片ID]
     - [x] 删除[涩图/二次元/风景/车万][P站图片ID]
     - [x] >setu status
-- lolicon `import _ "github.com/FloatTech/ZeroBot-App/plugin_lolicon"`
+- lolicon `app/lolicon 来自ZeroBot-Plugin`
     - [x] 来份萝莉
-- 搜图 `import _ "github.com/FloatTech/ZeroBot-App/plugin_saucenao"`
+- 搜图 `app/saucenao 来自ZeroBot-Plugin`
     - [x] 以图搜图|搜索图片|以图识图[图片]
     - [x] 搜图[P站图片ID]
-- 随机图片与点评 `github.com/FloatTech/ZeroBot-App/plugin_rand_image`
-    - [x] 随机图片
-    - [x] 直接随机（无r18检测，后果自负）
-    - [x] 设置随机图片网址[url]
-    - [x] 太涩了（撤回最近发的图）
-    - [x] 评价图片：发送一张图片进行评分
-- bilibili `import _ "github.com/FloatTech/ZeroBot-App/plugin_bilibili"`
-    - [x] >bili info [名字]
-- 嘉然 `import _ "github.com/FloatTech/ZeroBot-App/plugin_diana"`
-    - [x] @BOT 小作文
-    - [x] @BOT 发大病
-- AIfalse `import _ "github.com/FloatTech/ZeroBot-App/plugin_AIfalse"`
+- AIfalse `app/ai_false 来自ZeroBot-Plugin`
     - [x] 查询计算机当前活跃度 [身体检查]
     - [ ] 简易语音
     - [ ] 爬图合成 [@xxx]
+- EEAsst `app/EEAsst 电子助手`  
+    - [x] 查封装尺寸 [尺寸0603]
+    - [x] 查电阻大小 [电阻01B]
+    - [ ] 丝印库
+- Gag `app/gag 对一些行为进行禁言`
+    - [x] 想要静静 [我想静静]
+- jieba `app/jieba 结巴分词测试`
+    - [x] 结巴分词 [jieba分词 balabala]
+- snare `app/snare 群黑历史`
+    - [x] 使用
+    - [x] 加图
+    - [x] 删图
+- study `app/study 对话学习功能`
+    - [x] 精准匹配
+    - [x] 模糊匹配
+    - [x] 分词模糊匹配
+    - [x] 敷衍行为
+- thunder `app/thunder 群游戏手捧雷`  
+    - [x] 游戏功能 [手捧雷]
+    - [x] 小学数学加法
 - TODO...
-
-### 使用方法
-
-本项目符合 [OneBot](https://github.com/howmanybots/onebot) 标准，可基于以下项目与机器人框架/平台进行交互
-| 项目地址 | 平台 | 核心作者 | 备注 |
-| --- | --- | --- | --- |
-| [Yiwen-Chan/OneBot-YaYa](https://github.com/Yiwen-Chan/OneBot-YaYa) | [先驱](https://www.xianqubot.com/) | kanri |  |
-| [richardchien/coolq-http-api](https://github.com/richardchien/coolq-http-api) | CKYU | richardchien | 可在 Mirai 平台使用 [mirai-native](https://github.com/iTXTech/mirai-native) 加载 |
-| [Mrs4s/go-cqhttp](https://github.com/Mrs4s/go-cqhttp) | [MiraiGo](https://github.com/Mrs4s/MiraiGo) | Mrs4s |  |
-| [yyuueexxiinngg/cqhttp-mirai](https://github.com/yyuueexxiinngg/cqhttp-mirai) | [Mirai](https://github.com/mamoe/mirai) | yyuueexxiinngg |  |
-| [takayama-lily/onebot](https://github.com/takayama-lily/onebot) | [OICQ](https://github.com/takayama-lily/oicq) | takayama |  |
-
-#### 本地运行
-1. 下载安装 [Go](https://studygolang.com/dl/golang/go1.16.2.windows-amd64.msi) 环境
-2. [clone](https://github.com/Yiwen-Chan/ZeroBot-App/archive/master.zip) 本项目，本地解压
-3. 编辑 main.go 文件，内容按需修改
-4. 双击 build.bat 文件 或 直接双击 run.bat 文件
-5. 运行 OneBot 框架，并同时运行本插件
-
-#### 利用 Actions 在线编译 (推荐)
-1. 点击右上角 Fork 本项目，并转跳到自己 Fork 的仓库
-2. 点击仓库上方的 Actions 按钮，确认使用 Actions
-3. 编辑 main.go 文件，内容按需修改，提交修改后 Actions 自动执行
-4. 点击 Actions 按钮，等待编译完成，在 Actions 里下载编译好的文件
-5. 运行 OneBot 框架，并同时运行本插件
-6. 啾咪~
+### 数据库支持
+- SQLite
+- PostgreSql
 
 ### 特别感谢
 - [ZeroBot](https://github.com/wdvxdr1123/ZeroBot)
 - [ATRI](https://github.com/Kyomotoi/ATRI)
-
-
-## License
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FYiwen-Chan%2FZeroBot-App.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FYiwen-Chan%2FZeroBot-App?ref=badge_large)
+- [ZeroBot-Plugin](https://github.com/FloatTech/ZeroBot-Plugin)

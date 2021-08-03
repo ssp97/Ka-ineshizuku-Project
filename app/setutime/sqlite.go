@@ -183,7 +183,7 @@ func tags(objptr interface{}) []string {
 		elem = elem.Field(0)
 	}
 	for i, flen := 0, elem.Type().NumField(); i < flen; i++ {
-		tags = append(tags, elem.Type().Field(i).Tag.Get("db"))
+		tags = append(tags, elem.Type().Field(i).Tag.Get("dbManager"))
 	}
 	return tags
 }

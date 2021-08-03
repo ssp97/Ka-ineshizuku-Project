@@ -2,6 +2,8 @@ package manager
 
 import (
 	"fmt"
+	"github.com/FloatTech/ZeroBot-Plugin/pkg/dbManager"
+	"gorm.io/gorm"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -13,7 +15,58 @@ import (
 	timer "github.com/FloatTech/ZeroBot-Plugin-Timer"
 )
 
-func init() { // 插件主体
+type Config struct {
+	Enable bool
+}
+
+type Group struct {
+	ID uint64		`json:"id" form:"id" gorm:"primary_key;"`
+	Enable bool	`json:"enable" form:"enable"`
+}
+
+var db *dbManager.ORM
+
+func GroupSwitchControl(ctx *zero.Ctx) bool{
+
+	if zero.OnlyGroup(ctx) == false{
+		return true
+	}
+
+	groupId := ctx.Event.GroupID
+	var group Group
+	result := db.DB.First(&group, groupId)
+	if result.Error == gorm.ErrRecordNotFound {
+		db.DB.Create(Group{
+			ID: uint64(groupId),
+			Enable: false,
+		})
+		return false
+	}
+	return group.Enable
+}
+
+func Init(config Config) { // 插件主体
+	db = dbManager.GetDb(dbManager.DEFAULT_DB_NAME)
+	db.DB.AutoMigrate(Group{})
+
+	zero.OnFullMatch("开启",zero.AdminPermission).SetBlock(true).FirstPriority().Handle(func(ctx *zero.Ctx) {
+		db.DB.Table("groups").Where("id = ?", ctx.Event.GroupID).Update("enable",true)
+		ctx.SendChain(message.Text("群开关已开启"))
+	})
+
+	zero.OnFullMatch("关闭",zero.AdminPermission).SetBlock(true).FirstPriority().Handle(func(ctx *zero.Ctx) {
+		db.DB.Table("groups").Where("id = ?", ctx.Event.GroupID).Update("enable",false)
+		ctx.SendChain(message.Text("群开关已关闭"))
+	})
+
+	zero.OnFullMatch("群开关测试",GroupSwitchControl).SetBlock(true).FirstPriority().Handle(func(ctx *zero.Ctx) {
+		ctx.SendChain(message.Text("已开启"))
+	})
+
+	if config.Enable == false{
+		return
+	}
+
 	// 菜单
 	zero.OnFullMatch("群管系统", zero.AdminPermission).SetBlock(true).FirstPriority().
 		Handle(func(ctx *zero.Ctx) {

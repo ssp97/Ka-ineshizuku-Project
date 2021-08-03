@@ -1,17 +1,25 @@
 package jieba
 
+import (
+	"fmt"
+	"github.com/FloatTech/ZeroBot-Plugin/pkg/jieba"
+	zero "github.com/wdvxdr1123/ZeroBot"
+	"github.com/wdvxdr1123/ZeroBot/message"
+	"strings"
+	"time"
+)
 
 func init() {
-	//zero.OnRegex(`^jieba分词\s(.+?)$`).SetBlock(true).SecondPriority().
-	//	Handle(func(ctx *zero.Ctx) {
-	//
-	//		now := time.Now()
-	//
-	//		data := ctx.State["regex_matched"].([]string)[1]
-	//		resWords := jieba.Seg.Cut(data, true)
-	//		ctx.SendChain(message.Text(fmt.Sprintf("%s\t精确模式：%s \n", data, strings.Join(resWords, "-"))),
-	//			message.Text(fmt.Sprintf("\ntime:%v",time.Since(now))))
-	//	})
+	zero.OnRegex(`^jieba分词\s(.+?)$`).SetBlock(true).SecondPriority().
+		Handle(func(ctx *zero.Ctx) {
+
+			now := time.Now()
+
+			data := ctx.State["regex_matched"].([]string)[1]
+			resWords := jieba.Seg.Cut(data, true)
+			ctx.SendChain(message.Text(fmt.Sprintf("%s\t精确模式：%s \n", data, strings.Join(resWords, "-"))),
+				message.Text(fmt.Sprintf("\ntime:%v",time.Since(now))))
+		})
 
 
 	//zero.OnRegex(`^sego分词\s(.+?)$`).SetBlock(true).SecondPriority().
