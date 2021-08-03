@@ -99,3 +99,4 @@
 - [ZeroBot](https://github.com/wdvxdr1123/ZeroBot)
 - [ATRI](https://github.com/Kyomotoi/ATRI)
 - [ZeroBot-Plugin](https://github.com/FloatTech/ZeroBot-Plugin)
+- [ChatDACS](https://github.com/Giftia/ChatDACS)
