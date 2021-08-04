@@ -327,7 +327,7 @@ func Init(config Config) { // 插件主体
 	zero.OnNotice().SetBlock(false).SetPriority(40).
 		Handle(func(ctx *zero.Ctx) {
 			if ctx.Event.NoticeType == "group_increase" {
-				ctx.SendChain(message.Text("欢迎~"))
+				ctx.SendChain(message.Text("欢迎~，具体用法请参考https://github.com/ssp97/ZeroBot-Plugin"))
 			}
 		})
 	// 退群提醒

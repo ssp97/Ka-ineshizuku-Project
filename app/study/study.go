@@ -6,8 +6,8 @@ package study
 
 import (
 	"fmt"
-	"github.com/ssp97/ZeroBot-Plugin/pkg/dbManager"
 	log "github.com/sirupsen/logrus"
+	"github.com/ssp97/ZeroBot-Plugin/pkg/dbManager"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"gorm.io/gorm"
 	"math/rand"
@@ -111,6 +111,18 @@ func Init(c Config){
 	})
 
 	zero.OnRegex("^如果有人跟你说(.*) 你要回答(.*)$",zero.OnlyToMe).FirstPriority().SetBlock(true).Handle(func(ctx *zero.Ctx) {
+		q := ctx.State["regex_matched"].([]string)[1]
+		a := ctx.State["regex_matched"].([]string)[2]
+		log.Debugf("%s -> %s", q,a)
+		err := StudyDataAdd(q,a, uint64(ctx.Event.UserID))
+		if err != nil{
+			return
+		}
+		ctx.Send(fmt.Sprintf("心中默念%s，%s",q,a))
+		return
+	})
+
+	zero.OnRegex("^问：(.*) 答：(.*)$").FirstPriority().SetBlock(true).Handle(func(ctx *zero.Ctx) {
 		q := ctx.State["regex_matched"].([]string)[1]
 		a := ctx.State["regex_matched"].([]string)[2]
 		log.Debugf("%s -> %s", q,a)

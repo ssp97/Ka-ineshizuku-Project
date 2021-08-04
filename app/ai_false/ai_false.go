@@ -19,11 +19,11 @@ import (
 )
 
 func init() { // 插件主体
-	zero.OnFullMatchGroup([]string{"检查身体", "自检", "启动自检", "系统状态"}, zero.AdminPermission).FirstPriority().
+	zero.OnFullMatchGroup([]string{"检查身体", "自检", "启动自检", "系统状态"}, zero.AdminPermission).FirstPriority().SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			ctx.SendChain(message.Text(
 				"* CPU占用率: ", cpuPercent(), "%\n",
-				"* RAM占用率: ", memPercent(), "%\n",
+				"* RAM占用率: ", memPercent(), "\n",
 				//"* 硬盘活动率: ", diskPercent(), "%\n" ,
 				"* 硬盘使用率: ", diskUsage(),"\n",
 
@@ -41,9 +41,9 @@ func cpuPercent() float64 {
 	return math.Round(percent[0])
 }
 
-func memPercent() float64 {
+func memPercent() string {
 	memInfo, _ := mem.VirtualMemory()
-	return math.Round(memInfo.UsedPercent)
+	return fmt.Sprintf("%vM/%vM %v%%",memInfo.Used / 1024 / 1024,memInfo.Total / 1024 / 1024,math.Round(memInfo.UsedPercent))
 }
 
 func diskPercent() float64 {
