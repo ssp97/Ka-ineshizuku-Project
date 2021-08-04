@@ -6,8 +6,6 @@ package ai_false
 import (
 	"fmt"
 	"math"
-	"os"
-	"syscall"
 	"time"
 
 	"github.com/shirou/gopsutil/cpu"
@@ -53,16 +51,19 @@ func diskPercent() float64 {
 }
 
 func diskUsage() (usage string) {
-	wd, _ := os.Getwd()
-	fs := syscall.Statfs_t{}
-	err := syscall.Statfs(wd, &fs)
-	if err != nil {
-		return
-	}
+	//wd, _ := os.Getwd()
+	//fs := syscall.Statfs_t{}
+	//err := syscall.Statfs(wd, &fs)
+	//if err != nil {
+	//	return
+	//}
+	//
+	//all := (fs.Blocks * uint64(fs.Bsize) )/ 1024 / 1024
+	//free := (fs.Bfree * uint64(fs.Bsize) )/ 1024 / 1024
+	//used := all - free
 
-	all := (fs.Blocks * uint64(fs.Bsize) )/ 1024 / 1024
-	free := (fs.Bfree * uint64(fs.Bsize) )/ 1024 / 1024
-	used := all - free
+	used := 0
+	all := 0
 
 	usage = fmt.Sprintf("%dM/%dM",used, all)
 	return
