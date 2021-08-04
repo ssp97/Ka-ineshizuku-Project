@@ -2,7 +2,7 @@ package jieba
 
 import (
 	"fmt"
-	"github.com/FloatTech/ZeroBot-Plugin/pkg/jieba"
+	"github.com/ssp97/ZeroBot-Plugin/pkg/jieba"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	"strings"

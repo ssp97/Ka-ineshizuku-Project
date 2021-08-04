@@ -6,7 +6,7 @@ package study
 
 import (
 	"fmt"
-	"github.com/FloatTech/ZeroBot-Plugin/pkg/dbManager"
+	"github.com/ssp97/ZeroBot-Plugin/pkg/dbManager"
 	log "github.com/sirupsen/logrus"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"gorm.io/gorm"

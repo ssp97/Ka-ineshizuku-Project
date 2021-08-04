@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/FloatTech/ZeroBot-Plugin/pkg/avoidExamine"
+	"github.com/ssp97/ZeroBot-Plugin/pkg/avoidExamine"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 )

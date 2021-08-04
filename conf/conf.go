@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/BurntSushi/toml"
-	"github.com/FloatTech/ZeroBot-Plugin/pkg/dbManager"
+	"github.com/ssp97/ZeroBot-Plugin/pkg/dbManager"
 )
 
 

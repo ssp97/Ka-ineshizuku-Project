@@ -1,14 +1,14 @@
 package app
 
 import (
-	"github.com/FloatTech/ZeroBot-Plugin/app/EEAsst"
-	"github.com/FloatTech/ZeroBot-Plugin/app/gag"
-	"github.com/FloatTech/ZeroBot-Plugin/app/manager"
-	"github.com/FloatTech/ZeroBot-Plugin/app/setutime"
-	"github.com/FloatTech/ZeroBot-Plugin/app/snare"
-	"github.com/FloatTech/ZeroBot-Plugin/app/study"
-	"github.com/FloatTech/ZeroBot-Plugin/app/thunder"
-	"github.com/FloatTech/ZeroBot-Plugin/conf"
+	"github.com/ssp97/ZeroBot-Plugin/app/EEAsst"
+	"github.com/ssp97/ZeroBot-Plugin/app/gag"
+	"github.com/ssp97/ZeroBot-Plugin/app/manager"
+	"github.com/ssp97/ZeroBot-Plugin/app/setutime"
+	"github.com/ssp97/ZeroBot-Plugin/app/snare"
+	"github.com/ssp97/ZeroBot-Plugin/app/study"
+	"github.com/ssp97/ZeroBot-Plugin/app/thunder"
+	"github.com/ssp97/ZeroBot-Plugin/conf"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/driver"
 	"github.com/wdvxdr1123/ZeroBot/message"

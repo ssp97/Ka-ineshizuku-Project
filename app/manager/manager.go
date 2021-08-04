@@ -2,7 +2,7 @@ package manager
 
 import (
 	"fmt"
-	"github.com/FloatTech/ZeroBot-Plugin/pkg/dbManager"
+	"github.com/ssp97/ZeroBot-Plugin/pkg/dbManager"
 	"gorm.io/gorm"
 	"math/rand"
 	"strconv"
