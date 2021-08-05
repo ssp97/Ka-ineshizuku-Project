@@ -45,6 +45,13 @@ func init() { // 插件主体
 				time.Sleep(time.Second * 1)
 				ctx.SendChain(message.Text("喂(#`O′) 戳", nickname, "干嘛！"))
 			default:
+				ctx.SetGroupBan(
+					ctx.Event.GroupID,
+					ctx.Event.UserID, // 要禁言的人的qq
+					60,
+				)
+				time.Sleep(time.Second * 1)
+				ctx.SendChain(message.Text("生气了！"))
 				// 频繁触发，不回复
 			}
 			return

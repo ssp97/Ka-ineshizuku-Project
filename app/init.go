@@ -8,6 +8,7 @@ import (
 	"github.com/ssp97/ZeroBot-Plugin/app/snare"
 	"github.com/ssp97/ZeroBot-Plugin/app/study"
 	"github.com/ssp97/ZeroBot-Plugin/app/thunder"
+	_ "github.com/ssp97/ZeroBot-Plugin/app/haveAFriend"
 	"github.com/ssp97/ZeroBot-Plugin/conf"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/driver"

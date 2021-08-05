@@ -1,8 +1,8 @@
-[Db]
+[db]
     dbType = "postgresql"  # postgresql or sqlite，非sqlite要自己建库，自动建表
-    [Db.sqlite]
-        path = "data/main.Db"
-    [Db.postgresql]
+    [db.sqlite]
+        path = "data/main.db"
+    [db.postgresql]
         dsn = "host=192.168.123.98 user=postgres password=yuanpai dbname=zerobot port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 
 [zerobot]
