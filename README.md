@@ -90,6 +90,9 @@
 - thunder `app/thunder 群游戏手捧雷`  
     - [x] 游戏功能 [手捧雷]
     - [x] 小学数学加法
+- haveAFriend `app/haveAFriend 我有个朋友他说...图片生成功能`
+    - [x] 针对自己
+    - [x] 针对群友
 - TODO...
 ### 兼容性
 - [x] Linux 
