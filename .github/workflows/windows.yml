@@ -44,7 +44,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ZeroBot-Plugin-windows
-        path: data
+        path: data/*
 
     - name: Upload config template
       uses: actions/upload-artifact@v2
