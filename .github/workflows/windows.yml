@@ -33,9 +33,15 @@ jobs:
       
     - name: Build
       run: go build -ldflags="-s -w" -o artifacts/ZeroBot-Plugin-windows.exe
-    
+
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2
       with:
         name: ZeroBot-Plugin-windows.exe
         path: ./artifacts
+
+    - name: Upload data dir
+      uses: actions/upload-artifact@v2
+      with:
+        name: data
+        path: ./
