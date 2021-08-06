@@ -41,11 +41,10 @@ jobs:
         path: ./artifacts
 
     - name: Process data dir 0
-      run: mkdir temp
+      run: |
+          mkdir temp
+          copy data temp -r
 
-    - name: Process data dir 1
-      run: copy data temp/
-      
     - name: Upload data dir
       uses: actions/upload-artifact@v2
       with:
