@@ -1,5 +1,5 @@
 [db]
-    dbType = "postgresql"  # postgresql or sqlite，非sqlite要自己建库，自动建表
+    dbType = "sqlite"  # postgresql or sqlite，非sqlite要自己建库，自动建表
     [db.sqlite]
         path = "data/main.db"
     [db.postgresql]
@@ -7,9 +7,9 @@
 
 [zerobot]
     nickName = [ "二小姐" ]
-    url = "ws://192.168.123.98:6700"
+    url = "ws://127.0.0.1:6700"
     token = ""
-    superUser = [ "38263547" ]
+    superUser = [ "10000" ]
     prefix = "!"
 
 [app]
