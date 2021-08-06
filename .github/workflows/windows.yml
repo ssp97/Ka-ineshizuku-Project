@@ -32,7 +32,7 @@ jobs:
       run: go mod tidy
       
     - name: Build
-      run: go build -ldflags="-s -w" -o artifacts/ZeroBot-Plugin-windows.exe
+      run: go build -ldflags="-s -w -static-libstdc++ -static-libgcc" -o artifacts/ZeroBot-Plugin-windows.exe
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2
