@@ -40,11 +40,14 @@ jobs:
         name: ZeroBot-Plugin-windows
         path: ./artifacts
 
+    - name: Process data dir
+      run: mkdir temp && copy data temp/
+
     - name: Upload data dir
       uses: actions/upload-artifact@v2
       with:
         name: ZeroBot-Plugin-windows
-        path: data/*
+        path: temp/*
 
     - name: Upload config template
       uses: actions/upload-artifact@v2
