@@ -70,7 +70,7 @@ var SensitiveWords = map[string]bool{
 }
 
 func init() {
-	zero.OnRegex(`^来张(.*)$`).//, zero.AdminPermission
+	zero.OnRegex(`^来张(.*)$`).SetBlock(true).SetPriority(20).//, zero.AdminPermission
 		Handle(func(ctx *zero.Ctx) {
 			keyword := ctx.State["regex_matched"].([]string)[1]
 			if len(keyword) > 6*3{
