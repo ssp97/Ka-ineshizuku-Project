@@ -1,6 +1,8 @@
-data/SetuTime/cache
-data/SetuTime/search
+data/SetuTime/cache/*.jpg
+data/SetuTime/search/*.jpg
 data/manager
 .idea/
 .DS_Store
 ZeroBot-App
+main
+ZeroBot-Plugin
