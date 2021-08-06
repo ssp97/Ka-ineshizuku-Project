@@ -41,7 +41,8 @@ jobs:
         path: ./artifacts
 
     - name: Process data dir
-      run: mkdir temp
+      run: |
+           mkdir temp
            copy data temp/
 
     - name: Upload data dir
