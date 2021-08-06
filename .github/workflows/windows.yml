@@ -37,11 +37,11 @@ jobs:
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: ZeroBot-Plugin-windows.exe
+        name: ZeroBot-Plugin-windows
         path: ./artifacts
 
     - name: Upload data dir
       uses: actions/upload-artifact@v2
       with:
-        name: data
-        path: ./
+        name: ZeroBot-Plugin-windows
+        path: ./data
