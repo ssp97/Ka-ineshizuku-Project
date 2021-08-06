@@ -43,8 +43,8 @@ jobs:
     - name: Upload data dir
       uses: actions/upload-artifact@v2
       with:
-        name: ZeroBot-Plugin-windows/data
-        path: ./data
+        name: ZeroBot-Plugin-windows
+        path: data
 
     - name: Upload config template
       uses: actions/upload-artifact@v2
