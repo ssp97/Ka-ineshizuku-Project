@@ -40,7 +40,7 @@ jobs:
         name: ZeroBot-Plugin-windows
         path: ./artifacts
 
-    - name: Process data dir 0
+    - name: Process data dir
       run: |
           mkdir temp
           copy data temp -r
