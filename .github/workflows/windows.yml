@@ -47,7 +47,7 @@ jobs:
         path: ./data
 
     - name: Upload config template
-        uses: actions/upload-artifact@v2
-        with:
-          name: ZeroBot-Plugin-windows
-          path: ./config.toml.template
+      uses: actions/upload-artifact@v2
+      with:
+        name: ZeroBot-Plugin-windows
+        path: ./config.toml.template
