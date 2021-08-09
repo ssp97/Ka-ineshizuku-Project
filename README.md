@@ -90,9 +90,11 @@
 - thunder `app/thunder 群游戏手捧雷`  
     - [x] 游戏功能 [手捧雷]
     - [x] 小学数学加法
-- haveAFriend `app/haveAFriend 我有个朋友他说...图片生成功能`
-    - [x] 针对自己
-    - [x] 针对群友
+- haveAFriend `app/haveAFriend 我有个朋友说...图片生成功能`
+    - [x] 针对自己 
+    - [x] 针对群友 `我有个朋友说今天是个好日子@xxx`
+- gifApp `app/gifApp 一些gif图片合成玩法`
+    - [x] 摸头 `摸头@xxx`
 - TODO...
 ### 兼容性
 - [x] Linux 
@@ -105,6 +107,23 @@
 ### 数据库支持
 - SQLite
 - PostgreSql
+
+### 快速使用
+- 组件依赖请参考需要[go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
+- 在Action中，选择windows/linux版本，下载压缩包
+- 解压，复制config.toml.template为config.toml，并修改主要配置
+- 双击exe文件启动(windows)
+
+### 我要修改
+- 我想要修改一些配置上没有的怎么办
+```
+1. 点击右上角fork一份到自己仓库
+2. 修改文件(如果是改改触发的表达式的话推荐在线修改)
+3. 开启action自动编译
+4. 等
+5. 编译完成下载运行
+```
+
 
 ### 特别感谢
 - [ZeroBot](https://github.com/wdvxdr1123/ZeroBot)

@@ -1,19 +1,23 @@
 package app
 
 import (
+	"fmt"
 	"github.com/ssp97/ZeroBot-Plugin/app/EEAsst"
 	"github.com/ssp97/ZeroBot-Plugin/app/gag"
+	_ "github.com/ssp97/ZeroBot-Plugin/app/gifApp"
+	_ "github.com/ssp97/ZeroBot-Plugin/app/haveAFriend"
 	"github.com/ssp97/ZeroBot-Plugin/app/manager"
 	"github.com/ssp97/ZeroBot-Plugin/app/setutime"
 	"github.com/ssp97/ZeroBot-Plugin/app/snare"
 	"github.com/ssp97/ZeroBot-Plugin/app/study"
 	"github.com/ssp97/ZeroBot-Plugin/app/thunder"
-	_ "github.com/ssp97/ZeroBot-Plugin/app/haveAFriend"
 	"github.com/ssp97/ZeroBot-Plugin/conf"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/driver"
 	"github.com/wdvxdr1123/ZeroBot/message"
+	"math/rand"
 	"os"
+	"time"
 )
 
 
@@ -47,7 +51,15 @@ func Init(c *conf.Config){
 	})
 
 	zero.OnCommand("ping").SetBlock(true).SetPriority(999).Handle(func(ctx *zero.Ctx) {
-		ctx.SendChain(message.Text("pong"))
+
+		var d = float64(rand.Intn(10000))
+		t := time.Now()
+		//log.Println("ping-pong")
+		for i:= 1.0; i <= 114514.0; i++ {
+			d += i + i/10.0
+		}
+		result := fmt.Sprintf("pong %f %v",d,time.Since(t))
+		ctx.SendChain(message.Text(result))
 	})
 
 }

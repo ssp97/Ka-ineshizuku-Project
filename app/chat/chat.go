@@ -18,7 +18,7 @@ var poke = rate.NewManager(time.Minute*5, 8) // 戳一戳
 
 func init() { // 插件主体
 	// 被喊名字
-	zero.OnFullMatch("", zero.OnlyToMe).SetBlock(false).FirstPriority().
+	zero.OnFullMatch("", zero.OnlyToMe, zero.OnlyGroup).SetBlock(true).FirstPriority().
 		Handle(func(ctx *zero.Ctx) {
 			var nickname = zero.BotConfig.NickName[0]
 			time.Sleep(time.Second * 1)
@@ -32,7 +32,7 @@ func init() { // 插件主体
 			))
 		})
 	// 戳一戳
-	zero.On("notice/notify/poke", zero.OnlyToMe).SetBlock(false).FirstPriority().
+	zero.On("notice/notify/poke", zero.OnlyToMe).SetBlock(true).FirstPriority().
 		Handle(func(ctx *zero.Ctx) {
 			var nickname = zero.BotConfig.NickName[0]
 			switch {

@@ -6,7 +6,7 @@
         dsn = "host=192.168.123.98 user=postgres password=yuanpai dbname=zerobot port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 
 [zerobot]
-    nickName = [ "二小姐" ]
+    nickName = [ "小雫" ]
     url = "ws://192.168.123.98:6700"
     token = ""
     superUser = [ "38263547" ]
