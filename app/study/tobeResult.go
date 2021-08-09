@@ -2,7 +2,7 @@ package study
 
 import (
 	"fmt"
-	"github.com/ssp97/ZeroBot-Plugin/pkg/jieba"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/jieba"
 	log "github.com/sirupsen/logrus"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	"math/rand"

@@ -2,7 +2,7 @@ package EEAsst
 
 import (
 	"fmt"
-	"github.com/ssp97/ZeroBot-Plugin/pkg/dbManager"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/dbManager"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 )

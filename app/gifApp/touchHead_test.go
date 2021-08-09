@@ -1,7 +1,7 @@
 package gifApp
 
 import (
-	"github.com/ssp97/ZeroBot-Plugin/pkg/OicqUtils"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/OicqUtils"
 	"testing"
 )
 

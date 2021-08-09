@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/golang/freetype"
 	"github.com/nfnt/resize"
-	"github.com/ssp97/ZeroBot-Plugin/pkg/OicqUtils"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/OicqUtils"
 	"github.com/tfriedel6/canvas"
 	"github.com/tfriedel6/canvas/backend/softwarebackend"
 	zero "github.com/wdvxdr1123/ZeroBot"

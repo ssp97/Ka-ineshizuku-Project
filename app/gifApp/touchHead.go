@@ -3,8 +3,8 @@ package gifApp
 import (
 	"embed"
 	"fmt"
-	"github.com/ssp97/ZeroBot-Plugin/pkg/OicqUtils"
-	"github.com/ssp97/ZeroBot-Plugin/pkg/TypeUtils"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/OicqUtils"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/TypeUtils"
 	"github.com/tfriedel6/canvas"
 	"github.com/tfriedel6/canvas/backend/softwarebackend"
 	zero "github.com/wdvxdr1123/ZeroBot"

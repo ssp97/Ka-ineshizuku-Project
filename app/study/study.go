@@ -7,7 +7,7 @@ package study
 import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
-	"github.com/ssp97/ZeroBot-Plugin/pkg/dbManager"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/dbManager"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"gorm.io/gorm"
 	"math/rand"

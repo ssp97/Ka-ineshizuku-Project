@@ -1,4 +1,4 @@
-module github.com/ssp97/ZeroBot-Plugin
+module github.com/ssp97/Ka-ineshizuku-Project
 
 go 1.16
 
@@ -7,7 +7,6 @@ require (
 	github.com/FloatTech/AnimeAPI v0.0.0-20210713044920-63367fe18ccd
 	github.com/FloatTech/ZeroBot-Plugin-Timer v1.2.4
 	github.com/StackExchange/wmi v0.0.0-20210224194228-fe8f1750fd46 // indirect
-	github.com/discord/lilliput v0.0.0-20210720001558-e1547514bd5f
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646

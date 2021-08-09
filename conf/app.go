@@ -1,13 +1,13 @@
 package conf
 
 import (
-	"github.com/ssp97/ZeroBot-Plugin/app/EEAsst"
-	"github.com/ssp97/ZeroBot-Plugin/app/gag"
-	"github.com/ssp97/ZeroBot-Plugin/app/manager"
-	"github.com/ssp97/ZeroBot-Plugin/app/setutime"
-	"github.com/ssp97/ZeroBot-Plugin/app/snare"
-	"github.com/ssp97/ZeroBot-Plugin/app/study"
-	"github.com/ssp97/ZeroBot-Plugin/app/thunder"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/EEAsst"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/gag"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/manager"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/setutime"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/snare"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/study"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/thunder"
 )
 
 type AppConfig struct {
