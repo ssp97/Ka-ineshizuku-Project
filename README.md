@@ -1,6 +1,7 @@
 <div align="center">
-  <h2>ZeroBot-App</h2>
-  ZeroBot-App 是 ZeroBot 的 实用插件合集<br><br>
+  <h2>Ka Ineshizuku</h2>
+  <h2>夏禾雫</h2>
+  夏禾雫是基于ZeroBot框架的聊天机器人<br><br>
 
 [![YAYA](https://img.shields.io/badge/OneBot-YaYa-green.svg?style=social&logo=appveyor)](https://github.com/Yiwen-Chan/OneBot-YaYa)
 [![GOCQ](https://img.shields.io/badge/OneBot-MiraiGo-green.svg?style=social&logo=appveyor)](https://github.com/Mrs4s/go-cqhttp)
