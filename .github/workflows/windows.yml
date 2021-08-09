@@ -44,6 +44,7 @@ jobs:
       run: |
           mkdir temp
           copy data temp -r
+          copy static temp -r
 
     - name: Upload data dir
       uses: actions/upload-artifact@v2

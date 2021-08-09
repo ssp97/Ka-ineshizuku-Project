@@ -1,7 +1,6 @@
 package haveAFriend
 
 import (
-	"embed"
 	"fmt"
 	"github.com/golang/freetype"
 	"github.com/nfnt/resize"
@@ -23,10 +22,10 @@ import (
 	"time"
 )
 const PATH = "data/cache"
-//go:embed font
-var fonts embed.FS
+const FONT_PATH = "static/font/NotoSansSC-Regular.ttf"
 
-
+////go:embed font
+//var fonts embed.FS
 
 
 
@@ -35,7 +34,7 @@ func make(str1, str2 string,face *image.Image,_path string){
 	t := time.Now().Format("15:04")
 	mul := 2
 
-	fontNoto,err := fonts.ReadFile("font/NotoSansSC-Regular.ttf")
+	fontNoto,err := os.ReadFile(FONT_PATH)
 	if err != nil{
 		fmt.Println(err)
 	}

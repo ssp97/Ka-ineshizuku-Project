@@ -5,6 +5,7 @@ package ai_false
 
 import (
 	"fmt"
+	"github.com/shirou/gopsutil/host"
 	"math"
 	"time"
 
@@ -24,6 +25,7 @@ func init() { // 插件主体
 				"* RAM占用率: ", memPercent(), "\n",
 				//"* 硬盘活动率: ", diskPercent(), "%\n" ,
 				"* 硬盘使用率: ", diskUsage(),"\n",
+				"* 系统运行时间：",systemRunningTime(),"\n",
 
 			),
 			)
@@ -66,6 +68,12 @@ func diskUsage() (usage string) {
 	all := 0
 
 	usage = fmt.Sprintf("%dM/%dM",used, all)
+	return
+}
+
+func systemRunningTime()(t string) {
+	_time , _ := host.Uptime()
+	t = fmt.Sprintf("%vh", _time / 3600)
 	return
 }
 
