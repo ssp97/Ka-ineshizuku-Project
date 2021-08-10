@@ -21,9 +21,9 @@ import (
 	"strings"
 	"time"
 )
-const PATH = "data/cache"
+var PATH = path.Join("data", "cache")
 //const FONT_PATH = "static/font/NotoSansSC-Regular.ttf"
-const FONT_PATH = "static/font/simhei.ttf"
+var FONT_PATH = path.Join("static","font","simhei.ttf")
 
 ////go:embed font
 //var fonts embed.FS
@@ -110,7 +110,7 @@ func init(){
 		//	make(name, str,img,p)
 		//}
 		make(name, str,img,p)
-		ctx.SendChain(message.Image(fmt.Sprintf("file://%s" ,p)))
+		ctx.SendChain(message.Image(fmt.Sprintf("file:///%s" ,p)))
 	})
 }
 
