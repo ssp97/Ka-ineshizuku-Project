@@ -54,9 +54,37 @@ func GroupSwitchControl(ctx *ZeroBot.Ctx) bool{
 	return group.Enable
 }
 
+func UserBlackListQuery(ctx *ZeroBot.Ctx) bool{
+	userId := ctx.Event.UserID
+	now := time.Now().Unix()
+	var user BlackList
+	result := db.DB.First(&user, userId)
+	if result.Error == gorm.ErrRecordNotFound{
+		log.Debugln("------------------->创建记录")
+		db.DB.Create(&BlackList{
+			ID: uint64(userId),
+			Time: 0,
+			Forever: false,
+		})
+		return true
+	}
+	if uint64(now) < user.Time || user.Forever {
+		return false
+	}
+	return true
+}
+
+func AddToBlackList(ctx *ZeroBot.Ctx, t int64) error{
+	var user BlackList
+	now := time.Now().Unix()
+	result := db.DB.First(&user, ctx.Event.UserID).Update("time",now + t)
+	return result.Error
+}
+
 func Init(config Config) { // 插件主体
 	db = dbManager.GetDb(dbManager.DEFAULT_DB_NAME)
 	db.DB.AutoMigrate(Group{})
+	db.DB.AutoMigrate(BlackList{})
 
 	//zero.UsePreHandler(GroupSwitchControl)
 
@@ -75,6 +103,7 @@ func Init(config Config) { // 插件主体
 	})
 
 	zero.Default().UsePreHandler(GroupSwitchControl)
+	zero.Default().UsePreHandler(UserBlackListQuery)
 
 
 	if config.Enable == false{
