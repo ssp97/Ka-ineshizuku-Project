@@ -3,7 +3,7 @@ package EEAsst
 import (
 	"fmt"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/dbManager"
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 )
 
@@ -34,7 +34,7 @@ func Init(c Config){
 	db = dbManager.GetDb(dbManager.DEFAULT_DB_NAME)
 	db.DB.AutoMigrate(ComponentSilk{})
 
-	zero.OnRegex("^电阻(.*?)$").SetBlock(true).SetPriority(20).Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex("^电阻(.*?)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		code := ctx.State["regex_matched"].([]string)[1]
 		result, err := getEIA96Res(code)
 		if err != nil {
@@ -44,7 +44,7 @@ func Init(c Config){
 		}
 	})
 
-	zero.OnRegex("^尺寸(.*?)$").SetBlock(true).SetPriority(20).Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex("^尺寸(.*?)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		code := ctx.State["regex_matched"].([]string)[1]
 		result, err := getEIASize(code)
 		if err != nil {

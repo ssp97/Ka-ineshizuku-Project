@@ -2,6 +2,7 @@ package manager
 
 import (
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/dbManager"
 	"gorm.io/gorm"
 	"math/rand"
@@ -9,7 +10,8 @@ import (
 	"strings"
 	"time"
 
-	zero "github.com/wdvxdr1123/ZeroBot"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 
 	timer "github.com/FloatTech/ZeroBot-Plugin-Timer"
@@ -24,11 +26,17 @@ type Group struct {
 	Enable bool	`json:"enable" form:"enable"`
 }
 
+type BlackList struct {
+	ID 		uint64
+	Time 	uint64
+	Forever bool
+}
+
 var db *dbManager.ORM
 
-func GroupSwitchControl(ctx *zero.Ctx) bool{
+func GroupSwitchControl(ctx *ZeroBot.Ctx) bool{
 
-	if zero.OnlyGroup(ctx) == false{
+	if ZeroBot.OnlyGroup(ctx) == false{
 		return true
 	}
 
@@ -36,7 +44,8 @@ func GroupSwitchControl(ctx *zero.Ctx) bool{
 	var group Group
 	result := db.DB.First(&group, groupId)
 	if result.Error == gorm.ErrRecordNotFound {
-		db.DB.Create(Group{
+		log.Debugln("------------------->创建记录")
+		db.DB.Create(&Group{
 			ID: uint64(groupId),
 			Enable: false,
 		})
@@ -49,27 +58,32 @@ func Init(config Config) { // 插件主体
 	db = dbManager.GetDb(dbManager.DEFAULT_DB_NAME)
 	db.DB.AutoMigrate(Group{})
 
-	zero.OnFullMatch("开启",zero.AdminPermission).SetBlock(true).FirstPriority().Handle(func(ctx *zero.Ctx) {
+	//zero.UsePreHandler(GroupSwitchControl)
+
+	ZeroBot.OnFullMatch("开启",ZeroBot.AdminPermission).SetBlock(true).FirstPriority().Handle(func(ctx *ZeroBot.Ctx) {
 		db.DB.Table("groups").Where("id = ?", ctx.Event.GroupID).Update("enable",true)
 		ctx.SendChain(message.Text("群开关已开启"))
 	})
 
-	zero.OnFullMatch("关闭",zero.AdminPermission).SetBlock(true).FirstPriority().Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnFullMatch("关闭",ZeroBot.AdminPermission).SetBlock(true).FirstPriority().Handle(func(ctx *ZeroBot.Ctx) {
 		db.DB.Table("groups").Where("id = ?", ctx.Event.GroupID).Update("enable",false)
 		ctx.SendChain(message.Text("群开关已关闭"))
 	})
 
-	zero.OnFullMatch("群开关测试",GroupSwitchControl).SetBlock(true).FirstPriority().Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnFullMatch("群开关测试",GroupSwitchControl).SetBlock(true).FirstPriority().Handle(func(ctx *ZeroBot.Ctx) {
 		ctx.SendChain(message.Text("已开启"))
 	})
+
+	zero.Default().UsePreHandler(GroupSwitchControl)
+
 
 	if config.Enable == false{
 		return
 	}
 
 	// 菜单
-	zero.OnFullMatch("群管系统", zero.AdminPermission).SetBlock(true).FirstPriority().
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnFullMatch("群管系统", ZeroBot.AdminPermission).SetBlock(true).FirstPriority().
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SendChain(message.Text(
 				"====群管====", "\n",
 				"- 禁言@QQ 1分钟", "\n",
@@ -89,8 +103,8 @@ func Init(config Config) { // 插件主体
 			))
 		})
 	// 升为管理
-	zero.OnRegex(`^升为管理.*?(\d+)`, zero.OnlyGroup, zero.SuperUserPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^升为管理.*?(\d+)`, ZeroBot.OnlyGroup, ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SetGroupAdmin(
 				ctx.Event.GroupID,
 				strToInt(ctx.State["regex_matched"].([]string)[1]), // 被升为管理的人的qq
@@ -104,8 +118,8 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text(nickname + " 升为了管理~"))
 		})
 	// 取消管理
-	zero.OnRegex(`^取消管理.*?(\d+)`, zero.OnlyGroup, zero.SuperUserPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^取消管理.*?(\d+)`, ZeroBot.OnlyGroup, ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SetGroupAdmin(
 				ctx.Event.GroupID,
 				strToInt(ctx.State["regex_matched"].([]string)[1]), // 被取消管理的人的qq
@@ -119,8 +133,8 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("残念~ " + nickname + " 暂时失去了管理员的资格"))
 		})
 	// 踢出群聊
-	zero.OnRegex(`^踢出群聊.*?(\d+)`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^踢出群聊.*?(\d+)`, ZeroBot.OnlyGroup, ZeroBot.AdminPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SetGroupKick(
 				ctx.Event.GroupID,
 				strToInt(ctx.State["regex_matched"].([]string)[1]), // 被踢出群聊的人的qq
@@ -134,16 +148,16 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("残念~ " + nickname + " 被放逐"))
 		})
 	// 退出群聊
-	zero.OnRegex(`^退出群聊.*?(\d+)`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^退出群聊.*?(\d+)`, ZeroBot.OnlyGroup, ZeroBot.AdminPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SetGroupLeave(
 				strToInt(ctx.State["regex_matched"].([]string)[1]), // 要退出的群的群号
 				true,
 			)
 		})
 	// 开启全体禁言
-	zero.OnRegex(`^开启全员禁言$`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^开启全员禁言$`, ZeroBot.OnlyGroup, ZeroBot.AdminPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SetGroupWholeBan(
 				ctx.Event.GroupID,
 				true,
@@ -151,8 +165,8 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("全员自闭开始~"))
 		})
 	// 解除全员禁言
-	zero.OnRegex(`^解除全员禁言$`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^解除全员禁言$`, ZeroBot.OnlyGroup, ZeroBot.AdminPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SetGroupWholeBan(
 				ctx.Event.GroupID,
 				false,
@@ -160,8 +174,8 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("全员自闭结束~"))
 		})
 	// 禁言
-	zero.OnRegex(`^禁言.*?(\d+).*?\s(\d+)(.*)`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^禁言.*?(\d+).*?\s(\d+)(.*)`, ZeroBot.OnlyGroup, ZeroBot.AdminPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			duration := strToInt(ctx.State["regex_matched"].([]string)[2])
 			switch ctx.State["regex_matched"].([]string)[3] {
 			case "分钟":
@@ -184,8 +198,8 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("小黑屋收留成功~"))
 		})
 	// 解除禁言
-	zero.OnRegex(`^解除禁言.*?(\d+)`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^解除禁言.*?(\d+)`, ZeroBot.OnlyGroup, ZeroBot.AdminPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SetGroupBan(
 				ctx.Event.GroupID,
 				strToInt(ctx.State["regex_matched"].([]string)[1]), // 要解除禁言的人的qq
@@ -194,8 +208,8 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("小黑屋释放成功~"))
 		})
 	// 自闭禁言
-	zero.OnRegex(`^我要自闭.*?(\d+)(.*)`, zero.OnlyGroup).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^我要自闭.*?(\d+)(.*)`, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			duration := strToInt(ctx.State["regex_matched"].([]string)[1])
 			switch ctx.State["regex_matched"].([]string)[2] {
 			case "分钟":
@@ -218,8 +232,8 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("那我就不手下留情了~"))
 		})
 	// 修改名片
-	zero.OnRegex(`^修改名片.*?(\d+).*?\s(.*)`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^修改名片.*?(\d+).*?\s(.*)`, ZeroBot.OnlyGroup, ZeroBot.AdminPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SetGroupCard(
 				ctx.Event.GroupID,
 				strToInt(ctx.State["regex_matched"].([]string)[1]), // 被修改群名片的人
@@ -228,8 +242,8 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("嗯！已经修改了"))
 		})
 	// 修改头衔
-	zero.OnRegex(`^修改头衔.*?(\d+).*?\s(.*)`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^修改头衔.*?(\d+).*?\s(.*)`, ZeroBot.OnlyGroup, ZeroBot.AdminPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SetGroupSpecialTitle(
 				ctx.Event.GroupID,
 				strToInt(ctx.State["regex_matched"].([]string)[1]), // 被修改群头衔的人
@@ -238,8 +252,8 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("嗯！已经修改了"))
 		})
 	// 申请头衔
-	zero.OnRegex(`^申请头衔(.*)`, zero.OnlyGroup).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^申请头衔(.*)`, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SetGroupSpecialTitle(
 				ctx.Event.GroupID,
 				ctx.Event.UserID,                         // 被修改群头衔的人
@@ -248,8 +262,8 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("嗯！不错的头衔呢~"))
 		})
 	// 群聊转发
-	zero.OnRegex(`^群聊转发.*?(\d+)\s(.*)`, zero.SuperUserPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^群聊转发.*?(\d+)\s(.*)`, ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			// 对CQ码进行反转义
 			content := ctx.State["regex_matched"].([]string)[2]
 			content = strings.ReplaceAll(content, "&#91;", "[")
@@ -261,8 +275,8 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("📧 --> " + ctx.State["regex_matched"].([]string)[1]))
 		})
 	// 私聊转发
-	zero.OnRegex(`^私聊转发.*?(\d+)\s(.*)`, zero.SuperUserPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^私聊转发.*?(\d+)\s(.*)`, ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			// 对CQ码进行反转义
 			content := ctx.State["regex_matched"].([]string)[2]
 			content = strings.ReplaceAll(content, "&#91;", "[")
@@ -275,8 +289,8 @@ func Init(config Config) { // 插件主体
 		})
 
 	// 定时提醒
-	zero.OnRegex(`^在(.{1,2})月(.{1,3}日|每?周.?)的(.{1,3})点(.{1,3})分时(用.+)?提醒大家(.*)`, zero.SuperUserPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^在(.{1,2})月(.{1,3}日|每?周.?)的(.{1,3})点(.{1,3})分时(用.+)?提醒大家(.*)`, ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			if ctx.Event.GroupID > 0 {
 				dateStrs := ctx.State["regex_matched"].([]string)
 				ts := timer.GetFilledTimeStamp(dateStrs, false)
@@ -290,8 +304,8 @@ func Init(config Config) { // 插件主体
 			}
 		})
 	// 取消定时
-	zero.OnRegex(`^取消在(.{1,2})月(.{1,3}日|每?周.?)的(.{1,3})点(.{1,3})分的提醒`, zero.SuperUserPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^取消在(.{1,2})月(.{1,3}日|每?周.?)的(.{1,3})点(.{1,3})分的提醒`, ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			if ctx.Event.GroupID > 0 {
 				dateStrs := ctx.State["regex_matched"].([]string)
 				ts := timer.GetFilledTimeStamp(dateStrs, true)
@@ -310,8 +324,8 @@ func Init(config Config) { // 插件主体
 		})
 
 	// 随机点名
-	zero.OnFullMatchGroup([]string{"翻牌"}).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnFullMatchGroup([]string{"翻牌"}).SetBlock(true).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			if ctx.Event.GroupID > 0 {
 				list := ctx.GetGroupMemberList(ctx.Event.GroupID)
 				rand.Seed(time.Now().UnixNano())
@@ -324,22 +338,22 @@ func Init(config Config) { // 插件主体
 			}
 		})
 	// 入群欢迎
-	zero.OnNotice().SetBlock(false).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnNotice().SetBlock(false).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			if ctx.Event.NoticeType == "group_increase" {
-				ctx.SendChain(message.Text("欢迎~，具体用法请参考https://github.com/ssp97/ZeroBot-Plugin"))
+				ctx.SendChain(message.Text("欢迎~，具体用法请参考https://github.com/ssp97/Ka-ineshizuku-Project"))
 			}
 		})
 	// 退群提醒
-	zero.OnNotice().SetBlock(false).SetPriority(40).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnNotice().SetBlock(false).SetPriority(40).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			if ctx.Event.NoticeType == "group_decrease" {
 				ctx.SendChain(message.Text("有人跑路了~"))
 			}
 		})
 	// 运行 CQ 码
-	zero.OnRegex(`^run(.*)$`, zero.SuperUserPermission).SetBlock(true).SetPriority(0).
-		Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex(`^run(.*)$`, ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(0).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			var cmd = ctx.State["regex_matched"].([]string)[1]
 			cmd = strings.ReplaceAll(cmd, "&#91;", "[")
 			cmd = strings.ReplaceAll(cmd, "&#93;", "]")

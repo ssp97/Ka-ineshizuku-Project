@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/tidwall/gjson"
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 )
 
@@ -23,8 +23,8 @@ var (
 )
 
 func init() {
-	zero.OnFullMatch("来点萝莉").
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnFullMatch("来点萝莉").
+		Handle(func(ctx *ZeroBot.Ctx) {
 			go func() {
 				min := func(a, b int) int {
 					if a < b {

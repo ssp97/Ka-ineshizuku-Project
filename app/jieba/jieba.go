@@ -3,15 +3,15 @@ package jieba
 import (
 	"fmt"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/jieba"
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	"strings"
 	"time"
 )
 
 func init() {
-	zero.OnRegex(`^jieba分词\s(.+?)$`).SetBlock(true).SecondPriority().
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex(`^jieba分词\s(.+?)$`).SetBlock(true).SecondPriority().
+		Handle(func(ctx *ZeroBot.Ctx) {
 
 			now := time.Now()
 
@@ -22,8 +22,8 @@ func init() {
 		})
 
 
-	//zero.OnRegex(`^sego分词\s(.+?)$`).SetBlock(true).SecondPriority().
-	//	Handle(func(ctx *zero.Ctx) {
+	//ZeroBot.OnRegex(`^sego分词\s(.+?)$`).SetBlock(true).SecondPriority().
+	//	Handle(func(ctx *ZeroBot.Ctx) {
 	//		now := time.Now()
 	//		if segmenter.Dictionary() == nil{
 	//			ctx.SendChain(message.Text("正在加载词典，请稍等"))

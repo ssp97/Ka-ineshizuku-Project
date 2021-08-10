@@ -12,7 +12,8 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/app/study"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/thunder"
 	"github.com/ssp97/Ka-ineshizuku-Project/conf"
-	zero "github.com/wdvxdr1123/ZeroBot"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/driver"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	"math/rand"
@@ -30,18 +31,18 @@ func Init(c *conf.Config){
 	setutime.Init(c.App.Setutime)
 	thunder.Init(c.App.Thunder)
 
-	study.Init(c.App.Study)
+	study.Init(c.App.Study, c.Zerobot.NickName[0])
 
 	EEAsst.Init(c.App.EEAsst)
 
 	zerobotConfig := &c.Zerobot
-	zero.Run(zero.Config{
+	zero.RunDefault(ZeroBot.Config{
 		NickName:      zerobotConfig.NickName,
 		CommandPrefix: zerobotConfig.Prefix,
 
 		SuperUsers: append(zerobotConfig.SuperUser, os.Args[1:]...),
 
-		Driver: []zero.Driver{
+		Driver: []ZeroBot.Driver{
 			&driver.WSClient{
 				// OneBot 正向WS 默认使用 6700 端口
 				Url:         zerobotConfig.Url,
@@ -49,8 +50,22 @@ func Init(c *conf.Config){
 			},
 		},
 	})
+	//zero.Run(zero.Config{
+	//	NickName:      zerobotConfig.NickName,
+	//	CommandPrefix: zerobotConfig.Prefix,
+	//
+	//	SuperUsers: append(zerobotConfig.SuperUser, os.Args[1:]...),
+	//
+	//	Driver: []zero.Driver{
+	//		&driver.WSClient{
+	//			// OneBot 正向WS 默认使用 6700 端口
+	//			Url:         zerobotConfig.Url,
+	//			AccessToken: zerobotConfig.Token,
+	//		},
+	//	},
+	//})
 
-	zero.OnCommand("ping").SetBlock(true).SetPriority(999).Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnCommand("ping").SetBlock(true).SetPriority(999).Handle(func(ctx *ZeroBot.Ctx) {
 
 		var d = float64(rand.Intn(10000))
 		t := time.Now()

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 
 	"github.com/FloatTech/AnimeAPI/ascii2d"
@@ -20,8 +20,8 @@ import (
 
 func init() { // 插件主体
 	// 根据 PID 搜图
-	zero.OnRegex(`^搜图(\d+)$`).SetBlock(true).FirstPriority().
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex(`^搜图(\d+)$`).SetBlock(true).FirstPriority().
+		Handle(func(ctx *ZeroBot.Ctx) {
 			id, _ := strconv.ParseInt(ctx.State["regex_matched"].([]string)[1], 10, 64)
 			ctx.Send("少女祈祷中......")
 			// 获取P站插图信息
@@ -47,8 +47,8 @@ func init() { // 插件主体
 			)
 		})
 	// 以图搜图
-	zero.OnKeywordGroup([]string{"以图搜图", "搜索图片", "以图识图"}).SetBlock(true).FirstPriority().
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnKeywordGroup([]string{"以图搜图", "搜索图片", "以图识图"}).SetBlock(true).FirstPriority().
+		Handle(func(ctx *ZeroBot.Ctx) {
 			// 匹配命令
 			for _, elem := range ctx.Event.Message {
 				if elem.Type == "text" {
@@ -59,8 +59,8 @@ func init() { // 插件主体
 				}
 			}
 			// 匹配图片
-			rule := func() zero.Rule {
-				return func(ctx *zero.Ctx) bool {
+			rule := func() ZeroBot.Rule {
+				return func(ctx *ZeroBot.Ctx) bool {
 					var urls = []string{}
 					for _, elem := range ctx.Event.Message {
 						if elem.Type == "image" {
@@ -77,14 +77,14 @@ func init() { // 插件主体
 			// 索取图片
 			if !rule()(ctx) {
 				ctx.SendChain(message.Text("请发送一张图片"))
-				next := zero.NewFutureEvent("message", 999, false, zero.CheckUser(ctx.Event.UserID), rule())
+				next := ZeroBot.NewFutureEvent("message", 999, false, ZeroBot.CheckUser(ctx.Event.UserID), rule())
 				recv, cancel := next.Repeat()
 				select {
 				case <-time.After(time.Second * 120):
 					return
 				case e := <-recv:
 					cancel()
-					newCtx := &zero.Ctx{Event: e, State: zero.State{}}
+					newCtx := &ZeroBot.Ctx{Event: e, State: ZeroBot.State{}}
 					if rule()(newCtx) {
 						ctx.State["image_url"] = newCtx.State["image_url"]
 					}

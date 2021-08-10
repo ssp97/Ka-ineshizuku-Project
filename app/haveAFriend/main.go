@@ -7,7 +7,7 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/OicqUtils"
 	"github.com/tfriedel6/canvas"
 	"github.com/tfriedel6/canvas/backend/softwarebackend"
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	_ "golang.org/x/image/webp"
 	"image"
@@ -22,7 +22,8 @@ import (
 	"time"
 )
 const PATH = "data/cache"
-const FONT_PATH = "static/font/NotoSansSC-Regular.ttf"
+//const FONT_PATH = "static/font/NotoSansSC-Regular.ttf"
+const FONT_PATH = "static/font/simhei.ttf"
 
 ////go:embed font
 //var fonts embed.FS
@@ -90,7 +91,7 @@ func make(str1, str2 string,face *image.Image,_path string){
 func init(){
 	root, _ := os.Getwd()
 
-	zero.OnRegex("^^我有个朋友说(.*?)$").SetBlock(true).SetPriority(20).Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex("^^我有个朋友说(.*?)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		str := ctx.State["regex_matched"].([]string)[1]
 		userId := ctx.Event.UserID
 		for _, segment := range ctx.Event.Message {

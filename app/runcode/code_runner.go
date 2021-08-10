@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/extension/rate"
 	"github.com/wdvxdr1123/ZeroBot/message"
 
@@ -95,8 +95,8 @@ func init() {
 		"ts":         {"1010", "ts"},
 	}
 
-	zero.OnFullMatch(">runcode help").SetBlock(true).FirstPriority().
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnFullMatch(">runcode help").SetBlock(true).FirstPriority().
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SendChain(message.Text(
 				"使用说明: ", "\n",
 				">runcode [language] [code block]", "\n",
@@ -110,8 +110,8 @@ func init() {
 			))
 		})
 
-	zero.OnFullMatch(">runcode on", zero.AdminPermission).SetBlock(true).FirstPriority().
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnFullMatch(">runcode on", ZeroBot.AdminPermission).SetBlock(true).FirstPriority().
+		Handle(func(ctx *ZeroBot.Ctx) {
 			RunAllow = true
 			ctx.SendChain(
 				message.Text("> ", ctx.Event.Sender.NickName, "\n"),
@@ -119,8 +119,8 @@ func init() {
 			)
 		})
 
-	zero.OnFullMatch(">runcode off", zero.AdminPermission).SetBlock(true).FirstPriority().
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnFullMatch(">runcode off", ZeroBot.AdminPermission).SetBlock(true).FirstPriority().
+		Handle(func(ctx *ZeroBot.Ctx) {
 			RunAllow = false
 			ctx.SendChain(
 				message.Text("> ", ctx.Event.Sender.NickName, "\n"),
@@ -128,8 +128,8 @@ func init() {
 			)
 		})
 
-	zero.OnRegex(`^>runcode\s(.+?)\s([\s\S]+)$`).SetBlock(true).SecondPriority().
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex(`^>runcode\s(.+?)\s([\s\S]+)$`).SetBlock(true).SecondPriority().
+		Handle(func(ctx *ZeroBot.Ctx) {
 			if !limit.Load(ctx.Event.UserID).Acquire() {
 				ctx.Send("请稍后重试0x0...")
 				return

@@ -2,9 +2,9 @@ package study
 
 import (
 	"fmt"
-	"github.com/ssp97/Ka-ineshizuku-Project/pkg/jieba"
 	log "github.com/sirupsen/logrus"
-	"github.com/wdvxdr1123/ZeroBot/message"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/jieba"
+	zero "github.com/wdvxdr1123/ZeroBot"
 	"math/rand"
 	"sync"
 )
@@ -50,12 +50,16 @@ func TobeResultMax(t *TobeResult) string{
 	return maxList[n]
 }
 
-func ToBeResultDo(message message.Message)(TobeResult){
+func ToBeResultDo(ctx *zero.Ctx)(TobeResult){
 	var wg sync.WaitGroup
 	tobe := TobeResult{result: map[string]int{}}
+	message := ctx.Event.Message
 
 	allStr := message.String()
 	extStr := message.ExtractPlainText()
+
+	allStr = replaceAskSpecialStr(ctx, allStr)
+	extStr = replaceAskSpecialStr(ctx,extStr)
 
 	// 直接搜索
 	wg.Add(1)
@@ -74,9 +78,9 @@ func ToBeResultDo(message message.Message)(TobeResult){
 		defer wg.Done()
 		var data ChatStudy
 		result := db.DB.Model(&ChatStudy{}).Where("ask like ?", fmt.Sprintf("%%%s%%", allStr)).
-			Or("ask like ?", fmt.Sprintf("%s%%", allStr)).
-			Or("ask like ?", fmt.Sprintf("%%%s", allStr)).
-			Or("ask = ?", fmt.Sprintf("%s", allStr)).
+			//Or("ask like ?", fmt.Sprintf("%s%%", allStr)).
+			//Or("ask like ?", fmt.Sprintf("%%%s", allStr)).
+			//Or("ask = ?", fmt.Sprintf("%s", allStr)).
 			Order("RANDOM()").First(&data)
 		if result.Error == nil{
 			tobe.vague = &data.Answer
@@ -92,9 +96,9 @@ func ToBeResultDo(message message.Message)(TobeResult){
 			var studyData []ChatStudy
 			log.Debugf("%s", s)
 			db.DB.Model(&ChatStudy{}).Where("ask like ?", fmt.Sprintf("%%%s%%", s)).
-				Or("ask like ?", fmt.Sprintf("%s%%", s)).
-				Or("ask like ?", fmt.Sprintf("%%%s", s)).
-				Or("ask = ?", fmt.Sprintf("%s", s)).
+				//Or("ask like ?", fmt.Sprintf("%s%%", s)).
+				//Or("ask like ?", fmt.Sprintf("%%%s", s)).
+				//Or("ask = ?", fmt.Sprintf("%s", s)).
 				Find(&studyData)
 			for _, datum := range studyData {
 				TobeResultAdd(&tobe, datum.Answer)

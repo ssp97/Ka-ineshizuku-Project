@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"io"
 	"net/http"
 	"time"
@@ -21,8 +21,8 @@ func getBilibiliInfo(){
 
 
 func init() {
-	zero.OnRegex(`^>user info\s(.{1,25})$`).
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex(`^>user info\s(.{1,25})$`).
+		Handle(func(ctx *ZeroBot.Ctx) {
 
 		})
 }

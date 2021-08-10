@@ -3,7 +3,7 @@
 import (
 	"fmt"
 	"github.com/tidwall/gjson"
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	"math/rand"
 	"regexp"
@@ -30,7 +30,7 @@ func Init(c Config) {
 		return
 	}
 
-	zero.OnRegex("^手捧雷$",zero.OnlyGroup).SetPriority(1).Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex("^手捧雷$", ZeroBot.OnlyGroup).SetPriority(1).Handle(func(ctx *ZeroBot.Ctx) {
 		group := ctx.Event.GroupID
 		_,ok := thunderList[group]
 		gameTime := 60 + rand.Intn(160)
@@ -62,7 +62,7 @@ func Init(c Config) {
 
 		ctx.SendChain(message.At(t.victim),message.Text(t.question))
 
-		go func(ctx *zero.Ctx, group int64) {
+		go func(ctx *ZeroBot.Ctx, group int64) {
 
 			time.Sleep(1*time.Second)
 
@@ -70,7 +70,7 @@ func Init(c Config) {
 			startTime := time.Now().Unix()
 			stopTime := startTime + int64(gameTime)
 			for true {
-				next := zero.NewFutureEvent("message", 1, false, zero.CheckUser(t.victim), func(ctx *zero.Ctx) bool {
+				next := ZeroBot.NewFutureEvent("message", 1, false, ZeroBot.CheckUser(t.victim), func(ctx *ZeroBot.Ctx) bool {
 					if ctx.Event.GroupID == group{
 						return true
 					}
@@ -95,7 +95,7 @@ func Init(c Config) {
 						return
 					case e := <-recv:
 						//cancel()
-						newCtx := &zero.Ctx{Event: e, State: zero.State{}}
+						newCtx := &ZeroBot.Ctx{Event: e, State: ZeroBot.State{}}
 						reg := regexp.MustCompile(t.answer)
 						if reg.Match([]byte(newCtx.Event.Message.String())){
 							ctx.SendChain(message.At(t.victim),
@@ -126,7 +126,7 @@ func Init(c Config) {
 						return
 					case e := <-recv:
 						//
-						newCtx := &zero.Ctx{Event: e, State: zero.State{}}
+						newCtx := &ZeroBot.Ctx{Event: e, State: ZeroBot.State{}}
 						reg := regexp.MustCompile("\\[CQ:at,qq=(\\d+)")
 						result := reg.FindAllStringSubmatch(newCtx.Event.Message.String(),-1)
 						if len(result) <= 0{

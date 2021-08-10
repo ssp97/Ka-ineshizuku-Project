@@ -8,7 +8,8 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/dbManager"
-	zero "github.com/wdvxdr1123/ZeroBot"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"gorm.io/gorm"
 	"math/rand"
 )
@@ -29,17 +30,15 @@ type ChatMutter struct {
 	Mutter  string
 }
 
-
-
 var db *dbManager.ORM
+var BotName = ""
 
 
-
-func ChatStudyBot(ctx *zero.Ctx,mustSend bool)bool{
+func ChatStudyBot(ctx *ZeroBot.Ctx,mustSend bool)bool{
 	var replyStr string
 	n := rand.Intn(1000)
 
-	tobe := ToBeResultDo(ctx.Event.Message) // 提取纯文字算了 //ctx.Event.Message.String()
+	tobe := ToBeResultDo(ctx) // 提取纯文字算了 //ctx.Event.Message.String()
 	//fmt.Printf("Study func data : %v", tobe)
 	if tobe.direct != nil{
 		replyStr = *tobe.direct
@@ -52,7 +51,7 @@ func ChatStudyBot(ctx *zero.Ctx,mustSend bool)bool{
 	}
 
 	if n < tobe.replyPer || mustSend {
-		ctx.Send(replaceSpecialStr(ctx, replyStr))
+		ctx.Send(replaceAnswerSpecialStr(ctx, replyStr))
 		return true
 	}else {
 		log.Infof("%d > %d 不发送结果",n,tobe.replyPer )
@@ -75,11 +74,14 @@ func StudyDataAdd(q,a string,user uint64)error{
 }
 
 
-func Init(c Config){
+func Init(c Config, botName string){
 
 	if c.Enable == false{
 		return
 	}
+
+	BotName = botName
+
 	var count int64
 	db = dbManager.GetDb(dbManager.DEFAULT_DB_NAME)
 	db.DB.AutoMigrate(
@@ -98,19 +100,19 @@ func Init(c Config){
 		initMutterData()
 	}
 
-	zero.On("message",zero.OnlyToMe).SetBlock(true).SetPriority(9998).Handle(func(ctx *zero.Ctx) {
+	zero.Default().On("message", ZeroBot.OnlyToMe).SetBlock(true).SetPriority(9998).Handle(func(ctx *ZeroBot.Ctx) {
 		if ChatStudyBot(ctx,true) == true{
 			return
 		}
 	})
 
-	zero.On("message").SetBlock(true).SetPriority(9999).Handle(func(ctx *zero.Ctx) {
+	zero.Default().On("message").SetBlock(true).SetPriority(9999).Handle(func(ctx *ZeroBot.Ctx) {
 		if ChatStudyBot(ctx,false) == true{
 			return
 		}
 	})
 
-	zero.OnRegex("^如果有人跟你说(.*) 你要回答(.*)$",zero.OnlyToMe).FirstPriority().SetBlock(true).Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex("^如果有人跟你说(.*) 你要回答(.*)$", ZeroBot.OnlyToMe).FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
 		q := ctx.State["regex_matched"].([]string)[1]
 		a := ctx.State["regex_matched"].([]string)[2]
 		log.Debugf("%s -> %s", q,a)
@@ -122,7 +124,7 @@ func Init(c Config){
 		return
 	})
 
-	zero.OnRegex("^问：(.*) 答：(.*)$").FirstPriority().SetBlock(true).Handle(func(ctx *zero.Ctx) {
+	zero.Default().OnRegex("^问：(.*) 答：(.*)$").FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
 		q := ctx.State["regex_matched"].([]string)[1]
 		a := ctx.State["regex_matched"].([]string)[2]
 		log.Debugf("%s -> %s", q,a)

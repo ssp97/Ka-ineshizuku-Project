@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/extension/rate"
 	"github.com/wdvxdr1123/ZeroBot/message"
 
@@ -90,8 +90,8 @@ func Init(c Config) { // 插件主体
 
 	}
 
-	zero.OnRegex(`^来点(.*)$`, FirstValueInList(POOL.List)).SetBlock(true).SetPriority(20).
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex(`^来点(.*)$`, FirstValueInList(POOL.List)).SetBlock(true).SetPriority(20).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			if !limit.Load(ctx.Event.UserID).Acquire() {
 				ctx.SendChain(message.Text("请稍后重试0x0..."))
 				return
@@ -136,8 +136,8 @@ func Init(c Config) { // 插件主体
 			return
 		})
 
-	zero.OnRegex(`^添加(.*?)(\d+)$`, FirstValueInList(POOL.List), zero.SuperUserPermission).SetBlock(true).SetPriority(21).
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex(`^添加(.*?)(\d+)$`, FirstValueInList(POOL.List), ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(21).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			var (
 				type_ = ctx.State["regex_matched"].([]string)[1]
 				id, _ = strconv.ParseInt(ctx.State["regex_matched"].([]string)[2], 10, 64)
@@ -168,8 +168,8 @@ func Init(c Config) { // 插件主体
 			return
 		})
 
-	zero.OnRegex(`^删除(.*?)(\d+)$`, FirstValueInList(POOL.List), zero.SuperUserPermission).SetBlock(true).SetPriority(22).
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex(`^删除(.*?)(\d+)$`, FirstValueInList(POOL.List), ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(22).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			var (
 				type_ = ctx.State["regex_matched"].([]string)[1]
 				id, _ = strconv.ParseInt(ctx.State["regex_matched"].([]string)[2], 10, 64)
@@ -184,8 +184,8 @@ func Init(c Config) { // 插件主体
 		})
 
 	// 查询数据库涩图数量
-	zero.OnFullMatchGroup([]string{">setu status"}).SetBlock(true).SetPriority(23).
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnFullMatchGroup([]string{">setu status"}).SetBlock(true).SetPriority(23).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			state := []string{"[SetuTime]"}
 			for i := range POOL.List {
 				num, err := POOL.DB.Num(POOL.List[i])
@@ -203,8 +203,8 @@ func Init(c Config) { // 插件主体
 }
 
 // FirstValueInList 判断正则匹配的第一个参数是否在列表中
-func FirstValueInList(list []string) zero.Rule {
-	return func(ctx *zero.Ctx) bool {
+func FirstValueInList(list []string) ZeroBot.Rule {
+	return func(ctx *ZeroBot.Ctx) bool {
 		first := ctx.State["regex_matched"].([]string)[1]
 		for i := range list {
 			if first == list[i] {

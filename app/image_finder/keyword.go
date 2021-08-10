@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/avoidExamine"
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 )
 
@@ -70,8 +70,8 @@ var SensitiveWords = map[string]bool{
 }
 
 func init() {
-	zero.OnRegex(`^来张(.*)$`).SetBlock(true).SetPriority(20).//, zero.AdminPermission
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex(`^来张(.*)$`).SetBlock(true).SetPriority(20).//, ZeroBot.AdminPermission
+		Handle(func(ctx *ZeroBot.Ctx) {
 			keyword := ctx.State["regex_matched"].([]string)[1]
 			if len(keyword) > 6*3{
 				return
@@ -158,7 +158,7 @@ func Suiji(max int) int {
 	return rand.Intn(max)
 }
 
-func picDownload(ctx *zero.Ctx,file string, url string)(err error){
+func picDownload(ctx *ZeroBot.Ctx,file string, url string)(err error){
 	f,err := os.Create(file)
 	if err!= nil{
 		return

@@ -7,7 +7,7 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/TypeUtils"
 	"github.com/tfriedel6/canvas"
 	"github.com/tfriedel6/canvas/backend/softwarebackend"
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	_ "golang.org/x/image/bmp"
 	_ "golang.org/x/image/webp"
@@ -78,7 +78,7 @@ func make(face *image.Image,_path string)  {
 		draw.FloydSteinberg.Draw(pleated, backend.Image.Bounds(), backend.Image, image.ZP)
 
 		g.Image = append(g.Image, pleated)
-		g.Delay = append(g.Delay, 20)
+		g.Delay = append(g.Delay, 5)
 	}
 
 	f, err := os.OpenFile(_path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0777)
@@ -94,7 +94,7 @@ func make(face *image.Image,_path string)  {
 
 func init() {
 	root, _ := os.Getwd()
-	zero.OnRegex("^摸头").SetBlock(true).SetPriority(60).Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnRegex("^摸头").SetBlock(true).SetPriority(60).Handle(func(ctx *ZeroBot.Ctx) {
 		//str := ctx.State["regex_matched"].([]string)[1]
 		userId := ctx.Event.UserID
 		for _, segment := range ctx.Event.Message {

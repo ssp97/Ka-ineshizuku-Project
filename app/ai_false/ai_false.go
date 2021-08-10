@@ -13,13 +13,13 @@ import (
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/mem"
 
-	zero "github.com/wdvxdr1123/ZeroBot"
+	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 )
 
 func init() { // 插件主体
-	zero.OnFullMatchGroup([]string{"检查身体", "自检", "启动自检", "系统状态"}, zero.AdminPermission).FirstPriority().SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnFullMatchGroup([]string{"检查身体", "自检", "启动自检", "系统状态"}, ZeroBot.AdminPermission).FirstPriority().SetBlock(true).
+		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SendChain(message.Text(
 				"* CPU占用率: ", cpuPercent(), "%\n",
 				"* RAM占用率: ", memPercent(), "\n",
@@ -30,7 +30,7 @@ func init() { // 插件主体
 			),
 			)
 		})
-	zero.OnFullMatch("!获取群信息", zero.OnlyGroup).Handle(func(ctx *zero.Ctx) {
+	ZeroBot.OnFullMatch("!获取群信息", ZeroBot.OnlyGroup).Handle(func(ctx *ZeroBot.Ctx) {
 		ctx.SendChain(message.Text(fmt.Sprintf("%v", ctx.GetGroupInfo(ctx.Event.GroupID, false))))
 
 	})
