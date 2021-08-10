@@ -26,7 +26,7 @@ import (
 //go:embed static
 var static embed.FS
 
-const PATH = "data/cache"
+var PATH = path.Join("data","cache")
 
 type faceOffset struct {
 	x,y,w,h float64
@@ -44,7 +44,7 @@ func isInPalette(p color.Palette, c color.Color) int {
 
 
 func make(face *image.Image,_path string)  {
-	Sprite,err := static.Open("static/sprite.png")
+	Sprite,err := static.Open(path.Join("static", "sprite.png"))
 	if err != nil{
 		panic(err)
 	}
@@ -110,7 +110,7 @@ func init() {
 			return
 		}
 		make(faceImg, _path)
-		ctx.SendChain(message.Image(fmt.Sprintf("file://%s" ,_path)))
+		ctx.SendChain(message.Image(fmt.Sprintf("file:///%s" ,_path)))
 
 	})
 
