@@ -60,12 +60,12 @@ func Init(config Config) { // 插件主体
 
 	//zero.UsePreHandler(GroupSwitchControl)
 
-	ZeroBot.OnFullMatch("开启",ZeroBot.AdminPermission).SetBlock(true).FirstPriority().Handle(func(ctx *ZeroBot.Ctx) {
+	ZeroBot.OnCommand("init 1", ZeroBot.AdminPermission, ZeroBot.OnlyToMe).SetBlock(true).FirstPriority().Handle(func(ctx *ZeroBot.Ctx) {
 		db.DB.Table("groups").Where("id = ?", ctx.Event.GroupID).Update("enable",true)
 		ctx.SendChain(message.Text("群开关已开启"))
 	})
 
-	ZeroBot.OnFullMatch("关闭",ZeroBot.AdminPermission).SetBlock(true).FirstPriority().Handle(func(ctx *ZeroBot.Ctx) {
+	ZeroBot.OnCommand("init 0", ZeroBot.AdminPermission, ZeroBot.OnlyToMe).SetBlock(true).FirstPriority().Handle(func(ctx *ZeroBot.Ctx) {
 		db.DB.Table("groups").Where("id = ?", ctx.Event.GroupID).Update("enable",false)
 		ctx.SendChain(message.Text("群开关已关闭"))
 	})

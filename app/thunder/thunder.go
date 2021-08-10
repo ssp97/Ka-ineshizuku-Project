@@ -2,6 +2,7 @@
 
 import (
 	"fmt"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"github.com/tidwall/gjson"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
@@ -30,7 +31,7 @@ func Init(c Config) {
 		return
 	}
 
-	ZeroBot.OnRegex("^手捧雷$", ZeroBot.OnlyGroup).SetPriority(1).Handle(func(ctx *ZeroBot.Ctx) {
+	zero.Default().OnRegex("^手捧雷$", ZeroBot.OnlyGroup).SetPriority(1).Handle(func(ctx *ZeroBot.Ctx) {
 		group := ctx.Event.GroupID
 		_,ok := thunderList[group]
 		gameTime := 60 + rand.Intn(160)

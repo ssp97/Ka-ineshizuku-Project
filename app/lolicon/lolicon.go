@@ -4,6 +4,7 @@
 package lolicon
 
 import (
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -23,7 +24,7 @@ var (
 )
 
 func init() {
-	ZeroBot.OnFullMatch("来点萝莉").
+	zero.Default().OnFullMatch("来点萝莉").
 		Handle(func(ctx *ZeroBot.Ctx) {
 			go func() {
 				min := func(a, b int) int {

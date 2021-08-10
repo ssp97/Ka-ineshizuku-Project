@@ -5,6 +5,7 @@ Package chat
 package chat
 
 import (
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"math/rand"
 	"strconv"
 	"time"
@@ -18,7 +19,7 @@ var poke = rate.NewManager(time.Minute*5, 8) // 戳一戳
 
 func init() { // 插件主体
 	// 被喊名字
-	ZeroBot.OnFullMatch("", ZeroBot.OnlyToMe, ZeroBot.OnlyGroup).SetBlock(true).FirstPriority().
+	zero.Default().OnFullMatch("", ZeroBot.OnlyToMe, ZeroBot.OnlyGroup).SetBlock(true).FirstPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			var nickname = ZeroBot.BotConfig.NickName[0]
 			time.Sleep(time.Second * 1)
@@ -32,7 +33,7 @@ func init() { // 插件主体
 			))
 		})
 	// 戳一戳
-	ZeroBot.On("notice/notify/poke", ZeroBot.OnlyToMe).SetBlock(true).FirstPriority().
+	zero.Default().On("notice/notify/poke", ZeroBot.OnlyToMe).SetBlock(true).FirstPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			var nickname = ZeroBot.BotConfig.NickName[0]
 			switch {
@@ -59,18 +60,18 @@ func init() { // 插件主体
 	// 群空调
 	var AirConditTemp = map[int64]int{}
 	var AirConditSwitch = map[int64]bool{}
-	ZeroBot.OnFullMatch("空调开").SetBlock(true).FirstPriority().
+	zero.Default().OnFullMatch("空调开").SetBlock(true).FirstPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			AirConditSwitch[ctx.Event.GroupID] = true
 			ctx.SendChain(message.Text("❄️哔~"))
 		})
-	ZeroBot.OnFullMatch("空调关").SetBlock(true).FirstPriority().
+	zero.Default().OnFullMatch("空调关").SetBlock(true).FirstPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			AirConditSwitch[ctx.Event.GroupID] = false
 			delete(AirConditTemp, ctx.Event.GroupID)
 			ctx.SendChain(message.Text("💤哔~"))
 		})
-	ZeroBot.OnRegex(`设置温度(\d+)`).SetBlock(true).FirstPriority().
+	zero.Default().OnRegex(`设置温度(\d+)`).SetBlock(true).FirstPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			if _, exist := AirConditTemp[ctx.Event.GroupID]; !exist {
 				AirConditTemp[ctx.Event.GroupID] = 26
@@ -89,7 +90,7 @@ func init() { // 插件主体
 				))
 			}
 		})
-	ZeroBot.OnFullMatch(`群温度`).SetBlock(true).FirstPriority().
+	zero.Default().OnFullMatch(`群温度`).SetBlock(true).FirstPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			if _, exist := AirConditTemp[ctx.Event.GroupID]; !exist {
 				AirConditTemp[ctx.Event.GroupID] = 26

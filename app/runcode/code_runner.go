@@ -5,6 +5,7 @@ package runcode
 
 import (
 	"errors"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -95,7 +96,7 @@ func init() {
 		"ts":         {"1010", "ts"},
 	}
 
-	ZeroBot.OnFullMatch(">runcode help").SetBlock(true).FirstPriority().
+	zero.Default().OnFullMatch(">runcode help").SetBlock(true).FirstPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SendChain(message.Text(
 				"使用说明: ", "\n",
@@ -110,7 +111,7 @@ func init() {
 			))
 		})
 
-	ZeroBot.OnFullMatch(">runcode on", ZeroBot.AdminPermission).SetBlock(true).FirstPriority().
+	zero.Default().OnFullMatch(">runcode on", ZeroBot.AdminPermission).SetBlock(true).FirstPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			RunAllow = true
 			ctx.SendChain(
@@ -119,7 +120,7 @@ func init() {
 			)
 		})
 
-	ZeroBot.OnFullMatch(">runcode off", ZeroBot.AdminPermission).SetBlock(true).FirstPriority().
+	zero.Default().OnFullMatch(">runcode off", ZeroBot.AdminPermission).SetBlock(true).FirstPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			RunAllow = false
 			ctx.SendChain(
@@ -128,7 +129,7 @@ func init() {
 			)
 		})
 
-	ZeroBot.OnRegex(`^>runcode\s(.+?)\s([\s\S]+)$`).SetBlock(true).SecondPriority().
+	zero.Default().OnRegex(`^>runcode\s(.+?)\s([\s\S]+)$`).SetBlock(true).SecondPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			if !limit.Load(ctx.Event.UserID).Acquire() {
 				ctx.Send("请稍后重试0x0...")

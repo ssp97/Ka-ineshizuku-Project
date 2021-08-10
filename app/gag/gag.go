@@ -1,6 +1,7 @@
 package gag
 
 import (
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	"strconv"
@@ -19,7 +20,7 @@ func Init(c Config){
 	wantQuiet := []string{"想静静","要静静","自闭了","想自闭","要自闭"};
 
 	for _, v := range wantQuiet {
-		ZeroBot.OnRegex(v, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(40).
+		zero.Default().OnRegex(v, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(40).
 			Handle(func(ctx *ZeroBot.Ctx){
 				ctx.SetGroupBan(
 					ctx.Event.GroupID,
@@ -32,7 +33,7 @@ func Init(c Config){
 	}
 	ignoreMe := []string{"理我"};
 	for _, v := range ignoreMe {
-		ZeroBot.OnRegex(v, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(40).
+		zero.Default().OnRegex(v, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(40).
 			Handle(func(ctx *ZeroBot.Ctx){
 				ctx.SetGroupBan(
 					ctx.Event.GroupID,

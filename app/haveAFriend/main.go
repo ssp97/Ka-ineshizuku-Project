@@ -5,6 +5,7 @@ import (
 	"github.com/golang/freetype"
 	"github.com/nfnt/resize"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/OicqUtils"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"github.com/tfriedel6/canvas"
 	"github.com/tfriedel6/canvas/backend/softwarebackend"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
@@ -91,7 +92,7 @@ func make(str1, str2 string,face *image.Image,_path string){
 func init(){
 	root, _ := os.Getwd()
 
-	ZeroBot.OnRegex("^^我有个朋友说(.*?)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
+	zero.Default().OnRegex("^我有个朋友说(.*?)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		str := ctx.State["regex_matched"].([]string)[1]
 		userId := ctx.Event.UserID
 		for _, segment := range ctx.Event.Message {

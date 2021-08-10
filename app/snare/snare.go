@@ -2,6 +2,7 @@ package snare
 
 import (
 	"fmt"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	"io"
@@ -28,7 +29,7 @@ func Init(c Config) {
 		return
 	}
 
-	ZeroBot.OnRegex(c.RegexExec).SetBlock(true).SetPriority(c.Priority).
+	zero.Default().OnRegex(c.RegexExec).SetBlock(true).SetPriority(c.Priority).
 		Handle(func(ctx *ZeroBot.Ctx) {
 			groupId := ctx.Event.GroupID
 			dir := fmt.Sprintf("%s/%v", PATH,groupId)
@@ -50,8 +51,8 @@ func Init(c Config) {
 			//}
 			ctx.SendChain(message.Image(url))
 	})
-	
-	ZeroBot.OnRegex(c.RegexAdd, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(c.Priority).
+
+	zero.Default().OnRegex(c.RegexAdd, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(c.Priority).
 		Handle(func(ctx *ZeroBot.Ctx) {
 			groupId := ctx.Event.GroupID
 			for _, elem := range ctx.Event.Message {
@@ -80,8 +81,8 @@ func Init(c Config) {
 				}
 			}
 	})
-	
-	ZeroBot.OnRegex(c.RegexDel, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(c.Priority).
+
+	zero.Default().OnRegex(c.RegexDel, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(c.Priority).
 		Handle(func(ctx *ZeroBot.Ctx) {
 		groupId := ctx.Event.GroupID
 		for _, elem := range ctx.Event.Message {

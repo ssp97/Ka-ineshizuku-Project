@@ -2,6 +2,7 @@ package setutime
 
 import (
 	"fmt"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"os"
 	"strconv"
 	"strings"
@@ -90,7 +91,7 @@ func Init(c Config) { // 插件主体
 
 	}
 
-	ZeroBot.OnRegex(`^来点(.*)$`, FirstValueInList(POOL.List)).SetBlock(true).SetPriority(20).
+	zero.Default().OnRegex(`^来点(.*)$`, FirstValueInList(POOL.List)).SetBlock(true).SetPriority(20).
 		Handle(func(ctx *ZeroBot.Ctx) {
 			if !limit.Load(ctx.Event.UserID).Acquire() {
 				ctx.SendChain(message.Text("请稍后重试0x0..."))

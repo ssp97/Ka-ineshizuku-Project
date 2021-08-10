@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/OicqUtils"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/TypeUtils"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"github.com/tfriedel6/canvas"
 	"github.com/tfriedel6/canvas/backend/softwarebackend"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
@@ -94,7 +95,7 @@ func make(face *image.Image,_path string)  {
 
 func init() {
 	root, _ := os.Getwd()
-	ZeroBot.OnRegex("^摸头").SetBlock(true).SetPriority(60).Handle(func(ctx *ZeroBot.Ctx) {
+	zero.Default().OnRegex("^摸头").SetBlock(true).SetPriority(60).Handle(func(ctx *ZeroBot.Ctx) {
 		//str := ctx.State["regex_matched"].([]string)[1]
 		userId := ctx.Event.UserID
 		for _, segment := range ctx.Event.Message {

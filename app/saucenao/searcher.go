@@ -6,6 +6,7 @@ package saucenao
 
 import (
 	"fmt"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"strconv"
 	"strings"
 	"time"
@@ -20,7 +21,7 @@ import (
 
 func init() { // 插件主体
 	// 根据 PID 搜图
-	ZeroBot.OnRegex(`^搜图(\d+)$`).SetBlock(true).FirstPriority().
+	zero.Default().OnRegex(`^搜图(\d+)$`).SetBlock(true).FirstPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			id, _ := strconv.ParseInt(ctx.State["regex_matched"].([]string)[1], 10, 64)
 			ctx.Send("少女祈祷中......")

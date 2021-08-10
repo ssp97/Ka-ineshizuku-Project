@@ -3,6 +3,7 @@ package image_finder
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"io"
 	"math/rand"
 	"net/http"
@@ -70,7 +71,7 @@ var SensitiveWords = map[string]bool{
 }
 
 func init() {
-	ZeroBot.OnRegex(`^来张(.*)$`).SetBlock(true).SetPriority(20).//, ZeroBot.AdminPermission
+	zero.Default().OnRegex(`^来张(.*)$`).SetBlock(true).SetPriority(20).//, ZeroBot.AdminPermission
 		Handle(func(ctx *ZeroBot.Ctx) {
 			keyword := ctx.State["regex_matched"].([]string)[1]
 			if len(keyword) > 6*3{

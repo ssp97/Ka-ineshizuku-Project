@@ -3,6 +3,7 @@ package jieba
 import (
 	"fmt"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/jieba"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	"strings"
@@ -10,7 +11,7 @@ import (
 )
 
 func init() {
-	ZeroBot.OnRegex(`^jieba分词\s(.+?)$`).SetBlock(true).SecondPriority().
+	zero.Default().OnRegex(`^jieba分词\s(.+?)$`).SetBlock(true).SecondPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 
 			now := time.Now()

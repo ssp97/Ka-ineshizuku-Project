@@ -6,6 +6,7 @@ package ai_false
 import (
 	"fmt"
 	"github.com/shirou/gopsutil/host"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"math"
 	"time"
 
@@ -18,7 +19,7 @@ import (
 )
 
 func init() { // 插件主体
-	ZeroBot.OnFullMatchGroup([]string{"检查身体", "自检", "启动自检", "系统状态"}, ZeroBot.AdminPermission).FirstPriority().SetBlock(true).
+	zero.Default().OnFullMatchGroup([]string{"检查身体", "自检", "启动自检", "系统状态"}, ZeroBot.AdminPermission).FirstPriority().SetBlock(true).
 		Handle(func(ctx *ZeroBot.Ctx) {
 			ctx.SendChain(message.Text(
 				"* CPU占用率: ", cpuPercent(), "%\n",
@@ -30,7 +31,7 @@ func init() { // 插件主体
 			),
 			)
 		})
-	ZeroBot.OnFullMatch("!获取群信息", ZeroBot.OnlyGroup).Handle(func(ctx *ZeroBot.Ctx) {
+	zero.Default().OnFullMatch("!获取群信息", ZeroBot.OnlyGroup).Handle(func(ctx *ZeroBot.Ctx) {
 		ctx.SendChain(message.Text(fmt.Sprintf("%v", ctx.GetGroupInfo(ctx.Event.GroupID, false))))
 
 	})
