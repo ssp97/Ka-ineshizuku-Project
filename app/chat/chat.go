@@ -53,7 +53,7 @@ func init() { // 插件主体
 				//	60,
 				//)
 				time.Sleep(time.Second * 1)
-				ctx.SendChain(message.Text("生气了！"))
+				ctx.SendChain(message.At(ctx.Event.UserID),message.Text("生气了！不跟你说话了！"))
 				manager.AddToBlackList(ctx, 5*60)
 				// 频繁触发，不回复，还要不理你
 			}

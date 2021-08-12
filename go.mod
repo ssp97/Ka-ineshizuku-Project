@@ -21,6 +21,7 @@ require (
 	github.com/wdvxdr1123/ZeroBot v1.2.1
 	github.com/yanyiwu/gojieba v1.1.2
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d
+	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e // indirect
 	golang.org/x/tools v0.1.3-0.20210608163600-9ed039809d4c // indirect
 	gorm.io/driver/postgres v1.1.0
 	gorm.io/driver/sqlite v1.1.4
@@ -28,3 +29,5 @@ require (
 	modernc.org/sqlite v1.11.1
 	modernc.org/strutil v1.1.1
 )
+
+replace github.com/yanyiwu/gojieba v1.1.2 => github.com/ttys3/gojieba v1.1.3

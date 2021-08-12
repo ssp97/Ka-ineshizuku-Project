@@ -7,5 +7,5 @@ import (
 
 func TestName(t *testing.T) {
 	faceImg := OicqUtils.GetQQFaceImg(38263547)
-	make(faceImg, "test.gif")
+	touchHeadMake(faceImg, "test.gif")
 }

@@ -1,10 +1,10 @@
 package gifApp
 
 import (
-	"embed"
 	"fmt"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/OicqUtils"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/TypeUtils"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/fsUtils"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"github.com/tfriedel6/canvas"
 	"github.com/tfriedel6/canvas/backend/softwarebackend"
@@ -22,10 +22,12 @@ import (
 	_ "image/png"
 	"os"
 	"path"
+	"sync"
+	"time"
 )
 
-//go:embed static
-var static embed.FS
+////go:embed static
+//var static embed.FS
 
 var PATH = path.Join("data","cache")
 
@@ -44,8 +46,8 @@ func isInPalette(p color.Palette, c color.Color) int {
 }
 
 
-func make(face *image.Image,_path string)  {
-	Sprite,err := static.Open(path.Join("static", "sprite.png"))
+func touchHeadMake(face *image.Image,_path string)  {
+	Sprite,err := os.Open(path.Join(fsUtils.Getwd(), "static", "img", "sprite.png"))
 	if err != nil{
 		panic(err)
 	}
@@ -67,20 +69,32 @@ func make(face *image.Image,_path string)  {
 		{ x: -4, y: 0, w: 0, h: 0 },
 	}
 
+	g.Image = make([]*image.Paletted, 5)
+	g.Delay = make([]int ,5)
+	var wg sync.WaitGroup
+
 	for i := 0; i < 5; i++ {
-		backend := softwarebackend.New(112, 112)
-		cv := canvas.New(backend)
-		cv.SetFillStyle("#FFFFFF")
-		cv.FillRect(0,0, 112, 112)
-		cv.DrawImage(*face,offset[i].x+5,offset[i].y+5, offset[i].w+122, offset[i].h+122)
-		cv.DrawImage(SpritePng,112*float64(i),0,112,112,0,0,112,112)
+		wg.Add(1)
+		go func(i int) {
+			backend := softwarebackend.New(112, 112)
+			cv := canvas.New(backend)
+			cv.SetFillStyle("#FFFFFF")
+			cv.FillRect(0,0, 112, 112)
+			cv.DrawImage(*face,offset[i].x+5,offset[i].y+5, offset[i].w+122, offset[i].h+122)
+			cv.DrawImage(SpritePng,112*float64(i),0,112,112,0,0,112,112)
 
-		pleated := image.NewPaletted(backend.Image.Bounds(), palette.Plan9)
-		draw.FloydSteinberg.Draw(pleated, backend.Image.Bounds(), backend.Image, image.ZP)
+			pleated := image.NewPaletted(backend.Image.Bounds(), palette.Plan9)
+			draw.FloydSteinberg.Draw(pleated, backend.Image.Bounds(), backend.Image, image.ZP)
 
-		g.Image = append(g.Image, pleated)
-		g.Delay = append(g.Delay, 5)
+			g.Image[i] = pleated
+			g.Delay[i] = 5
+
+			//g.Image = append(g.Image, pleated)
+			//g.Delay = append(g.Delay, 5)
+			wg.Done()
+		}(i)
 	}
+	wg.Wait()
 
 	f, err := os.OpenFile(_path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0777)
 	if err != nil {
@@ -110,8 +124,9 @@ func init() {
 		if faceImg == nil{
 			return
 		}
-		make(faceImg, _path)
-		ctx.SendChain(message.Image(fmt.Sprintf("file:///%s" ,_path)))
+		t := time.Now()
+		touchHeadMake(faceImg, _path)
+		ctx.SendChain(message.Image(fmt.Sprintf("file:///%s" ,_path)), message.Text(fmt.Sprintf("%v",time.Since(t))))
 
 	})
 

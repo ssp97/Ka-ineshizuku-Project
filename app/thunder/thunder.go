@@ -163,6 +163,13 @@ func Init(c Config) {
 }
 
 func questionMake()(q , a string){
+	return primarySchoolAddition()
+}
+
+
+//func w
+
+func primarySchoolAddition()(q , a string){
 	rand.Seed(time.Now().Unix())
 	x := rand.Intn(1000)
 	y := rand.Intn(1000)

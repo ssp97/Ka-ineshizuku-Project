@@ -5,8 +5,11 @@
 package atri
 
 import (
+	"fmt"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/fsUtils"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"math/rand"
+	"path"
 	"time"
 
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
@@ -17,7 +20,7 @@ var (
 	// ATRI 所有命令的优先级
 	PRIO = -1
 	// ATRI 表情的 GitHub 镜像位置
-	RES = "https://raw.dihe.moe/Yiwen-Chan/ZeroBot-App/master/atri/"
+	RES = fmt.Sprintf("%s",path.Join(fsUtils.Getwd(), "static", "atri"))
 	// ATRI 的总开关
 	ENABLE = true
 )
@@ -226,12 +229,12 @@ func randText(text ...string) message.MessageSegment {
 
 func randImage(file ...string) message.MessageSegment {
 	length := len(file)
-	return message.Image(RES + file[rand.Intn(length)])
+	return message.Image("file:///" + path.Join(RES,file[rand.Intn(length)]))
 }
 
 func randRecord(file ...string) message.MessageSegment {
 	length := len(file)
-	return message.Record(RES + file[rand.Intn(length)])
+	return message.Record("file:///" + path.Join(RES, file[rand.Intn(length)]))
 }
 
 // AtriSwitch 控制 ATRI 的开关
