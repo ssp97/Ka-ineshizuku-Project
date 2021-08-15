@@ -14,6 +14,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/sosedoff/pgweb v0.11.8
 	github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816
+	github.com/tdewolff/canvas v0.0.0-20210813193915-9091572b3792
 	github.com/tfriedel6/canvas v0.12.1
 	github.com/tidwall/gjson v1.8.1
 	github.com/tidwall/pretty v1.2.0 // indirect

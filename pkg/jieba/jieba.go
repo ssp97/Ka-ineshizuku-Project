@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-var dictDir = path.Join(filepath.Dir(os.Args[0]), path.Join("data", "dict"))
+var dictDir = path.Join(filepath.Dir(os.Args[0]), path.Join("static", "dict"))
 var jiebaPath = path.Join(dictDir, "jieba.dict.utf8")
 var hmmPath = path.Join(dictDir, "hmm_model.utf8")
 var userPath = path.Join(dictDir, "user.dict.utf8")
