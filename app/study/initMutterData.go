@@ -1,85 +1,25 @@
 package study
 
-var __mutterData = []string{
-	"[CQ:image,file=f516e00ca5af5ba88432dc2ebe535636.image,url=https://gchat.qpic.cn/gchatpic_new/1005056803/2063243247-2906993909-F516E00CA5AF5BA88432DC2EBE535636/0?term=3]",
-	"确实",
-	"不错",
-	"嗯",
-	"对",
-	"有道理",
-	"这么厉害啊",
-	"啊这",
-	"就这",
-	"好耶",
-	"好起来了",
-	"牛逼",
-	"再来点",
-	"草",
-	"艹",
-	"小夜学习了",
-	"长知识了",
-	"开眼界了",
-	"好家伙",
-	"可以",
-	"还行",
-	"6",
-	"没懂",
-	"不是吧，阿sir",
-	"原来如此",
-	"真不错",
-	"不错，硬了",
-	"不会吧不会吧",
-	"笑死",
-	"还有这种事",
-	"不是很懂",
-	"[CQ:face,id=13]",
-	"爬",
-	"有一说一，确实",
-	"妙啊",
-	"差不多得了",
-	"还有这种好事",
-	"笑了",
-	"你继续说，小夜在听",
-	"那我走？",
-	"谢谢你米哈游",
-	"原来你也玩原神",
-	"哎  就是玩儿",
-	"已读",
-	"笑死，根本不好笑",
-	"听不见，重来！",
-	"光唠这有啥意思，实际点，来点色图",
-	"那没事了",
-	"绝了",
-	"还有这种操作",
-	"[CQ:image,file=618fe9d1159428a0d650f5544b87a359.image,url=https://gchat.qpic.cn/gchatpic_new/380596923/955072035-2480099261-618FE9D1159428A0D650F5544B87A359/0?term=3]",
-	"[CQ:image,file=ee770d65d899d5442f05ce0e91e33512.image,url=https://gchat.qpic.cn/gchatpic_new/1337912908/3929292338-3111613346-EE770D65D899D5442F05CE0E91E33512/0?term=3]",
-	"麻了",
-	"fnmdp",
-	"妈的，少说两句，我卡了",
-	"那当然",
-	"[CQ:image,file=9d563b36a2f0aacc19c5e5efcfc37bd9.image,url=https://gchat.qpic.cn/gchatpic_new/1005056803/2063243247-2237303927-9D563B36A2F0AACC19C5E5EFCFC37BD9/0?term=3]",
-	"你说你🐎呢？",
-	"不会真有人还不知道吧",
-	"真别逗我笑啊",
-	"那可真是有趣呢",
-	"这也能卷？",
-	"管人痴",
-	"[CQ:image,file=d1c9bbd689b14e8a1fd8a788c522b7df.image,url=https://gchat.qpic.cn/gchatpic_new/1009889445/2063243247-2722701840-D1C9BBD689B14E8A1FD8A788C522B7DF/0?term=3]",
-	"[CQ:image,file=0a1a3741cc9c452e1000522683d42314.image,url=https://gchat.qpic.cn/gchatpic_new/1009889445/2063243247-2222584476-0A1A3741CC9C452E1000522683D42314/0?term=3]",
-	"[CQ:image,file=edff40a1e9e16fe3d7c50c05639c6c6a.image,url=https://gchat.qpic.cn/gchatpic_new/1005056803/2063243247-2768161395-EDFF40A1E9E16FE3D7C50C05639C6C6A/0?term=3]",
-	"。",
-	"[CQ:image,file=f3114434e79959b383eaccf52c0a0bb0.image,url=https://gchat.qpic.cn/gchatpic_new/1005056803/2063243247-2349137658-F3114434E79959B383EACCF52C0A0BB0/0?term=3]",
-	"[CQ:image,file=3709b648357185e55cbbb77613eb4bf8.image,url=https://gchat.qpic.cn/gchatpic_new/1005056803/2063243247-3168775989-3709B648357185E55CBBB77613EB4BF8/0?term=3]",
-	"(文字或者图片)",
-	"(&#91;比心&#93;)",
-	"你配吗",
-	"啊啊啊",
-	"[CQ:at,qq=1648468212] ，，，",
-	"[CQ:image,file=15244c9a58e65aec23702f8bab54f4c9.image,url=https://gchat.qpic.cn/gchatpic_new/1005056803/2063243247-2862171823-15244C9A58E65AEC23702F8BAB54F4C9/0?term=3]",
-}
+import (
+	"fmt"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/fsUtils"
+	"io/ioutil"
+	"path"
+	"strings"
+)
 
 func initMutterData(){
-	for _, datum := range __mutterData {
-		db.DB.Table("chat_mutters").Create(&ChatMutter{Mutter: datum})
+
+	data,err := ioutil.ReadFile(path.Join(fsUtils.Getwd(), "static", "sql", "chat_mutters.sql"))
+	if err != nil{
+		fmt.Println(err)
 	}
+	sqlArr:=strings.Split(string(data),";")
+	for _,sql:=range sqlArr{
+		if sql==""{
+			continue
+		}
+		db.DB.Exec(sql)
+	}
+
 }

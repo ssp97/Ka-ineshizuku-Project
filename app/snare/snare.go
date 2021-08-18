@@ -2,6 +2,7 @@ package snare
 
 import (
 	"fmt"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/fsUtils"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
@@ -11,6 +12,7 @@ import (
 	"modernc.org/strutil"
 	"net/http"
 	"os"
+	"path"
 )
 
 const PATH = "data/snare"
@@ -77,7 +79,10 @@ func Init(c Config) {
 					if err!=nil{
 						fmt.Println(err)
 					}
-					ctx.SendChain(message.Text("安排上了"))
+					ctx.SendChain(message.Text("安排上了"),
+						message.At(ctx.Event.UserID),
+						message.Text("的图"),
+						message.Image(fmt.Sprintf("file:///%s",path.Join(fsUtils.Getwd(), file))))
 				}
 			}
 	})
