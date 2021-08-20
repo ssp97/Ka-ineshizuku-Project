@@ -4,7 +4,6 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/app"
 	"github.com/ssp97/Ka-ineshizuku-Project/conf"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/dbManager"
-	"net/http"
 	_ "net/http/pprof"
 	// 注：以下插件均可通过前面加 // 注释，注释后停用并不加载插件
 	// 下列插件可与 wdvxdr1123/ZeroBot v1.1.2 以上配合单独使用
@@ -40,7 +39,7 @@ func init() {
 		LogFormat:       "[zero][%time%][%lvl%]: %msg% \n",
 	})
 	log.SetLevel(log.DebugLevel)
-	go http.ListenAndServe("0.0.0.0:6060", nil)
+	//go http.ListenAndServe("0.0.0.0:6060", nil)
 }
 
 func main() {

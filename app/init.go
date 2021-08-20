@@ -36,34 +36,23 @@ func Init(c *conf.Config){
 	EEAsst.Init(c.App.EEAsst)
 
 	zerobotConfig := &c.Zerobot
+
+	var dri []ZeroBot.Driver
+	for i, _ := range zerobotConfig.Url {
+		dri = append(dri, &driver.WSClient{
+			Url:	zerobotConfig.Url[i],
+			AccessToken: zerobotConfig.Token[i],
+		})
+	}
+
 	zero.RunDefault(ZeroBot.Config{
 		NickName:      zerobotConfig.NickName,
 		CommandPrefix: zerobotConfig.Prefix,
 
 		SuperUsers: append(zerobotConfig.SuperUser, os.Args[1:]...),
 
-		Driver: []ZeroBot.Driver{
-			&driver.WSClient{
-				// OneBot 正向WS 默认使用 6700 端口
-				Url:         zerobotConfig.Url,
-				AccessToken: zerobotConfig.Token,
-			},
-		},
+		Driver: dri,
 	})
-	//zero.Run(zero.Config{
-	//	NickName:      zerobotConfig.NickName,
-	//	CommandPrefix: zerobotConfig.Prefix,
-	//
-	//	SuperUsers: append(zerobotConfig.SuperUser, os.Args[1:]...),
-	//
-	//	Driver: []zero.Driver{
-	//		&driver.WSClient{
-	//			// OneBot 正向WS 默认使用 6700 端口
-	//			Url:         zerobotConfig.Url,
-	//			AccessToken: zerobotConfig.Token,
-	//		},
-	//	},
-	//})
 
 	ZeroBot.OnCommand("ping").SetBlock(true).SetPriority(999).Handle(func(ctx *ZeroBot.Ctx) {
 

@@ -68,6 +68,7 @@ var SensitiveWords = map[string]bool{
 	"R-18G":true,
 	"R18G":true,
 	"R18":true,
+	"派派":true,
 }
 
 func init() {
@@ -77,6 +78,12 @@ func init() {
 			if len(keyword) > 6*3{
 				return
 			}
+
+			if SensitiveWords[keyword]{
+				ctx.SendChain(message.Text("没有"))
+				return
+			}
+
 			soutujson := soutuapi(keyword)
 
 			if(len(soutujson.Illusts) <= 0){

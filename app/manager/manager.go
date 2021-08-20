@@ -41,13 +41,14 @@ func GroupSwitchControl(ctx *ZeroBot.Ctx) bool{
 	}
 
 	groupId := ctx.Event.GroupID
+
 	var group Group
 	result := db.DB.First(&group, groupId)
 	if result.Error == gorm.ErrRecordNotFound {
 		log.Debugln("------------------->创建记录")
 		db.DB.Create(&Group{
 			ID: uint64(groupId),
-			Enable: false,
+			Enable: true,
 		})
 		return false
 	}
@@ -56,6 +57,9 @@ func GroupSwitchControl(ctx *ZeroBot.Ctx) bool{
 
 func UserBlackListQuery(ctx *ZeroBot.Ctx) bool{
 	userId := ctx.Event.UserID
+	if userId < 10000{
+		return false
+	}
 	now := time.Now().Unix()
 	var user BlackList
 	result := db.DB.First(&user, userId)
