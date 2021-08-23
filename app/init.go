@@ -17,6 +17,7 @@ import (
 	"github.com/wdvxdr1123/ZeroBot/driver"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	"math/rand"
+	"net/http"
 	"os"
 	"time"
 )
@@ -65,5 +66,9 @@ func Init(c *conf.Config){
 		result := fmt.Sprintf("pong %f %v",d,time.Since(t))
 		ctx.SendChain(message.Text(result))
 	})
+
+	if zerobotConfig.DebugPort > 0 && zerobotConfig.DebugPort<65536{
+		go http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", zerobotConfig.DebugPort), nil)
+	}
 
 }

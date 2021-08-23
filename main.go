@@ -39,7 +39,7 @@ func init() {
 		LogFormat:       "[zero][%time%][%lvl%]: %msg% \n",
 	})
 	log.SetLevel(log.DebugLevel)
-	//go http.ListenAndServe("0.0.0.0:6060", nil)
+	//
 }
 
 func main() {

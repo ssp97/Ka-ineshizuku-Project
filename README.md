@@ -66,6 +66,7 @@
 - 搜图 `app/saucenao 来自ZeroBot-Plugin`
     - [x] 以图搜图|搜索图片|以图识图[图片]
     - [x] 搜图[P站图片ID]
+    - [ ] 新增其他图源
 - AIfalse `app/ai_false 来自ZeroBot-Plugin`
     - [x] 查询计算机当前活跃度 [身体检查]
     - [ ] 简易语音
@@ -78,10 +79,11 @@
     - [x] 想要静静 [我想静静]
 - jieba `app/jieba 结巴分词测试`
     - [x] 结巴分词 [jieba分词 balabala]
-- snare `app/snare 群黑历史`
-    - [x] 使用
-    - [x] 加图
-    - [x] 删图
+- snare `app/snare 群黑历史等群友间互相伤害功能`
+    - [x] 使用 [随机陷害]
+    - [x] 加图 [陷害加图]
+    - [x] 删图 [陷害删图]
+    - [x] 伪造聊天 [!伪造@xxx balabala]
 - study `app/study 对话学习功能`
     - [x] 精准匹配
     - [x] 模糊匹配
@@ -100,7 +102,9 @@
 ### 兼容性
 - [x] Linux 
 - [ ] Windows (有待测试)
-
+```
+    因为CPP程序依赖问题，暂时不能使用"go run"进行运行，也不允许在中文路径下运行。
+```
 ### 依赖组件
 - oneBot v11 的兼容实现，例如[go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 - 选择PostgreSql作为数据库时，需要安装对饮的数据库并进行配置(可能会带来更好的性能)

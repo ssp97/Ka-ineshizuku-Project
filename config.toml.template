@@ -6,11 +6,12 @@
         dsn = "host=192.168.123.98 user=postgres password=yuanpai dbname=zerobot port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 
 [zerobot]
-    nickName = [ "二小姐" ]
-    url = "ws://127.0.0.1:6700"
-    token = ""
+    nickName = [ "小雫" ]
+    url = ["ws://127.0.0.1:6700"]
+    token = [""]
     superUser = [ "10000" ]
     prefix = "!"
+    debugPort = 6060
 
 [app]
     [app.manager]    # 管理功能
