@@ -10,8 +10,10 @@ require (
 	github.com/go-gl/gl v0.0.0-20210426225639-a3bfa832c8aa // indirect
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
-	github.com/lon9/mat v1.1.2
+	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/lestrrat-go/strftime v1.0.5 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
+	github.com/orcaman/writerseeker v0.0.0-20200621085525-1d3f536ff85e
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/shirou/gopsutil v3.21.6+incompatible
 	github.com/sirupsen/logrus v1.8.1
@@ -21,7 +23,7 @@ require (
 	github.com/tidwall/gjson v1.8.1
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.6 // indirect
-	github.com/wdvxdr1123/ZeroBot v1.2.1
+	github.com/wdvxdr1123/ZeroBot v1.2.2
 	github.com/yanyiwu/gojieba v1.1.2
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed // indirect
@@ -36,4 +38,7 @@ require (
 	modernc.org/strutil v1.1.1
 )
 
-replace github.com/yanyiwu/gojieba v1.1.2 => github.com/ttys3/gojieba v1.1.3
+replace (
+	github.com/wdvxdr1123/ZeroBot v1.2.2 => github.com/ssp97/ZeroBot v1.2.3
+	github.com/yanyiwu/gojieba v1.1.2 => github.com/ttys3/gojieba v1.1.3
+)

@@ -1,9 +1,12 @@
 package gifApp
 
 import (
+	"encoding/base64"
 	"fmt"
+	"github.com/orcaman/writerseeker"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/OicqUtils"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/TypeUtils"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/avoidExamine"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/fsUtils"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"github.com/tfriedel6/canvas"
@@ -20,6 +23,7 @@ import (
 	_ "image/jpeg"
 	"image/png"
 	_ "image/png"
+	"io/ioutil"
 	"os"
 	"path"
 	"sync"
@@ -46,7 +50,7 @@ func isInPalette(p color.Palette, c color.Color) int {
 }
 
 
-func touchHeadMake(face *image.Image,_path string)  {
+func touchHeadMake(face *image.Image)(b *string)  {
 	Sprite,err := os.Open(path.Join(fsUtils.Getwd(), "static", "img", "sprite.png"))
 	if err != nil{
 		panic(err)
@@ -96,19 +100,28 @@ func touchHeadMake(face *image.Image,_path string)  {
 	}
 	wg.Wait()
 
-	f, err := os.OpenFile(_path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0777)
-	if err != nil {
-		panic(err)
-	}
+	//f, err := os.OpenFile(_path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0777)
+	//if err != nil {
+	//	panic(err)
+	//}
+	w := new(writerseeker.WriterSeeker)
 
-	err = gif.EncodeAll(f, &g)
+	err = gif.EncodeAll(w, &g)
 	if err != nil {
 		panic(err)
 	}
+	d, err := ioutil.ReadAll(w.Reader())
+	if err != nil{
+		panic(err)
+	}
+	d = avoidExamine.PicByte(d)
+	bs := base64.StdEncoding.EncodeToString(d)
+	b = &bs
+	return
 }
 
 func init() {
-	root, _ := os.Getwd()
+	//root, _ := os.Getwd()
 	zero.Default().OnRegex("^摸头").SetBlock(true).SetPriority(60).Handle(func(ctx *ZeroBot.Ctx) {
 		//str := ctx.State["regex_matched"].([]string)[1]
 		userId := ctx.Event.UserID
@@ -117,16 +130,16 @@ func init() {
 				userId = TypeUtils.StrToInt(segment.Data["qq"])
 			}
 		}
-		file := fmt.Sprintf("%d.jpg",userId)
-		_path := path.Join(root, PATH, file)
+		//file := fmt.Sprintf("%d.jpg",userId)
+		//_path := path.Join(root, PATH, file)
 
 		faceImg := OicqUtils.GetQQFaceImg(userId)
 		if faceImg == nil{
 			return
 		}
 		t := time.Now()
-		touchHeadMake(faceImg, _path)
-		ctx.SendChain(message.Image(fmt.Sprintf("file:///%s" ,_path)), message.Text(fmt.Sprintf("%v",time.Since(t))))
+		bs := touchHeadMake(faceImg)
+		ctx.SendChain(zero.ImageBase64Message(bs), message.Text(fmt.Sprintf("%v",time.Since(t))))
 
 	})
 

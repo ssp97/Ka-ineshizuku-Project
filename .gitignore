@@ -1,9 +1,14 @@
 data/SetuTime/cache/*.jpg
 data/SetuTime/search/*.jpg
+data/cache/*.jpg
+data/cache/*.image
 data/manager
+data/main.db
+data/main.db-journal
 .idea/
 .DS_Store
 ZeroBot-App
+Ka-ineshizuku-Project
 main
 ZeroBot-Plugin
 config.toml

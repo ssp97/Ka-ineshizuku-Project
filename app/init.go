@@ -57,15 +57,28 @@ func Init(c *conf.Config){
 
 	ZeroBot.OnCommand("ping").SetBlock(true).SetPriority(999).Handle(func(ctx *ZeroBot.Ctx) {
 
-		var d = float64(rand.Intn(10000))
+		var d = float64(rand.Intn(10000*100000))/100000
 		t := time.Now()
-		//log.Println("ping-pong")
 		for i:= 1.0; i <= 114514.0; i++ {
 			d += i + i/10.0
 		}
 		result := fmt.Sprintf("pong %f %v",d,time.Since(t))
 		ctx.SendChain(message.Text(result))
 	})
+
+	//ZeroBot.OnRequest().Handle(func(ctx *ZeroBot.Ctx) {
+	//	fmt.Println(ctx.Event.RequestType)
+	//	if ctx.Event.RequestType=="friend"{
+	//		flag := ctx.Event.Flag
+	//		ctx.SetFriendAddRequest(flag, true, "")
+	//		fmt.Println("处理加好友")
+	//	}
+	//	if ctx.Event.RequestType=="group"{
+	//		flag := ctx.Event.Flag
+	//		subType := ctx.Event.SubType
+	//		ctx.SetGroupAddRequest(flag, subType, true, "")
+	//	}
+	//})
 
 	if zerobotConfig.DebugPort > 0 && zerobotConfig.DebugPort<65536{
 		go http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", zerobotConfig.DebugPort), nil)

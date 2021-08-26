@@ -92,6 +92,7 @@
     - 注：目前大部分语料来自[星野夜蝶Offiial](https://github.com/Giftia/ChatDACS)
 - thunder `app/thunder 群游戏手捧雷`  
     - [x] 游戏功能 [手捧雷]
+    - [x] 加倍功能  
     - [x] 小学数学加法
 - haveAFriend `app/haveAFriend 我有个朋友说...图片生成功能`
     - [x] 针对自己 
@@ -107,7 +108,7 @@
 ```
 ### 依赖组件
 - oneBot v11 的兼容实现，例如[go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
-- 选择PostgreSql作为数据库时，需要安装对饮的数据库并进行配置(可能会带来更好的性能)
+- 选择PostgreSql作为数据库时，需要安装对应的数据库并进行配置(可能会带来更好的性能)
 
 ### 数据库支持
 - SQLite

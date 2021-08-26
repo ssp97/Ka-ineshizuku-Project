@@ -8,9 +8,9 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"path"
 	"time"
 
-	"github.com/ssp97/Ka-ineshizuku-Project/pkg/avoidExamine"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 )
@@ -112,12 +112,15 @@ func init() {
 						ctx.SendChain(message.Text(fmt.Sprintf("啊偶，图片下载失败了...因为%s",err)))
 						return
 					}
-					err = avoidExamine.PicFile(file)
-					if err!= nil{
-						ctx.SendChain(message.Text("啊偶，图片处理出错了，因为%s", err))
-					}
-					ctx.SendChain(message.Image(fmt.Sprintf("file:///%s/%s/%d",rootDir,PATH,soutujson.Illusts[rannum].ID)),
-						message.Text(fmt.Sprintf("%d-%s",soutujson.Illusts[rannum].ID,soutujson.Illusts[rannum].Title)))
+					//err = avoidExamine.PicFile(file)
+					//if err!= nil{
+					//	ctx.SendChain(message.Text("啊偶，图片处理出错了，因为%s", err))
+					//}
+					ctx.SendChain(
+						zero.ImageFileMessage(path.Join(rootDir,PATH,fmt.Sprintf("%d",soutujson.Illusts[rannum].ID))),
+						//message.Image(fmt.Sprintf("file:///%s/%s/%d",rootDir,PATH,soutujson.Illusts[rannum].ID)),
+						message.Text(fmt.Sprintf("%d-%s",soutujson.Illusts[rannum].ID,soutujson.Illusts[rannum].Title)),
+						)
 
 					go func(file string) {
 						time.Sleep(time.Second * 120)

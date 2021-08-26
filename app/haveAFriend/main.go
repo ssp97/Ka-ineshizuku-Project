@@ -1,11 +1,14 @@
 package haveAFriend
 
 import (
+	"encoding/base64"
 	"fmt"
 	"github.com/golang/freetype"
 	"github.com/nfnt/resize"
+	"github.com/orcaman/writerseeker"
 	log "github.com/sirupsen/logrus"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/OicqUtils"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/avoidExamine"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	"github.com/tfriedel6/canvas"
 	"github.com/tfriedel6/canvas/backend/softwarebackend"
@@ -17,6 +20,7 @@ import (
 	_ "image/gif"
 	"image/jpeg"
 	_ "image/png"
+	"io/ioutil"
 	"math"
 	"os"
 	"path"
@@ -33,7 +37,7 @@ var FONT_PATH = path.Join("static","font","simhei.ttf")
 
 
 
-func haveAFriendMake(str1, str2 string,face *image.Image,_path string){
+func haveAFriendMake(str1, str2 string,face *image.Image)(b *string){
 
 	t := time.Now().Format("15:04")
 	_t := time.Now()
@@ -96,21 +100,29 @@ func haveAFriendMake(str1, str2 string,face *image.Image,_path string){
 	//log.Debugln(time.Since(_t)) 1040
 	m := resize.Thumbnail(350*2, 80*2, backend.Image, resize.Lanczos3)
 	//log.Debugln(time.Since(_t)) 1119ms
-	f, err := os.OpenFile(_path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0777)
-	if err != nil {
-		panic(err)
-	}
+	//f, err := os.OpenFile(_path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0777)
+	//if err != nil {
+	//	panic(err)
+	//}
+	w := new(writerseeker.WriterSeeker)
 
-	err = jpeg.Encode(f, m, &jpeg.Options{Quality: 80})
+
+	err = jpeg.Encode(w, m, &jpeg.Options{Quality: 80})
 	if err != nil {
 		panic(err)
 	}
+	d, err := ioutil.ReadAll(w.Reader())
+	if err != nil{
+		panic(err)
+	}
+	d = avoidExamine.PicByte(d)
+	bs := base64.StdEncoding.EncodeToString(d)
+	b = &bs
+	return
 }
 
 
 func init(){
-	root, _ := os.Getwd()
-
 	zero.Default().OnRegex("^我有个朋友说(.*?)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		str := ctx.State["regex_matched"].([]string)[1]
 		userId := ctx.Event.UserID
@@ -121,17 +133,10 @@ func init(){
 			}
 		}
 		name := ctx.GetGroupMemberInfo(ctx.Event.GroupID,userId,true).Get("nickname").String()
-		file := fmt.Sprintf("%d.jpg",userId)
-		p := path.Join(root, PATH, file)
 		img := OicqUtils.GetQQFaceImg(userId)
-		//haveAFriendMake(name, str,img,p)
-		//err := makeByGpu(name, str,img,p)
-		//if err != nil{
-		//	haveAFriendMake(name, str,img,p)
-		//}
 		t := time.Now()
-		haveAFriendMake(name, str,img,p)
-		ctx.SendChain(message.Image(fmt.Sprintf("file:///%s" ,p)), message.Text(fmt.Sprintf("%v",time.Since(t))))
+		b := haveAFriendMake(name, str,img)
+		ctx.SendChain(zero.ImageBase64Message(b), message.Text(fmt.Sprintf("%v",time.Since(t))))
 	})
 }
 

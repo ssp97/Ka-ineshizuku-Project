@@ -10,7 +10,6 @@ import (
 // 虚拟合并转发
 
 func init() {
-
 	zero.Default().OnRegex("^!伪造").SetPriority(40).SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
 		msg := message.Message{}
 		userId := int64(0)

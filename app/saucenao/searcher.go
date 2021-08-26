@@ -82,6 +82,7 @@ func init() { // 插件主体
 				recv, cancel := next.Repeat()
 				select {
 				case <-time.After(time.Second * 120):
+					cancel()
 					return
 				case e := <-recv:
 					cancel()

@@ -46,12 +46,14 @@ func Init(c Config) {
 			}
 			picId := rand.Intn(picCount)
 
-			url := fmt.Sprintf("file://%s/%s/%v",rootDir,dir,rd[picId].Name())
+			//url := fmt.Sprintf("file://%s/%s/%v",rootDir,dir,rd[picId].Name())
+			file := fmt.Sprintf("%s/%s/%v",rootDir,dir,rd[picId].Name())
 			//d, err := pathToBase64(url)
 			//if err!= nil{
 			//	return
 			//}
-			ctx.SendChain(message.Image(url))
+			//ctx.SendChain(message.Image(url))
+			ctx.SendChain(zero.ImageFileMessage(file))
 	})
 
 	zero.Default().OnRegex(c.RegexAdd, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(c.Priority).
@@ -82,7 +84,9 @@ func Init(c Config) {
 					ctx.SendChain(message.Text("安排上了"),
 						message.At(ctx.Event.UserID),
 						message.Text("的图"),
-						message.Image(fmt.Sprintf("file:///%s",path.Join(fsUtils.Getwd(), file))))
+						zero.ImageFileMessage(path.Join(fsUtils.Getwd(), file)),
+						//message.Image(fmt.Sprintf("file:///%s",path.Join(fsUtils.Getwd(), file))))
+					)
 				}
 			}
 	})

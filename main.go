@@ -4,7 +4,11 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/app"
 	"github.com/ssp97/Ka-ineshizuku-Project/conf"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/dbManager"
+	"io"
 	_ "net/http/pprof"
+	"os"
+	"time"
+
 	// 注：以下插件均可通过前面加 // 注释，注释后停用并不加载插件
 	// 下列插件可与 wdvxdr1123/ZeroBot v1.1.2 以上配合单独使用
 	// 词库类
@@ -24,21 +28,27 @@ import (
 
 	_ "github.com/ssp97/Ka-ineshizuku-Project/app/jieba" // 分词
 
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	log "github.com/sirupsen/logrus"
 	easy "github.com/t-tomalak/logrus-easy-formatter"
 )
 
-var content = []string{
-	"* ChatBot + ZeroBot + Golang ",
-	"* Project: https://github.com/ssp97/ZeroBot-app",
-}
-
 func init() {
+	logFile, err := rotatelogs.New("logs/%Y%m%d"+".log",
+		rotatelogs.WithLinkName("logs/now.log"),
+		rotatelogs.WithMaxAge(time.Duration(24 * 30)*time.Hour),
+		rotatelogs.WithRotationTime(time.Duration(24)*time.Hour))
+	if err != nil {
+		log.Error("\t->Failed to log to file, using default stderr")
+	}
+	mw := io.MultiWriter(os.Stdout, logFile)
+	log.SetOutput(mw)
+
 	log.SetFormatter(&easy.Formatter{
 		TimestampFormat: "2006-01-02 15:04:05",
 		LogFormat:       "[zero][%time%][%lvl%]: %msg% \n",
 	})
-	log.SetLevel(log.DebugLevel)
+	log.SetLevel(log.WarnLevel)
 	//
 }
 

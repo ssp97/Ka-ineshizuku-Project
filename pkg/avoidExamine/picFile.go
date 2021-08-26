@@ -1,6 +1,7 @@
 package avoidExamine
 
 import (
+	"bytes"
 	"math/rand"
 	"os"
 )
@@ -25,3 +26,16 @@ func PicFile(path string)(err error){
 
 	return
 }
+
+func PicByte(data ...[]byte)(result []byte){
+	r := randomBytes(rand.Intn(20))
+	result = bytes.Join(data,r)
+	return
+}
+
+//func PicBase64(data string)(result string){
+//	decodeBytes, err := base64.StdEncoding.DecodeString(data)
+//	r := randomBytes(rand.Intn(20))
+//	data :=
+//	rs := base64.StdEncoding.EncodeToString(r)
+//}

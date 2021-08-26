@@ -36,15 +36,15 @@ func init() { // 插件主体
 	//		ENABLE = false
 	//		ctx.SendChain(randText("Zzz……Zzz……"))
 	//	})
-	zero.Default().OnFullMatch("萝卜子", AtriSwitch(), AtriSleep()).SetBlock(true).SetPriority(PRIO).
-		Handle(func(ctx *ZeroBot.Ctx) {
-			switch rand.Intn(2) {
-			case 0:
-				ctx.SendChain(randText("萝卜子是对机器人的蔑称！", "是亚托莉......萝卜子可是对机器人的蔑称"))
-			case 1:
-				ctx.SendChain(randRecord("RocketPunch.amr"))
-			}
-		})
+	//zero.Default().OnFullMatch("萝卜子", AtriSwitch(), AtriSleep()).SetBlock(true).SetPriority(PRIO).
+	//	Handle(func(ctx *ZeroBot.Ctx) {
+	//		switch rand.Intn(2) {
+	//		case 0:
+	//			ctx.SendChain(randText("萝卜子是对机器人的蔑称！", "是亚托莉......萝卜子可是对机器人的蔑称"))
+	//		case 1:
+	//			ctx.SendChain(randRecord("RocketPunch.amr"))
+	//		}
+	//	})
 	zero.Default().OnKeywordGroup([]string{"喜欢", "爱你", "suki", "daisuki", "すき", "好き", "贴贴", "老婆", "亲一个", "mua"}, AtriSwitch(), AtriSleep(), ZeroBot.OnlyToMe).SetBlock(true).SetPriority(PRIO).
 		Handle(func(ctx *ZeroBot.Ctx) {
 			if rand.Intn(10) == 0 {
@@ -229,7 +229,8 @@ func randText(text ...string) message.MessageSegment {
 
 func randImage(file ...string) message.MessageSegment {
 	length := len(file)
-	return message.Image("file:///" + path.Join(RES,file[rand.Intn(length)]))
+	//return message.Image("file:///" + path.Join(RES,file[rand.Intn(length)]))
+	return zero.ImageFileMessage(path.Join(RES,file[rand.Intn(length)]))
 }
 
 func randRecord(file ...string) message.MessageSegment {
