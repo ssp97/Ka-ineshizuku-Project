@@ -52,12 +52,13 @@ func NewWebSocketServer(port int, accessToken string) *WSServer{
 }
 
 func (ws *WSServer) Connect() {
-	http.HandleFunc("/", ws.websocketServer)
+	// nothing
 }
 
 func (ws *WSServer)websocketServer(w http.ResponseWriter, r *http.Request){
 	wsConn := WSConn{
 		Server: ws,
+		selfID: 0,
 	}
 
 	c, err := ws.Server.Upgrade(w, r, nil)
@@ -67,22 +68,31 @@ func (ws *WSServer)websocketServer(w http.ResponseWriter, r *http.Request){
 	defer c.Close()
 	wsConn.conn = c
 
-	rsp, _ := wsConn.CallApi(zero.APIRequest{
-		Action: "get_login_info",
-		Params: nil,
-	})
-	wsConn.selfID = rsp.Data.Get("user_id").Int()
-	zero.APICallers.Store(wsConn.selfID, &wsConn) // 添加Caller到 APICaller list...
-	defer zero.APICallers.Delete(wsConn.selfID)   // 退出后则要删除掉
-	log.Infof("接受websocket连接")
+	log.Infof("接受websocket连接:%v", c.RemoteAddr())
+
+	go func() {
+		rsp, err := wsConn.CallApi(zero.APIRequest{
+			Action: "get_login_info",
+			Params: nil,
+		})
+
+		if err != nil{
+			log.Warn("获取基础信息失败")
+			return
+		}
+		wsConn.selfID = rsp.Data.Get("user_id").Int()
+		zero.APICallers.Store(wsConn.selfID, &wsConn) // 添加Caller到 APICaller list...
+		log.Infof("基础信息获取成功:%v", c.RemoteAddr())
+	}()
 
 	for {
 		t, payload, err := wsConn.conn.ReadMessage()
 		if err != nil { // reconnect
-			zero.APICallers.Delete(wsConn.selfID) // 断开从apicaller中删除
-			log.Warn("Websocket服务器连接断开...")
-			time.Sleep(time.Millisecond * time.Duration(3))
-			ws.Connect()
+			if wsConn.selfID > 0{
+				zero.APICallers.Delete(wsConn.selfID)   // 退出后则要删除掉
+			}
+			log.Warnf("websocket连接断开:%v", c.RemoteAddr())
+			return
 		}
 
 		if t == websocket.TextMessage {
@@ -114,8 +124,10 @@ func (ws *WSServer)websocketServer(w http.ResponseWriter, r *http.Request){
 
 func (ws *WSServer) Listen(handler func([]byte, zero.APICaller)){
 	ws.handler = handler
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", ws.websocketServer)
 	log.Infof("start server on port %d", ws.Port)
-	err:=http.ListenAndServe(fmt.Sprintf(":%d", ws.Port),nil)
+	err := http.ListenAndServe(fmt.Sprintf(":%d", ws.Port),mux)
 	if err!=nil{
 		log.Error(err)
 	}
