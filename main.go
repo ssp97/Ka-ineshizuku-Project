@@ -48,7 +48,7 @@ func init() {
 		TimestampFormat: "2006-01-02 15:04:05",
 		LogFormat:       "[zero][%time%][%lvl%]: %msg% \n",
 	})
-	log.SetLevel(log.WarnLevel)
+	log.SetLevel(log.InfoLevel)
 	//
 }
 

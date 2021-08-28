@@ -30,7 +30,7 @@ func connectPostgresql(cSqlite  *ConfigPostgresql)  (*gorm.DB, error){
 	)
 
 	db, err := gorm.Open(postgres.Open(cSqlite.DSN), &gorm.Config{
-		PrepareStmt: true,
+		PrepareStmt: false,
 		Logger: newLogger,
 	})
 	if err != nil {

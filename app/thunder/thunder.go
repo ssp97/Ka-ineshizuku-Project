@@ -19,6 +19,7 @@ type thunder struct {
 	answer		string
 	victim		int64
 	lastVictim  int64
+	nowTime		time.Time
 }
 var thunderList = map[int64]thunder{}
 var lock sync.Mutex
@@ -44,12 +45,15 @@ func Init(c Config) {
 			question: q,
 			answer: a,
 			victim: ctx.Event.UserID,
+			nowTime: time.Now(),
 			//onlineList: onlineList,
 		}
-		thunderList[group] = t
+		if ok == false{
+			thunderList[group] = t
+		}
 		lock.Unlock()
 
-		fmt.Println(t)
+		//fmt.Println(t)
 		if ok==true{
 			ctx.SendChain(message.Text("场上已经有雷了"))
 			return
@@ -67,7 +71,7 @@ func Init(c Config) {
 			t := thunderList[group]
 			startTime := time.Now().Unix()
 			stopTime := startTime + int64(gameTime)
-			for true {
+			for {
 				next := ZeroBot.NewFutureEvent("message", -9999, true, ZeroBot.CheckUser(t.victim), func(ctx *ZeroBot.Ctx) bool {
 					if ctx.Event.GroupID == group{
 						return true
@@ -99,7 +103,7 @@ func Init(c Config) {
 						reg := regexp.MustCompile(t.answer)
 						if reg.Match([]byte(newCtx.Event.Message.String())){
 							ctx.SendChain(message.At(t.victim),
-							message.Text("回答正确，来。你要把雷丢给谁？"))
+							message.Text(fmt.Sprintf("(%d)回答正确，来。你要把雷丢给谁？",t.nowTime.Unix())))
 							break WaitAnswer
 						}else{
 							ctx.SendChain(
@@ -126,11 +130,11 @@ func Init(c Config) {
 						lock.Unlock()
 						return
 					case e := <-recv:
-						//
 						newCtx := &ZeroBot.Ctx{Event: e, State: ZeroBot.State{}}
 						reg := regexp.MustCompile("\\[CQ:at,qq=(\\d+)")
 						result := reg.FindAllStringSubmatch(newCtx.Event.Message.String(),-1)
-						if len(result) <= 0 && newCtx.Event.IsToMe == true{
+						if newCtx.Event.IsToMe == true{
+							cancel()  // 提前停止监听
 							level ++
 							gameTime += 90
 							q,a := questionMake(level)
@@ -149,22 +153,23 @@ func Init(c Config) {
 							ctx.SendChain(message.At(t.victim),
 								message.Text("给谁给谁，我听不清"))
 						} else {
-							//println(result[0][1])
+							cancel()
 							t.lastVictim = t.victim
 							t.victim = strToInt(result[0][1])
 							q,a := questionMake(level)
 							t.question = q
 							t.answer = a
+							t.nowTime = time.Now()
 							break WaitNextVictim
 						}
 					}
 				}
-				cancel()
+
 
 				if t.victim == 1648468212{ // 小夜不会受伤
 					ctx.SendChain(message.Text(fmt.Sprintf("问：%s 答：%s",t.question,t.answer)))
 					time.Sleep(5*time.Second)
-					ctx.SendChain(message.Text(fmt.Sprintf("问：%s 答：","回答正确，来。你要把雷丢给谁？")),
+					ctx.SendChain(message.Text(fmt.Sprintf("问：(%d)%s 答：",t.nowTime.Unix(),"回答正确，来。你要把雷丢给谁？")),
 						message.At(t.lastVictim))
 					time.Sleep(5*time.Second)
 					stopTime += 12
@@ -178,11 +183,18 @@ func Init(c Config) {
 }
 
 func questionMake(level int)(q , a string){
-	return primarySchoolAddition(level)
+	f := []func(int)(string,string){
+		primarySchoolAddition,
+		primarySchoolSubtraction,
+		primarySchoolMultiplication,
+		ChickenAndRabbit,
+		JumpInLine,
+	}
+	q,a = f[rand.Intn(len(f))](level)
+	fmt.Printf("%s -> %s\r\n", q, a)
+	return
 }
 
-
-//func w
 
 func primarySchoolAddition(level int)(q , a string){
 	rand.Seed(time.Now().Unix())
@@ -199,20 +211,57 @@ func primarySchoolAddition(level int)(q , a string){
 	return
 }
 
-//func primarySchoolAddition(level int)(q , a string){
-//	rand.Seed(time.Now().Unix())
-//	p := math.Pow10(level)
-//	x := rand.Intn(int(p))
-//	y := rand.Intn(int(p))
-//	z := x + y
-//	if level <= 4{
-//		q = fmt.Sprintf("小学数学题： %d + %d = ?", x, y)
-//	}else{
-//		q = fmt.Sprintf("数学题： %d + %d = ?", x, y)
-//	}
-//	a = fmt.Sprintf("%d",z)
-//	return
-//}
+func primarySchoolSubtraction(level int)(q , a string){
+	rand.Seed(time.Now().Unix())
+	p := math.Pow10(level-1)
+	x := rand.Intn(int(p))
+	y := rand.Intn(int(p))
+	z := x - y
+	if level <= 4{
+		q = fmt.Sprintf("小学数学题： %d - %d = ?", x, y)
+	}else{
+		q = fmt.Sprintf("数学题： %d - %d = ?", x, y)
+	}
+	a = fmt.Sprintf("%d",z)
+	return
+}
+
+func primarySchoolMultiplication(level int)(q , a string){
+	rand.Seed(time.Now().Unix())
+	p := math.Pow10(level/2)
+	x := rand.Intn(int(p))
+	y := rand.Intn(int(p))
+	z := x * y
+	if level <= 4{
+		q = fmt.Sprintf("小学数学题： %d x %d = ?", x, y)
+	}else{
+		q = fmt.Sprintf("数学题： %d x %d = ?", x, y)
+	}
+	a = fmt.Sprintf("%d",z)
+	return
+}
+
+// 鸡兔同笼
+func ChickenAndRabbit(level int)(q , a string){
+	rand.Seed(time.Now().Unix())
+	p := math.Pow10(level-2) / 2
+	chicken := rand.Intn(int(p))
+	rabbit := rand.Intn(int(p))
+	q = fmt.Sprintf("鸡兔同笼：现有一笼子，里面有鸡和兔子若干只，数一数，共有头%d个，腿%d条，爱看色图的老色pi，你能算出鸡有多少只吗？(回答“x只”)", chicken+rabbit, chicken*2+rabbit*4)
+	a = fmt.Sprintf("%d只",chicken)
+	return
+}
+
+// 插队问题
+func JumpInLine(level int)(q , a string){
+	rand.Seed(time.Now().Unix())
+	p := math.Pow10(level-1)
+	m := rand.Intn(int(p)) + 2
+	w := rand.Intn(level) + 1
+	q = fmt.Sprintf("在一排%d名男同学的队伍中，每两名男同学之间插进%d名女同学，老色pi想一想，可以插多少名女同学？", m, w)
+	a = fmt.Sprintf("%d",(m-1)*w)
+	return
+}
 
 func strToInt(str string) int64 {
 	val, _ := strconv.ParseInt(str, 10, 64)

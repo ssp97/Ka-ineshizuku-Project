@@ -4,7 +4,6 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
-	"strconv"
 )
 
 type Config struct {
@@ -31,7 +30,7 @@ func Init(c Config){
 				return
 			})
 	}
-	ignoreMe := []string{"理我"};
+	ignoreMe := []string{"理我"}
 	for _, v := range ignoreMe {
 		zero.Default().OnRegex(v, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(40).
 			Handle(func(ctx *ZeroBot.Ctx){
@@ -45,9 +44,4 @@ func Init(c Config){
 			})
 	}
 
-}
-
-func strToInt(str string) int64 {
-	val, _ := strconv.ParseInt(str, 10, 64)
-	return val
 }

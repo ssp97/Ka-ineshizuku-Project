@@ -13,6 +13,7 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/app/thunder"
 	"github.com/ssp97/Ka-ineshizuku-Project/conf"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
+	wsServerDriver "github.com/ssp97/Ka-ineshizuku-Project/pkg/zero/driver"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/driver"
 	"github.com/wdvxdr1123/ZeroBot/message"
@@ -44,6 +45,9 @@ func Init(c *conf.Config){
 			Url:	zerobotConfig.Url[i],
 			AccessToken: zerobotConfig.Token[i],
 		})
+	}
+	if zerobotConfig.ServerPort > 0 {
+		dri = append(dri, wsServerDriver.NewWebSocketServer(zerobotConfig.ServerPort,""))
 	}
 
 	zero.RunDefault(ZeroBot.Config{

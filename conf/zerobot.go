@@ -6,5 +6,6 @@ type ZerobotConfig struct {
 	Token	[]string
 	SuperUser []string
 	Prefix 	string
+	ServerPort int
 	DebugPort int
 }
