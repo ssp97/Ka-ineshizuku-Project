@@ -233,10 +233,10 @@ func randImage(file ...string) message.MessageSegment {
 	return zero.ImageFileMessage(path.Join(RES,file[rand.Intn(length)]))
 }
 
-func randRecord(file ...string) message.MessageSegment {
-	length := len(file)
-	return message.Record("file:///" + path.Join(RES, file[rand.Intn(length)]))
-}
+//func randRecord(file ...string) message.MessageSegment {
+//	length := len(file)
+//	return message.Record("file:///" + path.Join(RES, file[rand.Intn(length)]))
+//}
 
 // AtriSwitch 控制 ATRI 的开关
 func AtriSwitch() ZeroBot.Rule {

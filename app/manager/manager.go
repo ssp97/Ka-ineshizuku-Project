@@ -24,6 +24,7 @@ type Config struct {
 type Group struct {
 	ID uint64		`json:"id" form:"id" gorm:"primary_key;"`
 	Enable bool	`json:"enable" form:"enable"`
+	Loader int64
 }
 
 type BlackList struct {
@@ -49,10 +50,18 @@ func GroupSwitchControl(ctx *ZeroBot.Ctx) bool{
 		db.DB.Create(&Group{
 			ID: uint64(groupId),
 			Enable: true,
+			Loader: ctx.Event.SelfID,
 		})
 		return false
 	}
-	return group.Enable
+	if group.Loader == 0{
+		group.Loader = ctx.Event.SelfID
+		db.DB.UpdateColumns(group)
+	}
+	if group.Loader == ctx.Event.SelfID{
+		return group.Enable
+	}
+	return false
 }
 
 func UserBlackListQuery(ctx *ZeroBot.Ctx) bool{
@@ -100,6 +109,11 @@ func Init(config Config) { // 插件主体
 	ZeroBot.OnCommand("init 0", ZeroBot.AdminPermission, ZeroBot.OnlyToMe).SetBlock(true).FirstPriority().Handle(func(ctx *ZeroBot.Ctx) {
 		db.DB.Table("groups").Where("id = ?", ctx.Event.GroupID).Update("enable",false)
 		ctx.SendChain(message.Text("群开关已关闭"))
+	})
+
+	ZeroBot.OnCommand("loader", ZeroBot.AdminPermission, ZeroBot.OnlyToMe).SetBlock(true).FirstPriority().Handle(func(ctx *ZeroBot.Ctx) {
+		db.DB.Table("groups").Where("id = ?", ctx.Event.GroupID).Update("loader", ctx.Event.SelfID)
+		ctx.SendChain(message.Text("已设置群活跃小雫"))
 	})
 
 	zero.Default().OnFullMatch("群开关测试",GroupSwitchControl).SetBlock(true).FirstPriority().Handle(func(ctx *ZeroBot.Ctx) {
