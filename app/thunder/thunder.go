@@ -135,7 +135,10 @@ func Init(c Config) {
 						newCtx := &ZeroBot.Ctx{Event: e, State: ZeroBot.State{}}
 						reg := regexp.MustCompile("\\[CQ:at,qq=(\\d+)")
 						result := reg.FindAllStringSubmatch(newCtx.Event.Message.String(),-1)
-						nextId := strToInt(result[0][1])
+						nextId := int64(0)
+						if len(result) < 0{
+							nextId = strToInt(result[0][1])
+						}
 						if newCtx.Event.IsToMe || zero.IsBot(nextId) == true{
 							cancel()  // 提前停止监听
 							level ++
