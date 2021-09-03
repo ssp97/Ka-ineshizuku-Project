@@ -31,3 +31,7 @@ func ImageBase64Message(b *string)(message.MessageSegment){
 	return message.Image(fmt.Sprintf("base64://%s", *b))
 }
 
+func IsBot(id int64)bool{
+	_,ok := ZeroBot.APICallers.Load(id)
+	return ok
+}

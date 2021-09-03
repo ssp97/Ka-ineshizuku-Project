@@ -19,6 +19,7 @@ type thunder struct {
 	answer		string
 	victim		int64
 	lastVictim  int64
+	referee		int64
 	nowTime		time.Time
 }
 var thunderList = map[int64]thunder{}
@@ -46,6 +47,7 @@ func Init(c Config) {
 			answer: a,
 			victim: ctx.Event.UserID,
 			nowTime: time.Now(),
+			referee: ctx.Event.SelfID,
 			//onlineList: onlineList,
 		}
 		if ok == false{
@@ -73,7 +75,7 @@ func Init(c Config) {
 			stopTime := startTime + int64(gameTime)
 			for {
 				next := ZeroBot.NewFutureEvent("message", -9999, true, ZeroBot.CheckUser(t.victim), func(ctx *ZeroBot.Ctx) bool {
-					if ctx.Event.GroupID == group{
+					if ctx.Event.GroupID == group && ctx.Event.SelfID == t.referee{
 						return true
 					}
 					return false
@@ -133,7 +135,8 @@ func Init(c Config) {
 						newCtx := &ZeroBot.Ctx{Event: e, State: ZeroBot.State{}}
 						reg := regexp.MustCompile("\\[CQ:at,qq=(\\d+)")
 						result := reg.FindAllStringSubmatch(newCtx.Event.Message.String(),-1)
-						if newCtx.Event.IsToMe == true{
+						nextId := strToInt(result[0][1])
+						if newCtx.Event.IsToMe || zero.IsBot(nextId) == true{
 							cancel()  // 提前停止监听
 							level ++
 							gameTime += 90
@@ -155,7 +158,7 @@ func Init(c Config) {
 						} else {
 							cancel()
 							t.lastVictim = t.victim
-							t.victim = strToInt(result[0][1])
+							t.victim = nextId
 							q,a := questionMake(level)
 							t.question = q
 							t.answer = a
