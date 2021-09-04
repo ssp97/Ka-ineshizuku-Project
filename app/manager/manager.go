@@ -37,7 +37,7 @@ var db *dbManager.ORM
 
 func GroupSwitchControl(ctx *ZeroBot.Ctx) bool{
 
-	if ZeroBot.OnlyGroup(ctx) == false{
+	if ZeroBot.OnlyPrivate(ctx) == true{
 		return true
 	}
 
@@ -46,7 +46,6 @@ func GroupSwitchControl(ctx *ZeroBot.Ctx) bool{
 	var group Group
 	result := db.DB.First(&group, groupId)
 	if result.Error == gorm.ErrRecordNotFound {
-		log.Debugln("------------------->创建记录")
 		db.DB.Create(&Group{
 			ID: uint64(groupId),
 			Enable: true,
