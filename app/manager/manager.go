@@ -385,14 +385,14 @@ func Init(config Config) { // 插件主体
 			}
 		})
 	// 入群欢迎
-	zero.Default().OnNotice().SetBlock(false).SetPriority(40).
+	zero.Default().OnNotice(GroupSwitchControl).SetBlock(false).SetPriority(40).
 		Handle(func(ctx *ZeroBot.Ctx) {
 			if ctx.Event.NoticeType == "group_increase" {
 				ctx.SendChain(message.Text("欢迎~，具体用法请参考https://github.com/ssp97/Ka-ineshizuku-Project"))
 			}
 		})
 	// 退群提醒
-	zero.Default().OnNotice().SetBlock(false).SetPriority(40).
+	zero.Default().OnNotice(GroupSwitchControl).SetBlock(false).SetPriority(40).
 		Handle(func(ctx *ZeroBot.Ctx) {
 			if ctx.Event.NoticeType == "group_decrease" {
 				ctx.SendChain(message.Text("有人跑路了~"))
