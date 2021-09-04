@@ -2,7 +2,6 @@ package driver
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 	"sync"
@@ -24,8 +23,8 @@ var (
 )
 
 type WSServer struct {
-	Port        int // ws连接地址
-	AccessToken string
+	//Port        int // ws连接地址
+	//AccessToken string
 	Server      websocket.Upgrader
 	handler     func([]byte, zero.APICaller)
 }
@@ -39,10 +38,10 @@ type WSConn struct {
 	seqMap      seqSyncMap
 }
 
-func NewWebSocketServer(port int, accessToken string) *WSServer{
+func NewWebSocketServer() *WSServer{
 	return &WSServer{
-		Port:         port,
-		AccessToken: accessToken,
+		//Port:         port,
+		//AccessToken: accessToken,
 		Server : websocket.Upgrader{
 			CheckOrigin: func(r *http.Request) bool {
 				return true
@@ -124,13 +123,14 @@ func (ws *WSServer)websocketServer(w http.ResponseWriter, r *http.Request){
 
 func (ws *WSServer) Listen(handler func([]byte, zero.APICaller)){
 	ws.handler = handler
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", ws.websocketServer)
-	log.Infof("start server on port %d", ws.Port)
-	err := http.ListenAndServe(fmt.Sprintf(":%d", ws.Port),mux)
-	if err!=nil{
-		log.Error(err)
-	}
+	//mux := http.NewServeMux()
+	//mux.HandleFunc("/", ws.websocketServer)
+	http.HandleFunc("/api/bot", ws.websocketServer)
+	//log.Infof("start server on port %d", ws.Port)
+	//err := http.ListenAndServe(fmt.Sprintf(":%d", ws.Port),mux)
+	//if err!=nil{
+	//	log.Error(err)
+	//}
 }
 
 func (ws *WSConn) nextSeq() uint64 {

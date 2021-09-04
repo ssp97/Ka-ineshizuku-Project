@@ -40,15 +40,14 @@ func Init(c *conf.Config){
 	zerobotConfig := &c.Zerobot
 
 	var dri []ZeroBot.Driver
+	dri = append(dri, wsServerDriver.NewWebSocketServer())
 	for i, _ := range zerobotConfig.Url {
 		dri = append(dri, &driver.WSClient{
 			Url:	zerobotConfig.Url[i],
 			AccessToken: zerobotConfig.Token[i],
 		})
 	}
-	if zerobotConfig.ServerPort > 0 {
-		dri = append(dri, wsServerDriver.NewWebSocketServer(zerobotConfig.ServerPort,""))
-	}
+
 
 	zero.RunDefault(ZeroBot.Config{
 		NickName:      zerobotConfig.NickName,
@@ -84,8 +83,6 @@ func Init(c *conf.Config){
 	//	}
 	//})
 
-	if zerobotConfig.DebugPort > 0 && zerobotConfig.DebugPort<65536{
-		go http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", zerobotConfig.DebugPort), nil)
-	}
+	go http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", zerobotConfig.ServerPort), nil)
 
 }
