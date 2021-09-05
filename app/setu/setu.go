@@ -80,7 +80,7 @@ func Init(c Config) {
 		}
 		var tag = ctx.State["regex_matched"].([]string)[1]
 		var data setu
-		result := db.DB.Model(&setu{}).Where("title like ?", fmt.Sprintf("%%%s%%", tag)).Order("RANDOM()").First(&data)
+		result := db.DB.Model(&setu{}).Where("title like ?", fmt.Sprintf("%%%s%%", tag)).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
 		if result.Error != nil{
 			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(fmt.Sprintf("未找到%s相关的图片", tag)))
 			return
