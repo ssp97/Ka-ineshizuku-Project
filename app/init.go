@@ -7,6 +7,7 @@ import (
 	_ "github.com/ssp97/Ka-ineshizuku-Project/app/gifApp"
 	_ "github.com/ssp97/Ka-ineshizuku-Project/app/haveAFriend"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/manager"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/publicModels"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/setu"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/setutime"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/snare"
@@ -26,6 +27,8 @@ import (
 
 
 func Init(c *conf.Config){
+
+	publicModels.Init()
 
 	manager.Init(c.App.Manager)
 

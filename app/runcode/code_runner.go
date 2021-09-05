@@ -37,7 +37,7 @@ func init() {
 		"c":          "#include <stdio.h>\n\nint main()\n{\n   printf(\"Hello, World! \n\");\n   return 0;\n}",
 		"c++":        "#include <iostream>\nusing namespace std;\n\nint main()\n{\n   cout << \"Hello World\";\n   return 0;\n}",
 		"cpp":        "#include <iostream>\nusing namespace std;\n\nint main()\n{\n   cout << \"Hello World\";\n   return 0;\n}",
-		"java":       "public class HelloWorld {\n    public static void main(String []args) {\n       System.out.println(\"Hello World!\");\n    }\n}",
+		"java":       "publicModels class HelloWorld {\n    publicModels static void main(String []args) {\n       System.out.println(\"Hello World!\");\n    }\n}",
 		"rust":       "fn main() {\n    println!(\"Hello World!\");\n}",
 		"rs":         "fn main() {\n    println!(\"Hello World!\");\n}",
 		"c#":         "using System;\nnamespace HelloWorldApplication\n{\n   class HelloWorld\n   {\n      static void Main(string[] args)\n      {\n         Console.WriteLine(\"Hello World!\");\n      }\n   }\n}",
