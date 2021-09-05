@@ -5,6 +5,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/dbManager"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/fsUtils"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/gocc"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/extension/rate"
@@ -79,16 +80,26 @@ func Init(c Config) {
 			return
 		}
 		var tag = ctx.State["regex_matched"].([]string)[1]
+		var tagS2t = gocc.S2t(tag)
 		var data setu
 		result := db.DB.Model(&setu{}).Where("title like ?", fmt.Sprintf("%%%s%%", tag)).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
-		if result.Error != nil{
-			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(fmt.Sprintf("未找到%s相关的图片", tag)))
+		if result.Error == nil{
+			SendPixivPic(ctx, data)
 			return
 		}
-		url := fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url)
-		id := ctx.SendChain(message.Reply(ctx.Event.MessageID),zero.ImageUrlMessage(url))
-		if id == 0 {
-			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("图片发送失败了"))
+		result = db.DB.Model(&setu{}).Where("title like ?", fmt.Sprintf("%%%s%%", tagS2t)).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
+		if result.Error == nil{
+			SendPixivPic(ctx, data)
+			return
 		}
+		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(fmt.Sprintf("未找到%s相关的图片", tag)))
 	})
+}
+
+func SendPixivPic(ctx *ZeroBot.Ctx, data setu){
+	url := fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url)
+	id := ctx.SendChain(message.Reply(ctx.Event.MessageID),zero.ImageUrlMessage(url))
+	if id == 0 {
+		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("图片发送失败了"))
+	}
 }

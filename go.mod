@@ -7,6 +7,7 @@ require (
 	github.com/FloatTech/AnimeAPI v0.0.0-20210713044920-63367fe18ccd
 	github.com/FloatTech/ZeroBot-Plugin-Timer v1.2.4
 	github.com/StackExchange/wmi v0.0.0-20210224194228-fe8f1750fd46 // indirect
+	github.com/adamzy/cedar-go v0.0.0-20170805034717-80a9c64b256d // indirect
 	github.com/go-gl/gl v0.0.0-20210426225639-a3bfa832c8aa // indirect
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
@@ -14,13 +15,15 @@ require (
 	github.com/json-iterator/go v1.1.11
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/lestrrat-go/strftime v1.0.5 // indirect
+	github.com/liuzl/cedar-go v0.0.0-20170805034717-80a9c64b256d // indirect
+	github.com/liuzl/da v0.0.0-20180704015230-14771aad5b1d // indirect
+	github.com/liuzl/gocc v0.0.0-20200216023908-f8cb162baf44
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/orcaman/writerseeker v0.0.0-20200621085525-1d3f536ff85e
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/shirou/gopsutil v3.21.6+incompatible
 	github.com/sirupsen/logrus v1.8.1
 	github.com/sosedoff/pgweb v0.11.8
-	github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816
 	github.com/tfriedel6/canvas v0.12.1
 	github.com/tidwall/gjson v1.8.1
 	github.com/tidwall/pretty v1.2.0 // indirect
