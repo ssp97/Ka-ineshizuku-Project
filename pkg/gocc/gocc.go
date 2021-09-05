@@ -1,14 +1,13 @@
 package gocc
 
 import (
-	_gocc "github.com/liuzl/gocc"
 	log "github.com/sirupsen/logrus"
 )
 
-var goccS2t *_gocc.OpenCC
+var goccS2t *OpenCC
 
 func init() {
-	_goccs2t, err := _gocc.New("s2t")
+	_goccs2t, err := New("s2t")
 	if err != nil{
 		log.Errorf("gocc err %s", err)
 	}else{
