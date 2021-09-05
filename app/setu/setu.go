@@ -42,7 +42,6 @@ type setu struct {
 
 func initSetuData(){
 
-
 	data,err := ioutil.ReadFile(path.Join(fsUtils.Getwd(), "static", "sql", "setu.sql"))
 	if err != nil{
 		fmt.Println(err)
@@ -94,7 +93,14 @@ func Init(c Config) {
 		}
 		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(fmt.Sprintf("未找到%s相关的图片", tag)))
 	})
-}
+
+	zero.Default().OnRegex(`^来张(.*)$`).SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
+
+
+	})
+
+	}
+
 
 func SendPixivPic(ctx *ZeroBot.Ctx, data setu){
 	url := fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url)

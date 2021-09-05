@@ -96,12 +96,10 @@ func init() { // 插件主体
 			ctx.Send("少女祈祷中......")
 			for _, pic := range ctx.State["image_url"].([]string) {
 				fmt.Println(pic)
-				if result, err := saucenao.SauceNAO(pic); err != nil {
-					ctx.SendChain(message.Text("你这阴间图哪来的啊。我问了好多人他们都说不知道"))
-					continue
-				} else {
+				if result, err := saucenao.SauceNAO(pic); err == nil {
 					// 返回SauceNAO的结果
 					ctx.SendChain(
+						message.Reply(ctx.Event.MessageID),
 						message.Text("我有把握是这个！"),
 						message.Image(result.Thumbnail),
 						message.Text(
@@ -116,11 +114,10 @@ func init() { // 插件主体
 					)
 					continue
 				}
-				if result, err := ascii2d.Ascii2d(pic); err != nil {
-					ctx.SendChain(message.Text("ERROR: ", err))
-				} else {
+				if result, err := ascii2d.Ascii2d(pic); err == nil {
 					// 返回Ascii2d的结果
 					ctx.SendChain(
+						message.Reply(ctx.Event.MessageID),
 						message.Text(
 							"大概是这个？", "\n",
 							"标题：", result.Title, "\n",
@@ -132,6 +129,8 @@ func init() { // 插件主体
 					)
 					continue
 				}
+				ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("你这阴间图哪来的啊。我问了好多人他们都说不知道"))
+				continue
 			}
 		})
 }

@@ -22,7 +22,6 @@ import (
 	_ "github.com/ssp97/Ka-ineshizuku-Project/app/ai_false" // 服务器监控
 
 	// 二次元图片
-	_ "github.com/ssp97/Ka-ineshizuku-Project/app/image_finder" // 关键字搜图
 	_ "github.com/ssp97/Ka-ineshizuku-Project/app/lolicon"      // lolicon 随机图片
 	_ "github.com/ssp97/Ka-ineshizuku-Project/app/saucenao"     // 以图搜图
 
