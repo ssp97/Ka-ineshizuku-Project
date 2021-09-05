@@ -7,6 +7,7 @@ import (
 	_ "github.com/ssp97/Ka-ineshizuku-Project/app/gifApp"
 	_ "github.com/ssp97/Ka-ineshizuku-Project/app/haveAFriend"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/manager"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/setu"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/setutime"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/snare"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/study"
@@ -36,6 +37,7 @@ func Init(c *conf.Config){
 	study.Init(c.App.Study, c.Zerobot.NickName[0])
 
 	EEAsst.Init(c.App.EEAsst)
+	setu.Init(c.App.Setu)
 
 	zerobotConfig := &c.Zerobot
 

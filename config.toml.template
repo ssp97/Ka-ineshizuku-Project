@@ -26,6 +26,8 @@
         enable = true
     [app.setutime]  # 来点xx图，本地数据库
         enable = true
+    [app.setu] # 新的来点xx，本地数据库
+        enable = false
     [app.thunder]   # 手捧雷，群游戏
         enable = true
 

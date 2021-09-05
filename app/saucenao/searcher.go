@@ -48,7 +48,7 @@ func init() { // 插件主体
 			)
 		})
 	// 以图搜图
-	ZeroBot.OnKeywordGroup([]string{"以图搜图", "搜索图片", "以图识图"}).SetBlock(true).FirstPriority().
+	zero.Default().OnKeywordGroup([]string{"以图搜图", "搜索图片", "以图识图"}).SetBlock(true).FirstPriority().
 		Handle(func(ctx *ZeroBot.Ctx) {
 			// 匹配命令
 			for _, elem := range ctx.Event.Message {

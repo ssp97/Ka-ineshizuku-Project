@@ -30,7 +30,7 @@ import (
 
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	log "github.com/sirupsen/logrus"
-	easy "github.com/t-tomalak/logrus-easy-formatter"
+	easy "github.com/ssp97/Ka-ineshizuku-Project/pkg/logFormatter"
 )
 
 func init() {
@@ -47,6 +47,7 @@ func init() {
 	log.SetFormatter(&easy.Formatter{
 		TimestampFormat: "2006-01-02 15:04:05",
 		LogFormat:       "[zero][%time%][%lvl%]: %msg% \n",
+		LogMsgMaxLen: 255,
 	})
 	log.SetLevel(log.InfoLevel)
 	//

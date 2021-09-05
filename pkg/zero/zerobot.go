@@ -7,6 +7,8 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/fsUtils"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
+	"io/ioutil"
+	"net/http"
 )
 
 var defaultZero = ZeroBot.New()
@@ -18,6 +20,22 @@ func RunDefault(op ZeroBot.Config) {
 
 func Default() *ZeroBot.Engine {
 	return defaultZero
+}
+
+func ImageUrlMessage(url string)(message.MessageSegment){
+	res, err := http.Get(url)
+
+	if err != nil {
+		fmt.Println(err)
+		return message.Text("图片下载失败")
+	}
+	d, err := ioutil.ReadAll(res.Body)
+	if err != nil{
+		panic(err)
+	}
+	d = avoidExamine.PicByte(d)
+	bs := base64.StdEncoding.EncodeToString(d)
+	return ImageBase64Message(&bs)
 }
 
 func ImageFileMessage(path string)(message.MessageSegment){
