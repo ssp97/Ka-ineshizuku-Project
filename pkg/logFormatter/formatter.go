@@ -40,7 +40,7 @@ func (f *Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 		timestampFormat = defaultTimestampFormat
 	}
 
-	if f.LogMsgMaxLen > 0{
+	if f.LogMsgMaxLen > 0 && entry.Level > logrus.ErrorLevel{
 		if len(entry.Message) > f.LogMsgMaxLen{
 			_msg := fmt.Sprintf("%s...", entry.Message[0: f.LogMsgMaxLen])
 			msg = &_msg
