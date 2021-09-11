@@ -24,10 +24,9 @@
         regexDel = "[陷祸迫]害删图"
     [app.gag]       # 禁言关键词
         enable = true
-    [app.setutime]  # 来点xx图，本地数据库
-        enable = true
     [app.setu] # 新的来点xx，本地数据库
         enable = false
+        server = "www.xxx.xxx:6050"
     [app.thunder]   # 手捧雷，群游戏
         enable = true
 

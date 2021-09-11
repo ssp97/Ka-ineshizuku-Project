@@ -26,6 +26,7 @@ var limit = rate.NewManager(time.Minute*1, 2)
 
 type Config struct {
 	Enable bool
+	Server string
 }
 
 type setu struct {
@@ -142,11 +143,11 @@ func Init(c Config) {
 	})
 	
 	zero.Default().OnRegex(`^真随机色图`).SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
-		data := `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+		data := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 				 <msg serviceID="1">
 				 <item><title>客官，这是你要的色图</title></item>
-				 <source name="setu" icon="http://222.186.160.172:20018/app/setu/api/random" action="" appid="-1" />
-				 </msg>`
+				 <source name="setu" icon="http://%s/app/setu/api/random" action="" appid="-1" />
+				 </msg>`, c.Server)
 		ctx.SendChain(message.XML(data))
 	})
 
