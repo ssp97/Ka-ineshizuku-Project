@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/EEAsst"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/gag"
 	_ "github.com/ssp97/Ka-ineshizuku-Project/app/gifApp"
@@ -13,6 +14,7 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/app/study"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/thunder"
 	"github.com/ssp97/Ka-ineshizuku-Project/conf"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/httpAndHttpsServer"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	wsServerDriver "github.com/ssp97/Ka-ineshizuku-Project/pkg/zero/driver"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
@@ -86,6 +88,28 @@ func Init(c *conf.Config){
 	//	}
 	//})
 
-	go http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", zerobotConfig.ServerPort), nil)
+	go func() {
+		err := httpAndHttpsServer.Run(fmt.Sprintf("0.0.0.0:%d", zerobotConfig.ServerPort), "data/cert/full_chain.pem","data/cert/private.key",nil)
+		if err!= nil{
+			log.Errorf("start http and https err:%s, use http only.", err)
+		}
+		err = http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", zerobotConfig.ServerPort), nil)
+		if err!= nil{
+			log.Panic(err)
+		}
+
+	}()
+
+	//go func() {
+	//	err := http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", zerobotConfig.ServerPort), nil)
+	//	if err!= nil{
+	//		log.Panic(err)
+	//	}
+	//}()
+	//go func() {
+	//	err := http.ListenAndServeTLS(fmt.Sprintf("0.0.0.0:%d", zerobotConfig.ServerPort),"data/cert/full_chain.pem","data/cert/private.key",nil)
+	//	if err!= nil{
+	//	}
+	//}()
 
 }

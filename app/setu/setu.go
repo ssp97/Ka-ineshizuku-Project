@@ -22,7 +22,7 @@ import (
 const PIXIV_IMG_PROXY = "https://i.pixiv.cat"
 
 var db *dbManager.ORM
-var limit = rate.NewManager(time.Minute*1, 5)
+var limit = rate.NewManager(time.Minute*1, 2)
 
 type Config struct {
 	Enable bool
@@ -106,18 +106,21 @@ func Init(c Config) {
 
 	zero.Default().OnRegex(`^来点(.*)$`).SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		if !limit.Load(ctx.Event.UserID).Acquire() {
-			ctx.SendChain(message.Text("服务受限！"))
+			ctx.SendChain(message.Reply(ctx.Event.MessageID),
+				message.Text("服务受限！接口流量限制！"))
 			return
 		}
 		var tag = ctx.State["regex_matched"].([]string)[1]
 		var tagS2t = gocc.S2t(tag)
 		var data setu
 		result := db.DB.Model(&setu{}).Where("title like ?", fmt.Sprintf("%%%s%%", tag)).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
+		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
 		if result.Error == nil{
 			SendPixivPic(ctx, data)
 			return
 		}
 		result = db.DB.Model(&setu{}).Where("title like ?", fmt.Sprintf("%%%s%%", tagS2t)).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
+		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
 		if result.Error == nil{
 			SendPixivPic(ctx, data)
 			return
