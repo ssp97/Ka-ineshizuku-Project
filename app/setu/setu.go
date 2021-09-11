@@ -83,6 +83,23 @@ func Init(c Config) {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
 	http.Handle("/app/setu/", r)
+	r.GET("/app/setu/api/random", func(ctx *gin.Context) {
+		var data setu
+		db.DB.Model(&setu{}).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
+		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
+		fmt.Print(data.Url)
+		ctx.Redirect(http.StatusFound, fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url))
+	})
+
+	r.GET("/app/setu/api/randomR18", func(ctx *gin.Context) {
+		var data setu
+		db.DB.Model(&setu{}).Where("r18 = ?", "1").Order("RANDOM()").First(&data)
+		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
+		fmt.Print(data.Url)
+		ctx.Redirect(http.StatusFound, fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url))
+	})
+
+
 	if c.Enable == false{
 		return
 	}
@@ -147,21 +164,7 @@ func Init(c Config) {
 		ctx.SendChain(message.Text(fmt.Sprintf("setu:\r\n  count:\t%d\r\n  isR18:\t%d\r\n  tags: \t%d",picCount, r18Count, tagCount)))
 	})
 
-	r.GET("/app/setu/api/random", func(ctx *gin.Context) {
-		var data setu
-		db.DB.Model(&setu{}).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
-		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
-		fmt.Print(data.Url)
-		ctx.Redirect(http.StatusFound, fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url))
-	})
 
-	r.GET("/app/setu/api/randomR18", func(ctx *gin.Context) {
-		var data setu
-		db.DB.Model(&setu{}).Where("r18 = ?", "1").Order("RANDOM()").First(&data)
-		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
-		fmt.Print(data.Url)
-		ctx.Redirect(http.StatusFound, fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url))
-	})
 
 }
 
