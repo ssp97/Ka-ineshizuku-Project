@@ -35,6 +35,12 @@ func Init(c Config) {
 	}
 
 	zero.Default().OnRegex("^手捧雷$", ZeroBot.OnlyGroup).SetPriority(1).Handle(func(ctx *ZeroBot.Ctx) {
+
+		if zero.IsGroupManager(ctx) == false{
+			ctx.SendChain(message.Text("服务受限：非群管理员"))
+			return
+		}
+
 		group := ctx.Event.GroupID
 		gameTime := 60 + rand.Intn(160)
 		level := 3

@@ -9,7 +9,6 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/app/manager"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/publicModels"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/setu"
-	"github.com/ssp97/Ka-ineshizuku-Project/app/setutime"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/snare"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/study"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/thunder"
@@ -34,7 +33,6 @@ func Init(c *conf.Config){
 
 	snare.Init(c.App.Snare)
 	gag.Init(c.App.Gag)
-	setutime.Init(c.App.Setutime)
 	thunder.Init(c.App.Thunder)
 
 	study.Init(c.App.Study, c.Zerobot.NickName[0])

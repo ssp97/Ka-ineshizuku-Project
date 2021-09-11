@@ -21,6 +21,9 @@ func Init(c Config){
 	for _, v := range wantQuiet {
 		zero.Default().OnRegex(v, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(40).
 			Handle(func(ctx *ZeroBot.Ctx){
+				if zero.IsGroupManager(ctx) == false{
+					ctx.SendChain(message.Text("服务受限：非群管理员"))
+				}
 				ctx.SetGroupBan(
 					ctx.Event.GroupID,
 					ctx.Event.UserID, // 要禁言的人的qq
@@ -30,10 +33,13 @@ func Init(c Config){
 				return
 			})
 	}
-	ignoreMe := []string{"理我"}
+	ignoreMe := []string{"[^道]理我[^都]"}
 	for _, v := range ignoreMe {
 		zero.Default().OnRegex(v, ZeroBot.OnlyGroup).SetBlock(true).SetPriority(40).
 			Handle(func(ctx *ZeroBot.Ctx){
+				if zero.IsGroupManager(ctx) == false{
+					ctx.SendChain(message.Text("服务受限：非群管理员"))
+				}
 				ctx.SetGroupBan(
 					ctx.Event.GroupID,
 					ctx.Event.UserID, // 要禁言的人的qq

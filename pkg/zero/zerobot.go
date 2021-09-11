@@ -53,3 +53,8 @@ func IsBot(id int64)bool{
 	_,ok := ZeroBot.APICallers.Load(id)
 	return ok
 }
+
+func IsGroupManager(ctx *ZeroBot.Ctx)bool{
+	data := ctx.GetGroupMemberInfo(ctx.Event.GroupID, ctx.Event.SelfID, false)
+	return data.Get("role").String() == "admin"
+}

@@ -8,6 +8,7 @@ require (
 	github.com/FloatTech/ZeroBot-Plugin-Timer v1.2.4
 	github.com/StackExchange/wmi v0.0.0-20210224194228-fe8f1750fd46 // indirect
 	github.com/adamzy/cedar-go v0.0.0-20170805034717-80a9c64b256d // indirect
+	github.com/gin-gonic/gin v1.3.0 // indirect
 	github.com/go-gl/gl v0.0.0-20210426225639-a3bfa832c8aa // indirect
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0

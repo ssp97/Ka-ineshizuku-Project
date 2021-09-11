@@ -5,7 +5,6 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/fsUtils"
 	"io/ioutil"
 	"path"
-	"strings"
 )
 
 func initStudyData() {
@@ -13,11 +12,5 @@ func initStudyData() {
 	if err != nil{
 		fmt.Println(err)
 	}
-	sqlArr:=strings.Split(string(data),";")
-	for _,sql:=range sqlArr{
-		if sql==""{
-			continue
-		}
-		db.DB.Exec(sql)
-	}
+	db.DB.Exec(string(data))
 }
