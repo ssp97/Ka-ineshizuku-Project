@@ -115,7 +115,7 @@ func Init(c Config) {
 		ctx.SendChain(zero.Share(url,"随机图",url))
 	})
 
-	zero.Default().OnCommand("setu").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
+	zero.Default().OnCommand("setu_info").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		type SetuCount struct {
 			SetuR18 int
 			Count int
@@ -134,6 +134,16 @@ func Init(c Config) {
 		ctx.SendChain(message.Text(fmt.Sprintf("setu:\r\n  count:\t%d\r\n  isR18:\t%d\r\n  isPG: \t%d\r\n  tags: \t%d",picCount, r18Count, pgCount, tagCount)))
 	})
 
+	zero.Default().OnRegex("^!setu_mapping:(.*)->(.*)$", ZeroBot.SuperUserPermission).FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
+		zh := ctx.State["regex_matched"].([]string)[1]
+		src := ctx.State["regex_matched"].([]string)[2]
+		db.DB.Model(&setuTagTranslated{}).Create(&setuTagTranslated{
+			Zh: zh,
+			Src: src,
+		})
+		ctx.SendChain(message.Text("创建映射成功"))
+		return
+	})
 
 
 }

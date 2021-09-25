@@ -12,10 +12,18 @@ func searchRandom(tag string, r18 int)(setu, error){
 	var tagLike = fmt.Sprintf("%%%s%%", tag)
 	var tagS2tLkie = fmt.Sprintf("%%%s%%", tagS2t)
 	var data setu
+	var tagTranslated setuTagTranslated
 
-	result := db.DB.Table("setus").Joins("join setu_tags ON setu_tags.pid = setus.pid").
-		Where("r18 = ? and (setu_tags.tag = ? or setu_tags.tag = ?)",r18, tag, tagS2t).
-		Order("RANDOM()").First(&data)
+	main := db.DB.Table("setus").Joins("join setu_tags ON setu_tags.pid = setus.pid")
+
+	result := db.DB.Model(&setuTagTranslated{}).Where("zh like ?", fmt.Sprintf("%%%s%%", tag)).First(&tagTranslated)
+	if result.Error == nil{
+		main.Where("r18 = ? and (setu_tags.tag = ? or setu_tags.tag = ? or setu_tags.tag = ?)",r18, tag, tagS2t, tagTranslated.Src)
+	}else{
+		main.Where("r18 = ? and (setu_tags.tag = ? or setu_tags.tag = ?)",r18, tag, tagS2t)
+	}
+
+	result = main.Order("RANDOM()").First(&data)
 	if result.Error == nil{
 		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
 		return data, nil
