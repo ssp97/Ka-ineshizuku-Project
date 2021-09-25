@@ -6,7 +6,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/dbManager"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/fsUtils"
-	"github.com/ssp97/Ka-ineshizuku-Project/pkg/gocc"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/extension/rate"
@@ -16,6 +15,7 @@ import (
 	"net/http"
 	"path"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -27,28 +27,6 @@ var limit = rate.NewManager(time.Minute*1, 2)
 type Config struct {
 	Enable bool
 	Server string
-}
-
-type setu struct {
-	Id				int
-	Pid 			int
-	P   			int
-	Title 			string
-	UserId 			int
-	UserAccount 	string
-	UserName		string
-	Url 			string
-	R18				int
-	Width			int
-	Height			int
-	Tags  			string
-	TagsTranslated	string
-	Caption			string
-}
-
-type setuTag struct {
-	Pid			  	int 		`gorm:"index"`
-	Tag 			string		`gorm:"index"`
 }
 
 func initSetuData(){
@@ -67,13 +45,16 @@ func initSetuData(){
 }
 
 func Init(c Config) {
-
-
 	var count int64
 	db = dbManager.GetDb(dbManager.DEFAULT_DB_NAME)
 	db.DB.AutoMigrate(
 		setu{},
+	)
+	db.DB.AutoMigrate(
 		setuTag{},
+	)
+	db.DB.AutoMigrate(
+		setuTagTranslated{},
 	)
 	db.DB.Model(&setu{}).Count(&count)
 	if count < 10000{
@@ -106,32 +87,18 @@ func Init(c Config) {
 	}
 
 	zero.Default().OnRegex(`^来点(.*)$`).SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
-		if !limit.Load(ctx.Event.UserID).Acquire() {
-			ctx.SendChain(message.Reply(ctx.Event.MessageID),
-				message.Text("服务受限！接口流量限制！"))
-			return
-		}
 		var tag = ctx.State["regex_matched"].([]string)[1]
-		var tagS2t = gocc.S2t(tag)
-		var data setu
-		result := db.DB.Model(&setu{}).Where("title like ?", fmt.Sprintf("%%%s%%", tag)).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
-		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
-		if result.Error == nil{
-			SendPixivPic(ctx, data)
-			return
-		}
-		result = db.DB.Model(&setu{}).Where("title like ?", fmt.Sprintf("%%%s%%", tagS2t)).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
-		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
-		if result.Error == nil{
-			SendPixivPic(ctx, data)
-			return
-		}
-		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(fmt.Sprintf("未找到%s相关的图片", tag)))
+		getAndSendPic(ctx,tag, 0)
 	})
 
 	zero.Default().OnRegex(`^来张(.*)$`).SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
+		var tag = ctx.State["regex_matched"].([]string)[1]
+		getAndSendPic(ctx,tag, -1)
+	})
 
-
+	zero.Default().OnRegex(`^来发(.*)$`).SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
+		var tag = ctx.State["regex_matched"].([]string)[1]
+		getAndSendPic(ctx,tag, 1)
 	})
 	
 	zero.Default().OnRegex(`^随机色图`).SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
@@ -139,16 +106,13 @@ func Init(c Config) {
 		db.DB.Model(&setu{}).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
 		//j := fmt.Sprintf(`{"app":"com.tencent.miniapp","desc":"","meta":{"Image":"%s"}}`, fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url))
 		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
-		ctx.SendChain(zero.Cardimage(fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url)))
+		//ctx.SendChain(zero.Cardimage(fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url)))
+		SendPixivBigPic(ctx, data)
 	})
 	
 	zero.Default().OnRegex(`^真随机色图`).SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
-		data := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-				 <msg serviceID="1">
-				 <item><title>客官，这是你要的色图</title></item>
-				 <source name="setu" icon="http://%s/app/setu/api/random" action="" appid="-1" />
-				 </msg>`, c.Server)
-		ctx.SendChain(message.XML(data))
+		url := fmt.Sprintf("https://%s/app/setu/api/random", c.Server)
+		ctx.SendChain(zero.Share(url,"随机图",url))
 	})
 
 	zero.Default().OnCommand("setu").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
@@ -159,23 +123,85 @@ func Init(c Config) {
 		var (
 			picCount int64
 			r18Count int64
+			pgCount  int64
 			tagCount int64
 		)
 
 		db.DB.Model(&setu{}).Count(&picCount)
 		db.DB.Model(&setu{}).Where("r18 = ?", 1).Count(&r18Count)
+		db.DB.Model(&setu{}).Where("r18 = ?", -1).Count(&pgCount)
 		db.DB.Model(&setuTag{}).Count(&tagCount)
-		ctx.SendChain(message.Text(fmt.Sprintf("setu:\r\n  count:\t%d\r\n  isR18:\t%d\r\n  tags: \t%d",picCount, r18Count, tagCount)))
+		ctx.SendChain(message.Text(fmt.Sprintf("setu:\r\n  count:\t%d\r\n  isR18:\t%d\r\n  isPG: \t%d\r\n  tags: \t%d",picCount, r18Count, pgCount, tagCount)))
 	})
 
 
 
 }
 
+func getAndSendPic(ctx *ZeroBot.Ctx, tag string, isR18 int){
+	if !limit.Load(ctx.Event.UserID).Acquire() && !ZeroBot.AdminPermission(ctx){
+		ctx.SendChain(message.Reply(ctx.Event.MessageID),
+			message.Text("服务受限！接口流量限制！"))
+		return
+	}
+	data, err := searchRandom(tag, isR18)
+	if err == nil {
+		SendPixivPic(ctx, data)
+		return
+	}
+	pid, url := loliconSearch(tag, isR18)
+	if pid > 0{
+		SendPixivPic(ctx, setu{Pid:pid, Url: url})
+	}
+	ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(fmt.Sprintf("未找到%s相关的图片", tag)))
+	return
+}
+
+func getSomePic(ctx *ZeroBot.Ctx, tag string, isR18 int, maxCount int){
+	if !limit.Load(ctx.Event.UserID).Acquire() && !ZeroBot.AdminPermission(ctx){
+		ctx.SendChain(message.Reply(ctx.Event.MessageID),
+			message.Text("服务受限！接口流量限制！"))
+		return
+	}
+
+	//SendSomePic
+}
+
+
 
 func SendPixivPic(ctx *ZeroBot.Ctx, data setu){
-	url := fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url)
+	url := fmt.Sprintf("%s/%s",PIXIV_IMG_PROXY, data.Url)
 	id := ctx.SendChain(message.Reply(ctx.Event.MessageID),zero.ImageUrlMessage(url))
+	if id == 0 {
+		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("图片发送失败了"))
+	}
+}
+
+func SendSomePic(ctx *ZeroBot.Ctx, data []setu){
+	msg := []message.MessageSegment{message.Reply(ctx.Event.MessageID)}
+	var lock sync.Locker
+	var wait sync.WaitGroup
+	for _, s := range data {
+		wait.Add(1)
+		go func(s setu) {
+			url := fmt.Sprintf("%s/%s",PIXIV_IMG_PROXY, s.Url)
+			m := zero.ImageUrlMessage(url)
+			lock.Lock()
+			msg = append(msg, m)
+			lock.Unlock()
+			wait.Done()
+		}(s)
+	}
+	wait.Wait()
+	id := ctx.SendChain(msg...)
+	if id == 0 {
+		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("图片发送失败了"))
+	}
+}
+
+func SendPixivBigPic(ctx *ZeroBot.Ctx, data setu){
+	url := fmt.Sprintf("%s/%s",PIXIV_IMG_PROXY, data.Url)
+	id := ctx.SendChain(zero.Cardimage(zero.ImageUrlMessage(url).Data["file"]))
 	if id == 0 {
 		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("图片发送失败了"))
 	}

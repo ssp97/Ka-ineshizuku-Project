@@ -148,6 +148,28 @@ func Init(config Config) { // 插件主体
 				"- 私聊转发 0000 XXX",
 			))
 		})
+	zero.Default().OnRegex(`^拉黑.*?(\d+)`, ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(40).Handle(func(ctx *ZeroBot.Ctx) {
+		var user BlackList
+		userId := strToInt(ctx.State["regex_matched"].([]string)[1])
+		result := db.DB.First(&user, userId).Update("forever",true)
+		if result.Error != nil{
+			ctx.SendChain(message.Text(fmt.Sprintf("操作失败，因为%s" ,result.Error)))
+		}else{
+			ctx.SendChain(message.Text("操作成功"))
+		}
+	})
+
+	zero.Default().OnRegex(`^拉白.*?(\d+)`, ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(40).Handle(func(ctx *ZeroBot.Ctx) {
+		var user BlackList
+		userId := strToInt(ctx.State["regex_matched"].([]string)[1])
+		result := db.DB.First(&user, userId).Update("forever",false)
+		if result.Error != nil{
+			ctx.SendChain(message.Text(fmt.Sprintf("操作失败，因为%s" ,result.Error)))
+		}else{
+			ctx.SendChain(message.Text("操作成功"))
+		}
+	})
+
 	// 升为管理
 	zero.Default().OnRegex(`^升为管理.*?(\d+)`, ZeroBot.OnlyGroup, ZeroBot.SuperUserPermission).SetBlock(true).SetPriority(40).
 		Handle(func(ctx *ZeroBot.Ctx) {

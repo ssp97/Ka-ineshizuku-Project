@@ -10,3 +10,14 @@ func Cardimage(data string) message.MessageSegment {
 		},
 	}
 }
+
+func Share(url, title, image string)message.MessageSegment{
+	return message.MessageSegment{
+		Type: "share",
+		Data: map[string]string{
+			"url": url,
+			"title": title,
+			"image": image,
+		},
+	}
+}
