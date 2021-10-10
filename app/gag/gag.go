@@ -23,6 +23,7 @@ func Init(c Config){
 			Handle(func(ctx *ZeroBot.Ctx){
 				if zero.IsGroupManager(ctx) == false{
 					ctx.SendChain(message.Text("服务受限：非群管理员"))
+					return
 				}
 				ctx.SetGroupBan(
 					ctx.Event.GroupID,
@@ -39,6 +40,7 @@ func Init(c Config){
 			Handle(func(ctx *ZeroBot.Ctx){
 				if zero.IsGroupManager(ctx) == false{
 					ctx.SendChain(message.Text("服务受限：非群管理员"))
+					return
 				}
 				ctx.SetGroupBan(
 					ctx.Event.GroupID,

@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/TypeUtils"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/dbManager"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/fsUtils"
+	"github.com/ssp97/Ka-ineshizuku-Project/pkg/pixivel"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/extension/rate"
@@ -81,10 +83,11 @@ func Init(c Config) {
 		ctx.Redirect(http.StatusFound, fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url))
 	})
 
-
 	if c.Enable == false{
 		return
 	}
+
+	//setuApi.Login()
 
 	zero.Default().OnRegex(`^来点(.*)$`).SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		var tag = ctx.State["regex_matched"].([]string)[1]
@@ -137,14 +140,28 @@ func Init(c Config) {
 	zero.Default().OnRegex("^!setu_mapping:(.*)->(.*)$", ZeroBot.SuperUserPermission).FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
 		zh := ctx.State["regex_matched"].([]string)[1]
 		src := ctx.State["regex_matched"].([]string)[2]
-		db.DB.Model(&setuTagTranslated{}).Create(&setuTagTranslated{
+		result := db.DB.Model(&setuTagTranslated{}).Create(&setuTagTranslated{
 			Zh: zh,
 			Src: src,
 		})
+		if result.Error != nil{
+			ctx.SendChain(message.Text("映射创建失败，因为"),message.Text(result.Error))
+			return
+		}
 		ctx.SendChain(message.Text("创建映射成功"))
 		return
 	})
-
+	
+	zero.Default().OnRegex("!setu_user:(.*)$", ZeroBot.SuperUserPermission).FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
+		id := TypeUtils.StrToInt(ctx.State["regex_matched"].([]string)[1])
+		data, err := pixivel.GetUserInfo(id)
+		if err!= nil{
+			ctx.SendChain(message.Text(fmt.Sprintf("发生错误了，因为%s", err)))
+			return
+		}
+		ctx.SendChain(message.Text(*data))
+		pixivel.GetUserAllIllust(id)
+	})
 
 }
 
@@ -184,6 +201,10 @@ func SendPixivPic(ctx *ZeroBot.Ctx, data setu){
 	id := ctx.SendChain(message.Reply(ctx.Event.MessageID),zero.ImageUrlMessage(url))
 	if id == 0 {
 		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("图片发送失败了"))
+	}else{
+		// 一分钟后撤回
+		time.Sleep(60 * time.Second)
+		ctx.DeleteMessage(id)
 	}
 }
 

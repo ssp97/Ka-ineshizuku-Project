@@ -16,6 +16,7 @@ require (
 	github.com/json-iterator/go v1.1.11
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/lestrrat-go/strftime v1.0.5 // indirect
+	github.com/levigross/grequests v0.0.0-20190908174114-253788527a1a
 	github.com/liuzl/cedar-go v0.0.0-20170805034717-80a9c64b256d // indirect
 	github.com/liuzl/da v0.0.0-20180704015230-14771aad5b1d
 	github.com/lxzan/hasaki v1.0.7
