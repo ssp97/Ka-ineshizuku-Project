@@ -21,7 +21,7 @@ import (
 	"time"
 )
 
-const PIXIV_IMG_PROXY = "https://i.pixiv.cat"
+const PIXIV_IMG_PROXY = "https://i.pixiv.re"
 
 var db *dbManager.ORM
 var limit = rate.NewManager(time.Minute*1, 2)
