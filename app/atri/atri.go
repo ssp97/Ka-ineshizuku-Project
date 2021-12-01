@@ -47,8 +47,15 @@ func init() { // 插件主体
 	//	})
 	zero.Default().OnKeywordGroup([]string{"喜欢", "爱你", "suki", "daisuki", "すき", "好き", "贴贴", "老婆", "亲一个", "mua"}, AtriSwitch(), AtriSleep(), ZeroBot.OnlyToMe).SetBlock(true).SetPriority(PRIO).
 		Handle(func(ctx *ZeroBot.Ctx) {
-			if rand.Intn(10) == 0 {
+			if rand.Intn(3) == 0 {
 				ctx.SendChain(randImage("SUKI.jpg", "SUKI1.jpg", "SUKI2.png"))
+			}else{
+				ctx.SendChain(randText(
+					"你说什么，我听不见！",
+					"色色的事情，可以哟~",
+					"没懂",
+					"死宅是没有未来的！",
+				))
 			}
 		})
 	zero.Default().OnKeywordGroup([]string{"草你妈", "操你妈", "脑瘫", "废柴", "fw", "five", "废物", "战斗", "爬", "爪巴", "sb", "SB", "傻B"}, AtriSwitch(), AtriSleep(), ZeroBot.OnlyToMe).SetBlock(true).SetPriority(PRIO - 1).
