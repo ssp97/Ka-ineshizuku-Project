@@ -160,7 +160,64 @@ func Init(c Config) {
 			return
 		}
 		ctx.SendChain(message.Text(*data))
-		pixivel.GetUserAllIllust(id)
+		//pixivel.GetUserAllIllust(id)
+	})
+
+	zero.Default().OnRegex("!setu_user_ill:(.*)$", ZeroBot.SuperUserPermission).FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
+		id := TypeUtils.StrToInt(ctx.State["regex_matched"].([]string)[1])
+		_, err := pixivel.GetUserInfo(id)
+		if err!= nil{
+			ctx.SendChain(message.Text(fmt.Sprintf("发生错误了，因为%s", err)))
+			return
+		}
+		//ctx.SendChain(message.Text(*data))
+		data := pixivel.GetUserAllIllust(id)
+		ctx.SendChain(message.Text(data))
+	})
+
+	zero.Default().OnRegex("!setu_add_user_all:(.*)$", ZeroBot.SuperUserPermission).FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
+		count := 0
+		id := TypeUtils.StrToInt(ctx.State["regex_matched"].([]string)[1])
+		_, err := pixivel.GetUserInfo(id)
+		if err!= nil{
+			ctx.SendChain(message.Text(fmt.Sprintf("发生错误了，因为%s", err)))
+			return
+		}
+		//ctx.SendChain(message.Text(*data))
+		data := pixivel.GetUserAllIllust(id)
+		for i:= range *data{
+			ill := (*data)[i]
+			//Pid 			int			`gorm:"uniqueIndex"`
+			//P   			int
+			//Title 			string		`gorm:"index"`
+			//UserId 			int
+			//UserAccount 	string
+			//UserName		string
+			//Url 			string
+			//R18				int			`gorm:"index"`
+			//Width			int
+			//Height			int
+			//Tags  			string
+			//TagsTranslated	string
+			//Caption			string
+			err = addSetu(setu{
+				Pid: ill.Pid,
+				P:ill.P,
+				Title: ill.Title,
+				UserId: ill.UserId,
+				UserAccount: ill.UserAccount,
+				UserName: ill.UserName,
+				Url: ill.Url,
+				R18: ill.R18,
+				Width: ill.Width,
+				Height: ill.Height,
+				Tags: strings.Join(ill.Tags, ", "),
+			}, ill.Tags)
+			if err == nil{
+				count++
+			}
+		}
+		ctx.SendChain(message.Text(fmt.Sprintf("增加了%d张图", count)))
 	})
 
 }

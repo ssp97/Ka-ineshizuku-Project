@@ -35,3 +35,15 @@ func searchRandom(tag string, r18 int)(setu, error){
 	}
 	return data, result.Error
 }
+
+func addSetu(setu2 setu, tags []string)(error){
+	for i := range tags{
+		tag := setuTag{
+			Pid: setu2.Pid,
+			Tag: tags[i],
+		}
+		db.DB.Model(&setuTag{}).Create(&tag)
+	}
+	result := db.DB.Table("setus").Create(&setu2)
+	return result.Error
+}
