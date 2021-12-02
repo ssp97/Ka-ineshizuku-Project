@@ -29,6 +29,9 @@ func searchRandom(tag string, r18 int)(setu, error){
 		return data, nil
 	}
 	result = db.DB.Model(&setu{}).Where("r18 = ? and (title like ? or title like ?)",r18, tagLike, tagS2tLkie).Order("RANDOM()").First(&data)
+	data.Url = strings.ReplaceAll(data.Url, "/img-original", "/c/600x1200_90/img-master")
+	data.Url = strings.ReplaceAll(data.Url, "{count}", "{count}_master1200.jpg")
+
 	if result.Error == nil{
 		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
 		return data, nil
