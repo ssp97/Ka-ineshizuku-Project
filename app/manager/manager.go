@@ -300,15 +300,15 @@ func Init(config Config) { // 插件主体
 			ctx.SendChain(message.Text("那我就不手下留情了~"))
 		})
 	// 修改名片
-	zero.Default().OnRegex(`^修改名片.*?(\d+).*?\s(.*)`, ZeroBot.OnlyGroup, ZeroBot.AdminPermission).SetBlock(true).SetPriority(40).
-		Handle(func(ctx *ZeroBot.Ctx) {
-			ctx.SetGroupCard(
-				ctx.Event.GroupID,
-				strToInt(ctx.State["regex_matched"].([]string)[1]), // 被修改群名片的人
-				ctx.State["regex_matched"].([]string)[2],           // 修改成的群名片
-			)
-			ctx.SendChain(message.Text("嗯！已经修改了"))
-		})
+	//zero.Default().OnRegex(`^修改名片.*?(\d+).*?\s(.*)`, ZeroBot.OnlyGroup, ZeroBot.AdminPermission).SetBlock(true).SetPriority(40).
+	//	Handle(func(ctx *ZeroBot.Ctx) {
+	//		ctx.SetGroupCard(
+	//			ctx.Event.GroupID,
+	//			strToInt(ctx.State["regex_matched"].([]string)[1]), // 被修改群名片的人
+	//			ctx.State["regex_matched"].([]string)[2],           // 修改成的群名片
+	//		)
+	//		ctx.SendChain(message.Text("嗯！已经修改了"))
+	//	})
 	// 修改头衔
 	zero.Default().OnRegex(`^修改头衔.*?(\d+).*?\s(.*)`, ZeroBot.OnlyGroup, ZeroBot.AdminPermission).SetBlock(true).SetPriority(40).
 		Handle(func(ctx *ZeroBot.Ctx) {

@@ -47,6 +47,6 @@ require (
 )
 
 replace (
-	github.com/wdvxdr1123/ZeroBot v1.2.2 => github.com/ssp97/ZeroBot v1.2.4
+	github.com/wdvxdr1123/ZeroBot v1.2.2 => github.com/ssp97/ZeroBot v1.2.5
 	github.com/yanyiwu/gojieba v1.1.2 => github.com/ttys3/gojieba v1.1.3
 )
