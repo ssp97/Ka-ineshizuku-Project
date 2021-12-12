@@ -54,6 +54,10 @@ func (ws *WSServer) Connect() {
 	// nothing
 }
 
+func (ws *WSServer) SelfID() int64{
+	return 0
+}
+
 func (ws *WSServer)websocketServer(w http.ResponseWriter, r *http.Request){
 	wsConn := WSConn{
 		Server: ws,

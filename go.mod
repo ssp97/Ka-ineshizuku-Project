@@ -28,8 +28,7 @@ require (
 	github.com/soheilhy/cmux v0.1.4
 	github.com/sosedoff/pgweb v0.11.8
 	github.com/tfriedel6/canvas v0.12.1
-	github.com/tidwall/gjson v1.8.1
-	github.com/tidwall/pretty v1.2.0 // indirect
+	github.com/tidwall/gjson v1.11.0
 	github.com/tklauser/go-sysconf v0.3.6 // indirect
 	github.com/wdvxdr1123/ZeroBot v1.2.2
 	github.com/yanyiwu/gojieba v1.1.2

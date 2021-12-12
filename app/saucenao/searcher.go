@@ -52,12 +52,13 @@ func init() { // 插件主体
 		Handle(func(ctx *ZeroBot.Ctx) {
 			// 匹配命令
 			for _, elem := range ctx.Event.Message {
-				if elem.Type == "text" {
-					text := strings.ReplaceAll(elem.Data["text"], " ", "")
-					if text != ctx.State["keyword"].(string) {
-						return
-					}
-				}
+				fmt.Println(elem.Type, elem.Data)
+				//if elem.Type == "text" {
+				//	text := strings.ReplaceAll(elem.Data["text"], " ", "")
+				//	if text != ctx.State["keyword"].(string) {
+				//	CQ:image,file=edc256d9d1f267fa5f2fb5ddbaa6b60f.image	return
+				//	}
+				//}
 			}
 			// 匹配图片
 			rule := func() ZeroBot.Rule {
