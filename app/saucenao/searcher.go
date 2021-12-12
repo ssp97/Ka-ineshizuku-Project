@@ -115,7 +115,7 @@ func init() { // 插件主体
 					)
 					continue
 				}
-				if result, err := ascii2d.Ascii2d(pic); err == nil {
+				if result, err := ascii2d.Ascii2d(pic); err == nil && result.Pid != 0{
 					// 返回Ascii2d的结果
 					ctx.SendChain(
 						message.Reply(ctx.Event.MessageID),
