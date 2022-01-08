@@ -69,7 +69,9 @@ func Init(c Config) {
 	http.Handle("/app/setu/", r)
 	r.GET("/app/setu/api/random", func(ctx *gin.Context) {
 		var data setu
-		db.DB.Model(&setu{}).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
+		//db.DB.Model(&setu{}).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
+		//db.DB.Model(&setu{}).Raw("tablesample bernoulli(0.1) ").Where("r18 = ?", "0").Order("RANDOM()").First(&data)
+		db.DB.Raw("select * from setus tablesample bernoulli(0.1) where r18 = 0  limit 1").First(&data)
 		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
 		fmt.Print(data.Url)
 		ctx.Redirect(http.StatusFound, fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url))
@@ -77,7 +79,9 @@ func Init(c Config) {
 
 	r.GET("/app/setu/api/randomR18", func(ctx *gin.Context) {
 		var data setu
-		db.DB.Model(&setu{}).Where("r18 = ?", "1").Order("RANDOM()").First(&data)
+		//db.DB.Model(&setu{}).Where("r18 = ?", "1").Order("	RANDOM()").First(&data)
+		//db.DB.Model(&setu{}).Raw("tablesample bernoulli(0.1) ").Where("r18 = ?", "1").Order("RANDOM()").First(&data)
+		db.DB.Raw("select * from setus tablesample bernoulli(0.1) where r18 = 1 limit 1").First(&data)
 		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
 		fmt.Print(data.Url)
 		ctx.Redirect(http.StatusFound, fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url))
@@ -106,7 +110,8 @@ func Init(c Config) {
 	
 	zero.Default().OnRegex(`^随机色图`).SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		var data setu
-		db.DB.Model(&setu{}).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
+		//db.DB.Model(&setu{}).Where("r18 = ?", "0").Order("RANDOM()").First(&data)
+		db.DB.Raw("select * from setus tablesample bernoulli(0.1) where r18 = 0 limit 1").First(&data)
 		//j := fmt.Sprintf(`{"app":"com.tencent.miniapp","desc":"","meta":{"Image":"%s"}}`, fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url))
 		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
 		//ctx.SendChain(zero.Cardimage(fmt.Sprintf("%s%s",PIXIV_IMG_PROXY, data.Url)))
