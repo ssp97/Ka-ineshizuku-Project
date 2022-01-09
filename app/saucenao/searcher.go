@@ -110,7 +110,7 @@ func init() { // 插件主体
 							"插画ID：", result.PixivID, "\n",
 							"画师：", result.MemberName, "\n",
 							"画师ID：", result.MemberID, "\n",
-							"直链：", "https://pixivel.moe/detail?id=", result.PixivID,
+							"直链：", "https://www.pixiv.net/artworks/", result.PixivID,
 						),
 					)
 					continue
