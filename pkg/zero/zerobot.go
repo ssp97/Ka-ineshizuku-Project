@@ -33,14 +33,16 @@ func ImageUrlMessage(url string)(message.MessageSegment){
 	if err != nil{
 		panic(err)
 	}
-	d = avoidExamine.PicByte(d)
+	//d = avoidExamine.PicByte(d)
+	d = avoidExamine.PicRandomDot(d)
 	bs := base64.StdEncoding.EncodeToString(d)
 	return ImageBase64Message(&bs)
 }
 
 func ImageFileMessage(path string)(message.MessageSegment){
 	d := fsUtils.ReadFile(path)
-	d = avoidExamine.PicByte(d)
+	//d = avoidExamine.PicByte(d)
+	d = avoidExamine.PicRandomDot(d)
 	base64str := base64.StdEncoding.EncodeToString(d)
 	return ImageBase64Message(&base64str)
 }

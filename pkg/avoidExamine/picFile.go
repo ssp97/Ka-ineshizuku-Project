@@ -2,6 +2,11 @@ package avoidExamine
 
 import (
 	"bytes"
+	log "github.com/sirupsen/logrus"
+	"image"
+	"image/color"
+	"image/draw"
+	"image/png"
 	"math/rand"
 	"os"
 )
@@ -30,6 +35,31 @@ func PicFile(path string)(err error){
 func PicByte(data ...[]byte)(result []byte){
 	r := randomBytes(rand.Intn(20))
 	result = bytes.Join(data,r)
+	return
+}
+
+func PicRandomDot(data ...[]byte)(result []byte){
+	reader := bytes.NewReader(data[0])
+	buffer := new(bytes.Buffer)
+	img, formatName, err := image.Decode(reader)
+	if err != nil {
+		log.Warn(err, formatName)
+		return nil
+	}
+	dx := img.Bounds().Dx()
+	dy := img.Bounds().Dy()
+	x := rand.Intn(dx)
+	y := rand.Intn(dy)
+	bounds := image.NewRGBA(img.Bounds())
+	draw.Draw(bounds, img.Bounds(), img, img.Bounds().Min, draw.Src)
+
+	bounds.SetRGBA(x,y, color.RGBA{A: 255, R: uint8(rand.Intn(255)), G: uint8(rand.Intn(255)), B: uint8(rand.Intn(255))})
+	bounds.SetRGBA(x,y, color.RGBA{A: 255, R: uint8(rand.Intn(255)), G: uint8(rand.Intn(255)), B: uint8(rand.Intn(255))})
+	bounds.SetRGBA(x,y, color.RGBA{A: 255, R: uint8(rand.Intn(255)), G: uint8(rand.Intn(255)), B: uint8(rand.Intn(255))})
+
+	err = png.Encode(buffer, bounds)
+	result = buffer.Bytes()
+
 	return
 }
 
