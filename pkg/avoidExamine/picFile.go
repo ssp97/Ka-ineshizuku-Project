@@ -7,6 +7,9 @@ import (
 	"image/color"
 	"image/draw"
 	"image/png"
+	_ "image/jpeg"
+	_ "image/gif"
+	_ "golang.org/x/image/bmp"
 	"math/rand"
 	"os"
 )
@@ -44,6 +47,7 @@ func PicRandomDot(data ...[]byte)(result []byte){
 	img, formatName, err := image.Decode(reader)
 	if err != nil {
 		log.Warn(err, formatName)
+		log.Info(string(data[0]))
 		return nil
 	}
 	dx := img.Bounds().Dx()
