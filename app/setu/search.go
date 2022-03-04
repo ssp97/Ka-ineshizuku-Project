@@ -26,9 +26,9 @@ func searchRandom(tag string, r18 int)(setu, error){
 
 	result = main.Order("RANDOM()").First(&data)
 	if result.Error == nil{
-		data.Url = strings.ReplaceAll(data.Url, "/img-original", "/c/600x1200_90/img-master")
-		data.Url = strings.ReplaceAll(data.Url, "{count}.png", "{count}_master1200.jpg")
-		data.Url = strings.ReplaceAll(data.Url, "{count}.jpg", "{count}_master1200.jpg")
+		//data.Url = strings.ReplaceAll(data.Url, "/img-original", "/c/600x1200_90/img-master")
+		//data.Url = strings.ReplaceAll(data.Url, "{count}.png", "{count}_master1200.jpg")
+		//data.Url = strings.ReplaceAll(data.Url, "{count}.jpg", "{count}_master1200.jpg")
 		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
 		return data, nil
 	}
@@ -36,9 +36,9 @@ func searchRandom(tag string, r18 int)(setu, error){
 
 	log.Warn(data.Url)
 	if result.Error == nil{
-		data.Url = strings.ReplaceAll(data.Url, "/img-original", "/c/600x1200_90/img-master")
-		data.Url = strings.ReplaceAll(data.Url, "{count}.png", "{count}_master1200.jpg")
-		data.Url = strings.ReplaceAll(data.Url, "{count}.jpg", "{count}_master1200.jpg")
+		//data.Url = strings.ReplaceAll(data.Url, "/img-original", "/c/600x1200_90/img-master")
+		//data.Url = strings.ReplaceAll(data.Url, "{count}.png", "{count}_master1200.jpg")
+		//data.Url = strings.ReplaceAll(data.Url, "{count}.jpg", "{count}_master1200.jpg")
 		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
 		return data, nil
 	}
