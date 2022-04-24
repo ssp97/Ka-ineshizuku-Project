@@ -21,7 +21,7 @@ import (
 	"time"
 )
 
-const PIXIV_IMG_PROXY = "https://i.pixiv.re"
+const PIXIV_IMG_PROXY = "https://pixiv.re"
 
 var db *dbManager.ORM
 var pixivapi SetuPixivApi
