@@ -24,11 +24,14 @@ import (
 const PIXIV_IMG_PROXY = "https://i.pixiv.re"
 
 var db *dbManager.ORM
+var pixivapi SetuPixivApi
 var limit = rate.NewManager(time.Minute*1, 2)
 
 type Config struct {
 	Enable bool
 	Server string
+	PixivUser string
+	PixivPassword string
 }
 
 func initSetuData(){
@@ -48,6 +51,8 @@ func initSetuData(){
 
 func Init(c Config) {
 	var count int64
+	pixivapi = SetuPixivApi{}
+
 	db = dbManager.GetDb(dbManager.DEFAULT_DB_NAME)
 	db.DB.AutoMigrate(
 		setu{},
@@ -64,6 +69,8 @@ func Init(c Config) {
 		initSetuData()
 		log.Warn("Init setu ok")
 	}
+
+	pixivapi.Init()
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
 	http.Handle("/app/setu/", r)
@@ -142,6 +149,17 @@ func Init(c Config) {
 		ctx.SendChain(message.Text(fmt.Sprintf("setu:\r\n  count:\t%d\r\n  isR18:\t%d\r\n  isPG: \t%d\r\n  tags: \t%d",picCount, r18Count, pgCount, tagCount)))
 	})
 
+	zero.Default().OnRegex("^!setu_pixiv_login:(.*),(.*)$", ZeroBot.SuperUserPermission).FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
+		token := ctx.State["regex_matched"].([]string)[1]
+		retoken := ctx.State["regex_matched"].([]string)[2]
+		err := pixivapi.SetTokenAndLogin(token, retoken)
+		if err != nil{
+			ctx.SendChain(message.Text("登录失败："),message.Text(err))
+		}else{
+			ctx.SendChain(message.Text("登录成功！"))
+		}
+	})
+
 	zero.Default().OnRegex("^!setu_mapping:(.*)->(.*)$", ZeroBot.SuperUserPermission).FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
 		zh := ctx.State["regex_matched"].([]string)[1]
 		src := ctx.State["regex_matched"].([]string)[2]
@@ -170,13 +188,14 @@ func Init(c Config) {
 
 	zero.Default().OnRegex("!setu_user_ill:(.*)$", ZeroBot.SuperUserPermission).FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
 		id := TypeUtils.StrToInt(ctx.State["regex_matched"].([]string)[1])
-		_, err := pixivel.GetUserInfo(id)
-		if err!= nil{
-			ctx.SendChain(message.Text(fmt.Sprintf("发生错误了，因为%s", err)))
-			return
-		}
-		//ctx.SendChain(message.Text(*data))
-		data := pixivel.GetUserAllIllust(id)
+		//_, err := pixivel.GetUserInfo(id)
+		//if err!= nil{
+		//	ctx.SendChain(message.Text(fmt.Sprintf("发生错误了，因为%s", err)))
+		//	return
+		//}
+		////ctx.SendChain(message.Text(*data))
+		//data := pixivel.GetUserAllIllust(id)
+		data := pixivapi.GetUserAllPic(uint64(id))
 		ctx.SendChain(message.Text(data))
 	})
 
@@ -192,19 +211,6 @@ func Init(c Config) {
 		data := pixivel.GetUserAllIllust(id)
 		for i:= range *data{
 			ill := (*data)[i]
-			//Pid 			int			`gorm:"uniqueIndex"`
-			//P   			int
-			//Title 			string		`gorm:"index"`
-			//UserId 			int
-			//UserAccount 	string
-			//UserName		string
-			//Url 			string
-			//R18				int			`gorm:"index"`
-			//Width			int
-			//Height			int
-			//Tags  			string
-			//TagsTranslated	string
-			//Caption			string
 			err = addSetu(setu{
 				Pid: ill.Pid,
 				P:ill.P,
