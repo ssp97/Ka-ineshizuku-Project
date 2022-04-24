@@ -39,7 +39,8 @@ func searchRandom(tag string, r18 int)(setu, error){
 		//data.Url = strings.ReplaceAll(data.Url, "/img-original", "/c/600x1200_90/img-master")
 		//data.Url = strings.ReplaceAll(data.Url, "{count}.png", "{count}_master1200.jpg")
 		//data.Url = strings.ReplaceAll(data.Url, "{count}.jpg", "{count}_master1200.jpg")
-		data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
+		//data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
+		data.Url = fmt.Sprintf("%d-%d.jpg", data.Pid, rand.Intn(data.P))
 		return data, nil
 	}
 	return data, result.Error
