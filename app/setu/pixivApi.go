@@ -114,7 +114,7 @@ func (pixivapi *SetuPixivApi)AddPicToDB(illust pixiv.Illust) error{
 			tags = append(tags, t.TranslatedName)
 		}
 
-		if t.Name == "R18"{
+		if t.Name == "R-18"{
 			isR18 = 1
 		}
 	}
