@@ -1,6 +1,7 @@
 package setu
 
 import (
+	"fmt"
 	"github.com/everpcpc/pixiv"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/publicModels"
 	"strconv"
@@ -105,12 +106,22 @@ func (pixivapi *SetuPixivApi)AddPicToDB(illust pixiv.Illust) error{
 	var tags []string
 	isR18 := 0
 	for _, t := range illust.Tags {
+		if t.Name == ""{
+			continue
+		}
 		tags = append(tags, t.Name)
-		tags = append(tags, t.TranslatedName)
+		if t.Name != t.TranslatedName && t.TranslatedName != ""{
+			tags = append(tags, t.TranslatedName)
+		}
+
 		if t.Name == "R18"{
 			isR18 = 1
 		}
 	}
+	fmt.Println(illust.Images)
+
+	url := strings.ReplaceAll(illust.Images.Medium, "https://i.pximg.net/c/540x540_70/img-master/", "/img-original")
+	url = strings.ReplaceAll(url, "p0_master1200", "p{count}")
 
 	err := addSetu(setu{
 		Pid: int(illust.ID),
@@ -119,7 +130,7 @@ func (pixivapi *SetuPixivApi)AddPicToDB(illust pixiv.Illust) error{
 		UserId: int(illust.User.ID),
 		UserAccount: illust.User.Account,
 		UserName: illust.User.Name,
-		Url: illust.Images.Original,
+		Url: url,
 		R18: isR18,
 		Width: illust.Width,
 		Height: illust.Height,

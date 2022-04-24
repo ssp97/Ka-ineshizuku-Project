@@ -9,7 +9,7 @@ type Setting struct {
 
 func GetSetting(key string)(err error, value string){
 	var data Setting
-	result := db.DB.Model(Setting{}).Where("key = ?", key).First(data)
+	result := db.DB.Model(Setting{}).Where("key = ?", key).First(&data)
 	if result.Error != nil{
 		return result.Error, ""
 	}else {
@@ -19,7 +19,7 @@ func GetSetting(key string)(err error, value string){
 
 func SetSetting(key, value string)(err error){
 	var data Setting
-	result := db.DB.Model(Setting{}).Where("key = ?", key).First(data)
+	result := db.DB.Model(Setting{}).Where("key = ?", key).First(&data)
 	if result.Error != nil {
 		result = db.DB.Model(Setting{}).Create(Setting{
 			Key:   key,
