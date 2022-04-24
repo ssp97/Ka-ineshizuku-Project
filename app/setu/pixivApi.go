@@ -120,7 +120,7 @@ func (pixivapi *SetuPixivApi)AddPicToDB(illust pixiv.Illust) error{
 	}
 	fmt.Println(illust.Images)
 
-	url := strings.ReplaceAll(illust.Images.Medium, "https://i.pximg.net/c/540x540_70/img-master/", "/img-original")
+	url := strings.ReplaceAll(illust.Images.Medium, "https://i.pximg.net/c/540x540_70/img-master/", "/img-original/")
 	url = strings.ReplaceAll(url, "p0_master1200", "p{count}")
 
 	err := addSetu(setu{
