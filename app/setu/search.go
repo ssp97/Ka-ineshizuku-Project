@@ -47,6 +47,14 @@ func searchRandom(tag string, r18 int)(setu, error){
 }
 
 func addSetu(setu2 setu, tags []string)(error){
+
+	var found int64
+	db.DB.Model(&setu{}).Where("pid = ?", setu2.Pid).Count(&found)
+
+	if found > 0{
+		return fmt.Errorf("setu is exist")
+	}
+
 	for i := range tags{
 		tag := setuTag{
 			Pid: setu2.Pid,

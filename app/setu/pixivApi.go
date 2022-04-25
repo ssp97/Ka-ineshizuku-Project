@@ -28,6 +28,7 @@ func (pixivapi *SetuPixivApi) Init() {
 		publicModels.SetSetting(PIXAPI_TOKEN_TIME_KEY, strconv.FormatInt(t.Unix(),10))
 		return nil
 	})
+	pixivapi.reLogin()
 
 	go func() {
 		for{
