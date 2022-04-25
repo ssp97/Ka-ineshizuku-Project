@@ -77,12 +77,15 @@ func (pixivapi *SetuPixivApi) Login(token, retoken string, time time.Time) error
 }
 
 func (pixivapi *SetuPixivApi)GetUserAllPic(uid uint64)int{
-	lastNext := 0
-	next := 0
-	count := 0
+	var lastNext int
+	var next int
+	var count int
+	var err error
+	var illusts []pixiv.Illust
 	for{
 		lastNext = next
-		illusts, next, err := pixivapi.App.UserIllusts(uid, "illust", next)
+		illusts, next, err = pixivapi.App.UserIllusts(uid, "illust", lastNext)
+		fmt.Println("next:", next, lastNext)
 		if err != nil{
 			log.Warn(err)
 			return 0
@@ -95,7 +98,7 @@ func (pixivapi *SetuPixivApi)GetUserAllPic(uid uint64)int{
 				count++
 			}
 		}
-		if next == lastNext{
+		if next == 0{
 			break
 		}
 	}
@@ -119,7 +122,7 @@ func (pixivapi *SetuPixivApi)AddPicToDB(illust pixiv.Illust) error{
 			isR18 = 1
 		}
 	}
-	fmt.Println(illust.Images)
+	//fmt.Println(illust.Images)
 
 	url := strings.ReplaceAll(illust.Images.Medium, "https://i.pximg.net/c/540x540_70/img-master/", "/img-original/")
 	url = strings.ReplaceAll(url, "p0_master1200", "p{count}")

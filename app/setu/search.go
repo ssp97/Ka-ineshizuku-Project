@@ -29,7 +29,12 @@ func searchRandom(tag string, r18 int)(setu, error){
 		//data.Url = strings.ReplaceAll(data.Url, "{count}.png", "{count}_master1200.jpg")
 		//data.Url = strings.ReplaceAll(data.Url, "{count}.jpg", "{count}_master1200.jpg")
 		//data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
-		data.Url = fmt.Sprintf("%d-%d.jpg", data.Pid, rand.Intn(data.P)+1)
+		if data.P > 1{
+			data.Url = fmt.Sprintf("%d.jpg", data.Pid)
+		}else{
+			data.Url = fmt.Sprintf("%d-%d.jpg", data.Pid, rand.Intn(data.P)+1)
+		}
+
 		return data, nil
 	}
 	result = db.DB.Model(&setu{}).Where("r18 = ? and (title like ? or title like ?)",r18, tagLike, tagS2tLkie).Order("RANDOM()").First(&data)
@@ -40,7 +45,11 @@ func searchRandom(tag string, r18 int)(setu, error){
 		//data.Url = strings.ReplaceAll(data.Url, "{count}.png", "{count}_master1200.jpg")
 		//data.Url = strings.ReplaceAll(data.Url, "{count}.jpg", "{count}_master1200.jpg")
 		//data.Url = strings.ReplaceAll(data.Url, `{count}`, fmt.Sprintf("%d",rand.Intn(data.P) ))
-		data.Url = fmt.Sprintf("%d-%d.jpg", data.Pid, rand.Intn(data.P)+1)
+		if data.P > 1{
+			data.Url = fmt.Sprintf("%d.jpg", data.Pid)
+		}else{
+			data.Url = fmt.Sprintf("%d-%d.jpg", data.Pid, rand.Intn(data.P)+1)
+		}
 		return data, nil
 	}
 	return data, result.Error
