@@ -16,6 +16,8 @@ const PIXAPI_TOKEN_KEY = "setu_pixivapi_token"
 const PIXAPI_RE_TOKEN_KEY = "setu_pixivapi_refresh_token"
 const PIXAPI_TOKEN_TIME_KEY = "setu_pixivapi_time"
 
+const PATH = "data/setu/cache"
+
 type SetuPixivApi struct {
 	App *pixiv.AppPixivAPI
 }
@@ -104,6 +106,16 @@ func (pixivapi *SetuPixivApi)GetUserAllPic(uid uint64)int{
 	}
 
 	return count
+}
+
+func (pixivapi *SetuPixivApi)GetPic(id,page uint64)([]byte, error){
+	//todo
+	return nil,nil
+}
+
+func (pixivapi *SetuPixivApi)DownloadPic(id uint64)error{
+	_, err := pixivapi.App.Download(id,PATH)
+	return err
 }
 
 func (pixivapi *SetuPixivApi)AddPicToDB(illust pixiv.Illust) error{

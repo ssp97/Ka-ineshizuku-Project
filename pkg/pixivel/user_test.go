@@ -1,7 +1,11 @@
 package pixivel
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestGetUserAllIllust(t *testing.T) {
-	GetUserAllIllust(1226647)
+	data := GetUserAllIllust(1226647)
+	fmt.Println(data)
 }

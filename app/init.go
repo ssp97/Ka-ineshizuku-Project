@@ -10,6 +10,7 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/app/manager"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/publicModels"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/setu"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/setuai"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/snare"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/study"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/thunder"
@@ -41,6 +42,8 @@ func Init(c *conf.Config){
 
 	EEAsst.Init(c.App.EEAsst)
 	setu.Init(c.App.Setu)
+
+	setuai.Init()
 
 	zerobotConfig := &c.Zerobot
 

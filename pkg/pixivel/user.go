@@ -16,14 +16,9 @@ type PixivelUser struct {
 
 func GetUserInfo(userId int64)(*PixivelUser , error){
 	var user PixivelUser
-	url := fmt.Sprintf("%s/pixiv", API)
+	url := fmt.Sprintf("%s/v2/pixiv/user/%d", API, userId)
 
-	res, err := grequests.Get(url, &grequests.RequestOptions{
-		Params: map[string]string{
-			"type" : "member",
-			"id" : fmt.Sprintf("%d", userId),
-		},
-	})
+	res, err := grequests.Get(url, &grequests.RequestOptions{})
 
 	if err != nil{
 		return nil, err
@@ -35,8 +30,8 @@ func GetUserInfo(userId int64)(*PixivelUser , error){
 		return nil, errors.New("404")
 	}
 
-	user.Name = json.Get("user.name").String()
-	user.Id = json.Get("user.id").Int()
+	user.Name = json.Get("data.name").String()
+	user.Id = json.Get("data.id").Int()
 
 	return &user, err
 }
@@ -48,22 +43,23 @@ func GetUserAllIllust(userId int64)(*[]Illust){
 	)
 
 	for {
-		url := fmt.Sprintf("%s/pixiv", API)
+		url := fmt.Sprintf("%s/v2/pixiv/user/%d/illusts", API, userId)
 
 		res, err := grequests.Get(url, &grequests.RequestOptions{
 			Params: map[string]string{
-				"type" : "member_illust",
-				"id" : fmt.Sprintf("%d", userId),
 				"page" : fmt.Sprintf("%d", page),
 			},
+			UserAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.56",
 		})
 		if err != nil{
+			//fmt.Println(err)
 			return nil
 		}
 		data := res.Bytes()
 		json := gjson.ParseBytes(data)
-
-		m := json.Get("illusts").Array()
+		fmt.Printf("%s\r\n", data)
+		m := json.Get("data.illusts").Array()
+		fmt.Println(m)
 		for i := range m {
 			ill := m[i]
 			tags := ill.Get("tags").Array()
@@ -71,12 +67,12 @@ func GetUserAllIllust(userId int64)(*[]Illust){
 			//fmt.Println(m[i])
 			data := Illust{
 				Pid: int(ill.Get("id").Int()),
-				P:	int(ill.Get("page_count").Int()),
+				P:	int(ill.Get("pageCount").Int()),
 				Title: ill.Get("title").String(),
-				UserId: int(ill.Get("user.id").Int()),
-				UserAccount: ill.Get("user.account").String(),
-				UserName: ill.Get("user.name").String(),
-				//Url: m[i].Get(),
+				//UserId: int(ill.Get("user.id").Int()),
+				//UserAccount: ill.Get("user.account").String(),
+				//UserName: ill.Get("user.name").String(),
+				////Url: m[i].Get(),
 				R18: 0,
 				Width: int(ill.Get("width").Int()),
 				Height: int(ill.Get("height").Int()),
