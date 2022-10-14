@@ -42,31 +42,30 @@ func Request(url string, prompt, width, height, scale, sampler, steps, seed, uc 
 		jsonData["prompt"] = *prompt
 		print("prompt:", *prompt, "\r\n")
 	}
-	//if width!=nil{
-	//	jsonData["width"] = *width
-	//}
-	//if height!=nil{
-	//	jsonData["height"] = *height
-	//}
-	//if scale!=nil{
-	//	jsonData["scale"] = *scale
-	//}
-	//if sampler!=nil{
-	//	jsonData["sampler"] = *sampler
-	//}
-	//if steps!=nil{
-	//	jsonData["steps"] = *steps
-	//}
+	if width!=nil{
+		jsonData["width"] = *width
+	}
+	if height!=nil{
+		jsonData["height"] = *height
+	}
+	if scale!=nil{
+		jsonData["scale"] = *scale
+	}
+	if sampler!=nil{
+		jsonData["sampler"] = *sampler
+	}
+	if steps!=nil{
+		jsonData["steps"] = *steps
+	}
 	if seed!=nil{
 		jsonData["seed"] = *seed
 	} else {
 		jsonData["seed"] = fmt.Sprintf("%d", n)
 		print("seed = ", jsonData["seed"], "\r\n")
 	}
-	//if uc!=nil{
-	//	jsonData["uc"] = *uc
-	//}
-	//print(jsonData)
+	if uc!=nil{
+		jsonData["uc"] = *uc
+	}
 
 	opt := grequests.RequestOptions{
 		Headers: map[string]string{
@@ -83,7 +82,7 @@ func Request(url string, prompt, width, height, scale, sampler, steps, seed, uc 
 	}
 
 	img := Decode(r.Bytes())
-	txt := fmt.Sprintf("prompt:%s\r\nseed:%d\r\n", jsonData["prompt"], jsonData["seed"])
+	txt := fmt.Sprintf("prompt:%s\r\nseed:%s\r\n","哔~" , jsonData["seed"])//jsonData["prompt"]
 	return img, txt
 }
 
