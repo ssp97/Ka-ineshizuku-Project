@@ -139,7 +139,7 @@ func init() {
 		}
 		t := time.Now()
 		bs := touchHeadMake(faceImg)
-		ctx.SendChain(zero.ImageBase64Message(bs), message.Text(fmt.Sprintf("%v",time.Since(t))))
+		ctx.SendChain(zero.ImageBase64Message_(bs), message.Text(fmt.Sprintf("%v",time.Since(t))))
 
 	})
 

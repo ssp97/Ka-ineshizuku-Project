@@ -10,6 +10,7 @@ import (
 	"github.com/wdvxdr1123/ZeroBot/message"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 var defaultZero = ZeroBot.New()
@@ -21,6 +22,21 @@ func RunDefault(op ZeroBot.Config) {
 
 func Default() *ZeroBot.Engine {
 	return defaultZero
+}
+
+func ImageBase64Message(b string)(message.MessageSegment){
+	b = strings.ReplaceAll(b,"base64://", "")
+	d, err := base64.StdEncoding.DecodeString(b)
+	if err != nil{
+		return message.Text("图片解析失败")
+	}
+	d = avoidExamine.PicRandomDot(d)
+	if d == nil{
+		log.Warn(fmt.Sprintf("图片错误:%s", d))
+		return message.Text(fmt.Sprintf("图片错误:%s", d))
+	}
+	bs := base64.StdEncoding.EncodeToString(d)
+	return ImageBase64Message_(&bs)
 }
 
 func ImageUrlMessage(url string)(message.MessageSegment){
@@ -41,7 +57,7 @@ func ImageUrlMessage(url string)(message.MessageSegment){
 		return message.Text(fmt.Sprintf("图片错误:%s", url))
 	}
 	bs := base64.StdEncoding.EncodeToString(d)
-	return ImageBase64Message(&bs)
+	return ImageBase64Message_(&bs)
 }
 
 func ImageFileMessage(path string)(message.MessageSegment){
@@ -53,10 +69,10 @@ func ImageFileMessage(path string)(message.MessageSegment){
 		return message.Text(fmt.Sprintf("图片错误:%s", path))
 	}
 	base64str := base64.StdEncoding.EncodeToString(d)
-	return ImageBase64Message(&base64str)
+	return ImageBase64Message_(&base64str)
 }
 
-func ImageBase64Message(b *string)(message.MessageSegment){
+func ImageBase64Message_(b *string)(message.MessageSegment){
 	return message.Image(fmt.Sprintf("base64://%s", *b))
 }
 

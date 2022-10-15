@@ -136,7 +136,7 @@ func init(){
 		img := OicqUtils.GetQQFaceImg(userId)
 		t := time.Now()
 		b := haveAFriendMake(name, str,img)
-		ctx.SendChain(zero.ImageBase64Message(b), message.Text(fmt.Sprintf("%v",time.Since(t))))
+		ctx.SendChain(zero.ImageBase64Message_(b), message.Text(fmt.Sprintf("%v",time.Since(t))))
 	})
 }
 

@@ -34,7 +34,7 @@ func Init(){
 		ctx.SendChain(message.Text("少女祈祷中......"))
 		img,txt := setuaiapi.Request(url, &tag, nil, nil, nil, nil, nil, nil, nil)
 		imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
-		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Image(imgB64), message.Text(txt))
+		ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
 	})
 
 	zero.Default().OnRegex("^!setuai_b64 (.*)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
@@ -54,7 +54,7 @@ func Init(){
 		ctx.SendChain(message.Text("少女祈祷中......"))
 		img,txt := setuaiapi.Request(url, &tag, nil, nil, nil, nil, nil, nil, nil)
 		imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
-		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Image(imgB64), message.Text(txt))
+		ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
 	})
 	
 	zero.Default().OnCommand("setuai_cmd").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
@@ -98,7 +98,7 @@ func Init(){
 		ctx.SendChain(message.Text("少女祈祷中......"))
 		img,txt := setuaiapi.Request(url, &tag, &width, &height, &scale, nil, &steps, &seed, &uc)
 		imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
-		id := ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Image(imgB64), message.Text(txt))
+		id := ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
 		if id == 0{
 			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("图片，好像被吃掉了呢"))
 		}
