@@ -1,5 +1,7 @@
 package publicModels
 
+import "fmt"
+
 type Setting struct {
 	Key        		string 		`gorm:"primarykey"`
 	Value			string
@@ -28,6 +30,7 @@ func SetSetting(key, value string)(err error){
 	}else{
 		data.Value = value
 		result = db.DB.Model(&Setting{}).Updates(data)
+		fmt.Println("update settings.")
 	}
 	return result.Error
 }
