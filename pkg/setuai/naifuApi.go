@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func Decode(data []byte) []byte{
+func NaifuDecode(data []byte) []byte{
 	d := string(data)
 	l := strings.Split(d, "\n")
 	b64 := strings.Split(l[2], ":")[1]
@@ -21,7 +21,7 @@ func Decode(data []byte) []byte{
 	return img
 }
 
-func Request(url string, prompt, width, height, scale, sampler, steps, seed, uc *string)([]byte,string){
+func NaifuRequest(url string, prompt, width, height, scale, sampler, steps, seed, uc *string)([]byte,string){
 	var n uint32
 	binary.Read(rand.Reader, binary.LittleEndian, &n)
 
@@ -74,14 +74,14 @@ func Request(url string, prompt, width, height, scale, sampler, steps, seed, uc 
 		JSON: &jsonData,
 	}
 
-	r,err := grequests.Post(url, &opt)
+	r,err := grequests.Post(url+"/generate-stream", &opt)
 	if err!=nil{
 		print("post err")
 		print(err)
 		return nil, ""
 	}
 
-	img := Decode(r.Bytes())
+	img := NaifuDecode(r.Bytes())
 	txt := fmt.Sprintf("prompt:%s\r\nseed:%s\r\n","哔~" , jsonData["seed"])//jsonData["prompt"]
 	return img, txt
 }
@@ -112,7 +112,7 @@ func main() {
 		return
 	}
 
-	img := Decode(r.Bytes())
+	img := NaifuDecode(r.Bytes())
 
 	file, err := os.OpenFile("./test.png", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0777)
 	if err != nil {

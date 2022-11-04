@@ -408,8 +408,8 @@ func Init(config Config) { // 插件主体
 	// 入群欢迎
 	zero.Default().OnNotice(GroupSwitchControl).SetBlock(false).SetPriority(40).
 		Handle(func(ctx *ZeroBot.Ctx) {
-			if ctx.Event.NoticeType == "group_increase" {
-				ctx.SendChain(message.Text("欢迎~，具体用法请参考https://github.com/ssp97/Ka-ineshizuku-Project"))
+			if ctx.Event.NoticeType == "group_increase" && ctx.Event.IsToMe == false{
+				ctx.SendChain(message.Text("欢迎~"), message.At(ctx.Event.UserID))
 			}
 		})
 	// 退群提醒

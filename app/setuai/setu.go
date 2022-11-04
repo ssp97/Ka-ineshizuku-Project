@@ -15,6 +15,7 @@ import (
 )
 
 const SETU_AI_URL_KEY = "setu_ai_url"
+const SETU_AI_URL_TYPE = "setu_ai_type"
 
 func Init(){
 	zero.Default().OnRegex("^!setuai_url:(.*)$", ZeroBot.SuperUserPermission).FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
@@ -24,17 +25,45 @@ func Init(){
 		ctx.SendChain(message.Text("setuai:url设置成功"))
 	})
 
+	zero.Default().OnRegex("^!setuai_type:(.*)$", ZeroBot.SuperUserPermission).FirstPriority().SetBlock(true).Handle(func(ctx *ZeroBot.Ctx) {
+		t := ctx.State["regex_matched"].([]string)[1]
+
+		if t == "sd" || t == "naifu"{
+			publicModels.SetSetting(SETU_AI_URL_TYPE, t)
+			ctx.SendChain(message.Text("setuai:type设置成功"))
+		}else{
+			ctx.SendChain(message.Text("setuai:type设置失败"))
+		}
+
+
+	})
+
 	zero.Default().OnRegex("^!setuai (.*)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		tag := ctx.State["regex_matched"].([]string)[1]
 		err, url := publicModels.GetSetting(SETU_AI_URL_KEY)
 		if err!=nil{
 			ctx.SendChain(message.Text("setuai:未设置url"))
 		}
+
+		err, t := publicModels.GetSetting(SETU_AI_URL_TYPE)
+		if err!=nil{
+			ctx.SendChain(message.Text("setuai:未设置type"))
+		}
+
 		print("tag = ", tag)
 		ctx.SendChain(message.Text("少女祈祷中......"))
-		img,txt := setuaiapi.Request(url, &tag, nil, nil, nil, nil, nil, nil, nil)
-		imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
-		ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
+
+		if t == "naifu" {
+			img,txt := setuaiapi.NaifuRequest(url, &tag, nil, nil, nil, nil, nil, nil, nil)
+			imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
+			ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
+		}else if t == "sd"{
+			img,txt := setuaiapi.SdRequest(url, &tag, nil, nil, nil, nil, nil, nil, nil)
+			imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
+			ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
+		}else{
+			ctx.SendChain(message.Text("未设置参数"))
+		}
 	})
 
 	zero.Default().OnRegex("^!setuai_b64 (.*)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
@@ -50,11 +79,26 @@ func Init(){
 		if err!=nil{
 			ctx.SendChain(message.Text("setuai:未设置url"))
 		}
+
+		err, t := publicModels.GetSetting(SETU_AI_URL_TYPE)
+		if err!=nil{
+			ctx.SendChain(message.Text("setuai:未设置type"))
+		}
+
 		print("tag = ", tag)
 		ctx.SendChain(message.Text("少女祈祷中......"))
-		img,txt := setuaiapi.Request(url, &tag, nil, nil, nil, nil, nil, nil, nil)
-		imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
-		ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
+
+		if t == "naifu" {
+			img,txt := setuaiapi.NaifuRequest(url, &tag, nil, nil, nil, nil, nil, nil, nil)
+			imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
+			ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
+		}else if t == "sd"{
+			img,txt := setuaiapi.SdRequest(url, &tag, nil, nil, nil, nil, nil, nil, nil)
+			imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
+			ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
+		}else{
+			ctx.SendChain(message.Text("未设置参数"))
+		}
 	})
 	
 	zero.Default().OnCommand("setuai_cmd").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
@@ -95,12 +139,30 @@ func Init(){
 		if err!=nil{
 			ctx.SendChain(message.Text("setuai:未设置url"))
 		}
+		err, t := publicModels.GetSetting(SETU_AI_URL_TYPE)
+		if err!=nil{
+			ctx.SendChain(message.Text("setuai:未设置type"))
+		}
+
+
 		ctx.SendChain(message.Text("少女祈祷中......"))
-		img,txt := setuaiapi.Request(url, &tag, &width, &height, &scale, nil, &steps, &seed, &uc)
-		imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
-		id := ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
-		if id == 0{
-			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("图片，好像被吃掉了呢"))
+
+		if t == "naifu" {
+			img,txt := setuaiapi.NaifuRequest(url, &tag, &width, &height, &scale, nil, &steps, &seed, &uc)
+			imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
+			id := ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
+			if id == 0{
+				ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("图片，好像被吃掉了呢"))
+			}
+		}else if t == "sd"{
+			img,txt := setuaiapi.SdRequest(url, &tag, &width, &height, &scale, nil, &steps, &seed, &uc)
+			imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
+			id := ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
+			if id == 0{
+				ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("图片，好像被吃掉了呢"))
+			}
+		}else{
+			ctx.SendChain(message.Text("未设置参数"))
 		}
 	})
 }

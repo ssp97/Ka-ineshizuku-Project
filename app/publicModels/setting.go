@@ -29,7 +29,7 @@ func SetSetting(key, value string)(err error){
 		})
 	}else{
 		data.Value = value
-		result = db.DB.Model(&Setting{}).Updates(data)
+		result = db.DB.Model(Setting{}).Where("key = ?", key).Updates(data)
 		fmt.Println("update settings.")
 	}
 	return result.Error
