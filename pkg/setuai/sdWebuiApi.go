@@ -1,4 +1,4 @@
-package setuai
+package setuasi
 
 import (
 	"crypto/rand"
@@ -46,30 +46,30 @@ type Sdtxt2imgRsp struct {
 	Images     []string `json:"images"`
 	Parameters struct {
 		EnableHr          bool     `json:"enable_hr"`
-		DenoisingStrength int      `json:"denoising_strength"`
-		FirstphaseWidth   int      `json:"firstphase_width"`
-		FirstphaseHeight  int      `json:"firstphase_height"`
+		DenoisingStrength float32      `json:"denoising_strength"`
+		FirstphaseWidth   float32      `json:"firstphase_width"`
+		FirstphaseHeight  float32      `json:"firstphase_height"`
 		Prompt            string   `json:"prompt"`
 		Styles            []string `json:"styles"`
 		Seed              int      `json:"seed"`
 		Subseed           int      `json:"subseed"`
-		SubseedStrength   int      `json:"subseed_strength"`
-		SeedResizeFromH   int      `json:"seed_resize_from_h"`
-		SeedResizeFromW   int      `json:"seed_resize_from_w"`
+		SubseedStrength   float32      `json:"subseed_strength"`
+		SeedResizeFromH   float32      `json:"seed_resize_from_h"`
+		SeedResizeFromW   float32      `json:"seed_resize_from_w"`
 		BatchSize         int      `json:"batch_size"`
 		NIter             int      `json:"n_iter"`
 		Steps             int      `json:"steps"`
-		CfgScale          int      `json:"cfg_scale"`
+		CfgScale          float32      `json:"cfg_scale"`
 		Width             int      `json:"width"`
 		Height            int      `json:"height"`
 		RestoreFaces      bool     `json:"restore_faces"`
 		Tiling            bool     `json:"tiling"`
 		NegativePrompt    string   `json:"negative_prompt"`
-		Eta               int      `json:"eta"`
-		SChurn            int      `json:"s_churn"`
-		STmax             int      `json:"s_tmax"`
-		STmin             int      `json:"s_tmin"`
-		SNoise            int      `json:"s_noise"`
+		Eta               float32      `json:"eta"`
+		SChurn            float32      `json:"s_churn"`
+		STmax             float32      `json:"s_tmax"`
+		STmin             float32      `json:"s_tmin"`
+		SNoise            float32      `json:"s_noise"`
 		OverrideSettings  struct {
 		} `json:"override_settings"`
 		SamplerIndex string `json:"sampler_index"`
@@ -202,7 +202,7 @@ func SdRequest(url string, prompt, width, height, scale, sampler, steps, seed, u
 		Headers: map[string]string{
 			"content-type":"application/json",
 		},
-		JSON: &jsonBytes,
+		JSON: jsonBytes,
 	}
 
 	r,err := grequests.Post(url+"/sdapi/v1/txt2img", &opt)
