@@ -1,4 +1,4 @@
-package setuasi
+package setuai
 
 import (
 	"crypto/rand"
@@ -18,10 +18,10 @@ type Sdtxt2imgReq struct {
 	Prompt            string   `json:"prompt"`
 	Styles            []string `json:"styles"`
 	Seed              int      `json:"seed"`
-	Subseed           int      `json:"subseed"`
-	SubseedStrength   int      `json:"subseed_strength"`
-	SeedResizeFromH   int      `json:"seed_resize_from_h"`
-	SeedResizeFromW   int      `json:"seed_resize_from_w"`
+	//Subseed           int      `json:"subseed"`
+	//SubseedStrength   int      `json:"subseed_strength"`
+	//SeedResizeFromH   int      `json:"seed_resize_from_h"`
+	//SeedResizeFromW   int      `json:"seed_resize_from_w"`
 	BatchSize         int      `json:"batch_size"`
 	NIter             int      `json:"n_iter"`
 	Steps             int      `json:"steps"`
@@ -31,11 +31,11 @@ type Sdtxt2imgReq struct {
 	RestoreFaces      bool     `json:"restore_faces"`
 	Tiling            bool     `json:"tiling"`
 	NegativePrompt    string   `json:"negative_prompt"`
-	Eta               int      `json:"eta"`
-	SChurn            int      `json:"s_churn"`
-	STmax             int      `json:"s_tmax"`
-	STmin             int      `json:"s_tmin"`
-	SNoise            int      `json:"s_noise"`
+	//Eta               int      `json:"eta"`
+	//SChurn            int      `json:"s_churn"`
+	//STmax             int      `json:"s_tmax"`
+	//STmin             int      `json:"s_tmin"`
+	//SNoise            int      `json:"s_noise"`
 	//OverrideSettings  struct {
 	//} `json:"override_settings"`
 	SamplerIndex string `json:"sampler_index"`
@@ -141,10 +141,10 @@ func SdRequest(url string, prompt, width, height, scale, sampler, steps, seed, u
 		"",
 		[]string{},
 		-1,
-		-1,
-		0,
-		-1,
-		-1,
+		//-1,
+		//0,
+		//-1,
+		//-1,
 		1,
 		1,
 		20,
@@ -154,11 +154,11 @@ func SdRequest(url string, prompt, width, height, scale, sampler, steps, seed, u
 		false,
 		false,
 		"",
-		0,
-		0,
-		0,
-		0,
-		1,
+		//0,
+		//0,
+		//0,
+		//0,
+		//1,
 		//nil,
 		"Euler a",
 	}
