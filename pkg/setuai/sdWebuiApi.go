@@ -12,24 +12,24 @@ import (
 
 type Sdtxt2imgReq struct {
 	EnableHr          bool     `json:"enable_hr"`
-	DenoisingStrength int      `json:"denoising_strength"`
-	FirstphaseWidth   int      `json:"firstphase_width"`
-	FirstphaseHeight  int      `json:"firstphase_height"`
+	//DenoisingStrength int      `json:"denoising_strength"`
+	//FirstphaseWidth   int      `json:"firstphase_width"`
+	//FirstphaseHeight  int      `json:"firstphase_height"`
 	Prompt            string   `json:"prompt"`
 	Styles            []string `json:"styles"`
 	Seed              int      `json:"seed"`
-	//Subseed           int      `json:"subseed"`
-	//SubseedStrength   int      `json:"subseed_strength"`
-	//SeedResizeFromH   int      `json:"seed_resize_from_h"`
-	//SeedResizeFromW   int      `json:"seed_resize_from_w"`
+	Subseed           int      `json:"subseed"`
+	SubseedStrength   int      `json:"subseed_strength"`
+	SeedResizeFromH   int      `json:"seed_resize_from_h"`
+	SeedResizeFromW   int      `json:"seed_resize_from_w"`
 	BatchSize         int      `json:"batch_size"`
 	NIter             int      `json:"n_iter"`
 	Steps             int      `json:"steps"`
 	CfgScale          int      `json:"cfg_scale"`
 	Width             int      `json:"width"`
 	Height            int      `json:"height"`
-	RestoreFaces      bool     `json:"restore_faces"`
-	Tiling            bool     `json:"tiling"`
+	//RestoreFaces      bool     `json:"restore_faces"`
+	//Tiling            bool     `json:"tiling"`
 	NegativePrompt    string   `json:"negative_prompt"`
 	//Eta               int      `json:"eta"`
 	//SChurn            int      `json:"s_churn"`
@@ -135,25 +135,25 @@ func SdDecode(data []byte) ([]byte, string){
 func SdRequest(url string, prompt, width, height, scale, sampler, steps, seed, uc *string)([]byte,string){
 	j := Sdtxt2imgReq{
 		false,
-		0,
-		0,
-		0,
+		//0,
+		//0,
+		//0,
 		"",
 		[]string{},
 		-1,
-		//-1,
-		//0,
-		//-1,
-		//-1,
+		-1,
+		0,
+		0,
+		0,
 		1,
 		1,
 		20,
 		11,
 		512,
 		768,
-		false,
-		false,
-		"",
+		//false,
+		//false,
+		"lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, lowres, bad anatomy, bad hands, text,error, missing fngers,extra digt ,fewer digits,cropped, wort quality ,low quality,normal quality, jpeg artifacts,signature,watermark, username, blurry, bad feet",
 		//0,
 		//0,
 		//0,
