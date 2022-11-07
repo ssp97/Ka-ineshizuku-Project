@@ -28,7 +28,7 @@ func Init() {
 		ctx.SendChain(message.Text("tts:npc设置成功"))
 	})
 
-	zero.Default().OnRegex("^!setuai (.*)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
+	zero.Default().OnRegex("^!tts (.*)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		text := ctx.State["regex_matched"].([]string)[1]
 		err, url := publicModels.GetSetting(VITS_TTS_URL_KEY)
 		if err!=nil{
