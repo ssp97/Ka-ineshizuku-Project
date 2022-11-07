@@ -14,6 +14,7 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/app/snare"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/study"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/thunder"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/tts"
 	"github.com/ssp97/Ka-ineshizuku-Project/conf"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/httpAndHttpsServer"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
@@ -44,6 +45,8 @@ func Init(c *conf.Config){
 	setu.Init(c.App.Setu)
 
 	setuai.Init()
+	tts.Init()
+
 
 	zerobotConfig := &c.Zerobot
 
