@@ -47,7 +47,7 @@ func Request(url, npc, txt string)([]byte,string){
 		return nil, ""
 	}
 	audio,txt := Decode(r.Bytes())
-	fmt.Println(audio)
+	//fmt.Println(audio)
 	return audio, txt
 }
 

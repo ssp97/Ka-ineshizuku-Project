@@ -1,7 +1,10 @@
 package tts
 
 import (
+	"crypto/rand"
 	"encoding/base64"
+	"encoding/binary"
+	"flag"
 	"fmt"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/publicModels"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/vitsTts"
@@ -49,6 +52,44 @@ func Init() {
 
 		ctx.SendChain(message.Record(fmt.Sprintf("base64://%s", bs))) //message.Reply(ctx.Event.MessageID), 语音似乎不可以回复
 	})
+
+	zero.Default().OnCommand("tts_cmd").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx){
+		fset := flag.FlagSet{}
+		var(
+			text string
+			npc string
+			//seed string
+			//width string
+			//height string
+			//scale string
+			//steps string
+		)
+		var n uint32
+		binary.Read(rand.Reader, binary.LittleEndian, &n)
+
+		fset.StringVar(&text, "text", "", "")
+		fset.StringVar(&npc, "npc", "可莉", "")
+
+		err, url := publicModels.GetSetting(VITS_TTS_URL_KEY)
+
+		if text == ""{
+			text = "你倒是发句话呀"
+		}
+
+		if err!=nil{
+			ctx.SendChain(message.Text("setuai:未设置url"))
+		}
+		d, _:= vitsTts.Request(url, npc, text)
+		if d==nil{
+			ctx.SendChain(message.Reply(ctx.Event.MessageID),message.Text("TTS生成错误"))
+			return
+		}
+		bs := base64.StdEncoding.EncodeToString(d)
+
+		ctx.SendChain(message.Record(fmt.Sprintf("base64://%s", bs))) //message.Reply(ctx.Event.MessageID), 语音似乎不可以回复
+
+	})
+
 }
 
 /*
