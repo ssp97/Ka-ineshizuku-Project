@@ -9,6 +9,7 @@ import (
 	"github.com/ssp97/Ka-ineshizuku-Project/app/publicModels"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/vitsTts"
 	"github.com/ssp97/Ka-ineshizuku-Project/pkg/zero"
+	"github.com/wdvxdr1123/ZeroBot/extension/shell"
 	"github.com/wdvxdr1123/ZeroBot/message"
 	ZeroBot "github.com/wdvxdr1123/ZeroBot"
 )
@@ -69,6 +70,9 @@ func Init() {
 
 		fset.StringVar(&text, "text", "", "")
 		fset.StringVar(&npc, "npc", "可莉", "")
+
+		arguments := shell.Parse(ctx.State["args"].(string))
+		err := fset.Parse(arguments)
 
 		err, url := publicModels.GetSetting(VITS_TTS_URL_KEY)
 
