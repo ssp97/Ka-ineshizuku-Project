@@ -157,7 +157,7 @@ func Init(){
 				ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("图片，好像被吃掉了呢"))
 			}
 		}else if t == "sd"{
-			img,txt := setuaiapi.SdRequest(url, &tag, &width, &height, &scale, nil, &steps, &seed, &uc)
+			img,txt := setuaiapi.SdRequest(url, &tag, &width, &height, &scale, &samper, &steps, &seed, &uc)
 			imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
 			id := ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
 			if id == 0{
