@@ -111,6 +111,7 @@ func Init(){
 			height string
 			scale string
 			steps string
+			samper string
 		)
 		var n uint32
 		binary.Read(rand.Reader, binary.LittleEndian, &n)
@@ -122,6 +123,7 @@ func Init(){
 		fset.StringVar(&height, "height", "768", "")
 		fset.StringVar(&scale, "scale", "11", "")
 		fset.StringVar(&steps, "steps", "20", "")
+		fset.StringVar(&samper, "samper", "DDIM", "")
 
 		arguments := shell.Parse(ctx.State["args"].(string))
 		err := fset.Parse(arguments)
@@ -148,7 +150,7 @@ func Init(){
 		ctx.SendChain(message.Text("少女祈祷中......"))
 
 		if t == "naifu" {
-			img,txt := setuaiapi.NaifuRequest(url, &tag, &width, &height, &scale, nil, &steps, &seed, &uc)
+			img,txt := setuaiapi.NaifuRequest(url, &tag, &width, &height, &scale, &samper, &steps, &seed, &uc)
 			imgB64 := "base64://" + base64.StdEncoding.EncodeToString(img)
 			id := ctx.SendChain(message.Reply(ctx.Event.MessageID), zero.ImageBase64Message(imgB64), message.Text(txt))
 			if id == 0{
