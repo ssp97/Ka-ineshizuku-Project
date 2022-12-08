@@ -4,6 +4,7 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/EEAsst"
+	"github.com/ssp97/Ka-ineshizuku-Project/app/chatgpt"
 	"github.com/ssp97/Ka-ineshizuku-Project/app/gag"
 	_ "github.com/ssp97/Ka-ineshizuku-Project/app/gifApp"
 	_ "github.com/ssp97/Ka-ineshizuku-Project/app/haveAFriend"
@@ -46,6 +47,7 @@ func Init(c *conf.Config){
 
 	setuai.Init()
 	tts.Init()
+	chatgpt.Init()
 
 
 	zerobotConfig := &c.Zerobot
