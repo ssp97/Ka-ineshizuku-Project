@@ -14,7 +14,6 @@ import (
 
 const CHATGPT_TOKEN_CODE = "chatgpt_token"
 var gC2 *chatgpt_go.ChatGPT
-//var gConversation *chatgpt_go.Conversation
 var gConversationDict = make(map[int64]*chatgpt_go.Conversation)
 func Init(){
 
@@ -56,7 +55,7 @@ func Init(){
 
 	})
 
-	zero.Default().OnRegex("^!chatgpt (.*)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
+	zero.Default().OnRegex("^!chatgpt ((?:.|\n)*?)$").SetBlock(true).SetPriority(20).Handle(func(ctx *ZeroBot.Ctx) {
 		text := ctx.State["regex_matched"].([]string)[1]
 
 		uid := ctx.Event.GroupID
@@ -71,10 +70,10 @@ func Init(){
 
 		if err != nil {
 			// Handle err
-			ctx.SendChain(message.Text(fmt.Sprintf("出错了, %s", err)))
+			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(fmt.Sprintf("出错了, %s", err)))
 			return
 		}
-		ctx.SendChain(message.Text(resp))
+		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(resp))
 
 	})
 
