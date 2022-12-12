@@ -32,7 +32,7 @@ require (
 	github.com/tklauser/go-sysconf v0.3.6 // indirect
 	github.com/wdvxdr1123/ZeroBot v1.2.2
 	github.com/yanyiwu/gojieba v1.1.2
-	github.com/zhan3333/chatgpt-go v0.0.0-20221208155043-a092f61d2422
+	github.com/zhan3333/chatgpt-go v0.0.0-20221212110725-8387056f63a8
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed // indirect
 	golang.org/x/text v0.3.7 // indirect
