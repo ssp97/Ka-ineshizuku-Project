@@ -44,8 +44,9 @@ func Init(){
 			if gC2 != nil{
 				if err := gC2.RefreshAccessToken(); err != nil {
 					log.Warn(fmt.Errorf("refresh access token: %w", err) )
+					gC2 = nil
 				}
-				time.Sleep(time.Minute * 1)
+				time.Sleep(time.Minute * 5)
 			}
 		}
 
@@ -130,6 +131,11 @@ func Init(){
 			uid = ctx.Event.UserID
 		}
 
+		if gC2 == nil{
+			ctx.SendChain(message.Text("未登录(各种原因"))
+			return
+		}
+
 		if _, ok := gConversationDict[uid]; !ok{
 			gConversationDict[uid] = gC2.NewConversation("", "")
 		}
@@ -137,6 +143,7 @@ func Init(){
 
 		if err != nil {
 			// Handle err
+			log.Error(err)
 			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(fmt.Sprintf("出错了, %s", err)))
 			return
 		}
@@ -148,6 +155,11 @@ func Init(){
 		uid := ctx.Event.GroupID
 		if uid == 0{
 			uid = ctx.Event.UserID
+		}
+
+		if gC2 == nil{
+			ctx.SendChain(message.Text("未登录(各种原因"))
+			return
 		}
 
 		gConversationDict[uid] = gC2.NewConversation("", "")
@@ -164,7 +176,6 @@ func Init(){
 		}else{
 			ctx.SendChain(message.Text("我好像...失忆了"))
 		}
-
 
 	})
 }
