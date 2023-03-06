@@ -23,16 +23,17 @@ require (
 	github.com/lxzan/hasaki v1.0.7
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/orcaman/writerseeker v0.0.0-20200621085525-1d3f536ff85e
+	github.com/sashabaranov/go-openai v1.4.2
 	github.com/shirou/gopsutil v3.21.6+incompatible
 	github.com/sirupsen/logrus v1.9.0
 	github.com/soheilhy/cmux v0.1.4
 	github.com/sosedoff/pgweb v0.11.8
+	github.com/stretchr/testify v1.8.1 // indirect
 	github.com/tfriedel6/canvas v0.12.1
 	github.com/tidwall/gjson v1.11.0
 	github.com/tklauser/go-sysconf v0.3.6 // indirect
 	github.com/wdvxdr1123/ZeroBot v1.2.2
 	github.com/yanyiwu/gojieba v1.1.2
-	github.com/zhan3333/chatgpt-go v0.0.0-20221212110725-8387056f63a8
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed // indirect
 	golang.org/x/text v0.3.7 // indirect
