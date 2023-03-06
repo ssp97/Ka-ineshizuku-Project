@@ -17,6 +17,16 @@ const CHATGPT_DEFAULT_TEXT = "chatgpt_default_text"
 
 var gC2 *openai.Client
 var gChatgptCtxList = make(map[int64][]openai.ChatCompletionMessage)
+
+func discarDearliestConversation(response openai.ChatCompletionResponse,now []openai.ChatCompletionMessage) []openai.ChatCompletionMessage {
+	log.Info("Token is %d", response.Usage.TotalTokens)
+	if response.Usage.TotalTokens > (4096 - 512){
+		now = now[2:]
+	}
+
+	return now
+}
+
 func Init(){
 
 	_, token  := publicModels.GetSetting(CHATGPT_TOKEN_CODE)
@@ -94,6 +104,7 @@ func Init(){
 		}
 		gChatgptCtxList[uid] = append(gChatgptCtxList[uid], chatMsg)
 		gChatgptCtxList[uid] = append(gChatgptCtxList[uid], resp.Choices[0].Message)
+		gChatgptCtxList[uid] = discarDearliestConversation(resp, gChatgptCtxList[uid])
 		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(resp.Choices[0].Message.Content))
 
 	})
