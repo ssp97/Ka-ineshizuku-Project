@@ -16,7 +16,7 @@ const CHATGPT_DEFAULT_TEXT = "chatgpt_default_text"
 
 
 var gC2 *openai.Client
-var gChatgptCtxList = make(map[int64]context.Context)
+var gChatgptCtxList = make(map[int64][]openai.ChatCompletionMessage)
 func Init(){
 
 	_, token  := publicModels.GetSetting(CHATGPT_TOKEN_CODE)
@@ -72,18 +72,18 @@ func Init(){
 			return
 		}
 
-
 		if _, ok := gChatgptCtxList[uid]; !ok{
-			gChatgptCtxList[uid] = context.Background()
+			gChatgptCtxList[uid] = []openai.ChatCompletionMessage{}
 		}
-		resp, err := gC2.CreateChatCompletion(gChatgptCtxList[uid], openai.ChatCompletionRequest{
+
+		chatMsg := openai.ChatCompletionMessage{
+			Role:    openai.ChatMessageRoleUser,
+			Content: text,
+		}
+
+		resp, err := gC2.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
 			Model: openai.GPT3Dot5Turbo,
-			Messages: []openai.ChatCompletionMessage{
-				{
-					Role:    openai.ChatMessageRoleUser,
-					Content: text,
-				},
-			},
+			Messages: append(gChatgptCtxList[uid], chatMsg),
 		})
 
 		if err != nil {
@@ -92,6 +92,8 @@ func Init(){
 			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(fmt.Sprintf("出错了, %s", err)))
 			return
 		}
+		gChatgptCtxList[uid] = append(gChatgptCtxList[uid], chatMsg)
+		gChatgptCtxList[uid] = append(gChatgptCtxList[uid], resp.Choices[0].Message)
 		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(resp.Choices[0].Message.Content))
 
 	})
@@ -107,25 +109,26 @@ func Init(){
 			return
 		}
 
-		gChatgptCtxList[uid] = context.Background()
+		gChatgptCtxList[uid] = []openai.ChatCompletionMessage{}
 
 		err, defaultText  := publicModels.GetSetting(CHATGPT_DEFAULT_TEXT)
 
 		if defaultText != "" && err != nil{
-			resp, err := gC2.CreateChatCompletion(gChatgptCtxList[uid], openai.ChatCompletionRequest{
+			chatMsg := openai.ChatCompletionMessage{
+				Role:    openai.ChatMessageRoleUser,
+				Content: defaultText,
+			}
+			resp, err := gC2.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
 				Model: openai.GPT3Dot5Turbo,
-				Messages: []openai.ChatCompletionMessage{
-					{
-						Role:    openai.ChatMessageRoleUser,
-						Content: defaultText,
-					},
-				},
+				Messages: append(gChatgptCtxList[uid], chatMsg),
 			})
 			if err != nil {
 				// Handle err
 				ctx.SendChain(message.Text("我好像...失忆了"))
 				return
 			}
+			gChatgptCtxList[uid] = append(gChatgptCtxList[uid], chatMsg)
+			gChatgptCtxList[uid] = append(gChatgptCtxList[uid], resp.Choices[0].Message)
 			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text(resp))
 		}else{
 			ctx.SendChain(message.Text("我好像...失忆了"))
